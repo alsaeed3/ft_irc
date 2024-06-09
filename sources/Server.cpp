@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 08:20:31 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/09 11:10:15 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void Server::setNonblocking( int fd ) {
 	return;
 }
 
-void Server::run( void ) {
+void Server::runServer( void ) {
 
 	while ( true ) {
 

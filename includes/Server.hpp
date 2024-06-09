@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 08:03:51 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/09 11:10:15 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class Server {
 	public:
 
 		Server( int port, const std::string &password );
-		void	run( void );
+		void	runServer( void );
 };
 
 #endif /* SERVER_HPP */
