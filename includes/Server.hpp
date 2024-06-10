@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 11:10:15 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/10 14:37:49 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,33 +29,44 @@
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include "IrcException.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
-#include "CommandType.hpp"
+#include <signal.h>
+#include <IrcException.hpp>
+#include <Client.hpp>
+#include <Channel.hpp>
+#include <CommandType.hpp>
 
+class Client;
+class Channel;
 class Server {
 
 	private:
 
-		int								_listeningSocket;
-		std::string 					_serverPassword;
-		std::map<int, Client*>			_clients;
-		std::map<std::string, Channel>	_channels;
-		std::vector<pollfd>				_fds;
+		static const int						MAX_CLIENTS = FD_SETSIZE;
+		static const int						BUFFER_SIZE = 1024;
 
-		void 	initServer( int port );
-		void 	setNonblocking( int fd );
-		void 	handleNewConnection( void );
-		void 	handleClientMessage( int client_fd );
-		void 	closeClient( int client_fd );
-		void	processCommand( int client_fd, const std::string &command );
-		void	authenticateClient( int client_fd, const std::string &password);
+		static int								_listeningSocket;
+		static std::string 						_serverPassword;
+		static int								_serverPort;
+		static std::map<int, Client*>			_clients;
+		static std::map<std::string, Channel>	_channels;
+		static std::vector<pollfd>				_fds;
+
+		Server( void );
+
+		static void 	setNonblocking( int fd );
+		static void 	handleNewConnection( void );
+		static void 	handleClientMessage( int client_fd );
+		static void 	closeClient( int client_fd );
+		static void		processCommand( int client_fd, const std::string &command );
+		static void		authenticateClient( int client_fd, const std::string &password);
 
 	public:
 
-		Server( int port, const std::string &password );
-		void	runServer( void );
+		static void 	initServer( void );
+		static void		runServer( void );
+		static void		signalHandler( int signal );
+		static void		setServerPassword( const std::string &password ) { _serverPassword = password; }
+		static void		setServerPort( int port ) { _listeningSocket = port; }
 };
 
 #endif /* SERVER_HPP */

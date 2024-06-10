@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 08:08:30 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/09 11:53:01 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #include <string>
 #include <vector>
-#include "IrcException.hpp"
+#include <IrcException.hpp>
 #include <unistd.h>
 #include <cstring>
 #include <sys/socket.h>

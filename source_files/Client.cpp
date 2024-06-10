@@ -6,11 +6,11 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/08 11:47:31 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/09 11:54:00 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Client.hpp"
+#include <Client.hpp>
 
 // Constructor
 Client::Client( int fd, const std::string &ip ) :	_fd( fd ), 

@@ -6,31 +6,16 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 11:10:15 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/10 14:39:42 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Server.hpp"
+#include <Server.hpp>
 
-Server::Server( int port, const std::string &password ) : _serverPassword( password ) {
+void	Server::initServer( void ) {
 
-	try {
-
-		initServer( port );
-	}
-	catch ( const IrcException &e ) {
-
-		std::cerr << "Server initialization error: " << e.what() << std::endl;
-		exit( 1 );
-	}
-	
-	return;
-}
-
-void Server::initServer( int port ) {
-
-	_listeningSocket = socket( AF_INET, SOCK_STREAM, 0 );
-	if ( _listeningSocket == -1 ) {
+	Server::_listeningSocket = socket( AF_INET, SOCK_STREAM, 0 );
+	if ( Server::_listeningSocket == -1 ) {
 
 		throw IrcException( "Can't create a socket!" );
 	}
@@ -38,26 +23,28 @@ void Server::initServer( int port ) {
 	sockaddr_in serverHint;
 	std::memset( &serverHint, 0, sizeof( serverHint ) );
 	serverHint.sin_family = AF_INET;
-	serverHint.sin_port = htons( port );
+	serverHint.sin_port = htons( Server::_serverPort );
 	serverHint.sin_addr.s_addr = INADDR_ANY;
 
-	if ( bind( _listeningSocket, (sockaddr*)&serverHint, sizeof( serverHint ) ) == -1 ) {
+	if ( bind( Server::_listeningSocket, (sockaddr*)&serverHint, sizeof( serverHint ) ) == -1 ) {
 
 		throw IrcException( "Can't bind to IP/port" );
 	}
 
-	if ( listen( _listeningSocket, SOMAXCONN ) == -1 ) {
+	if ( listen( Server::_listeningSocket, SOMAXCONN ) == -1 ) {
 		
 		throw IrcException( "Can't listen!" );
 	}
 	
-	setNonblocking( _listeningSocket );
-	_fds.push_back( { _listeningSocket, POLLIN, 0 } );
-
+	setNonblocking( Server::_listeningSocket );
+	Server::_fds.push_back( { Server::_listeningSocket, POLLIN, 0 } );
+	
+	gethostname( )
+	
 	return;
 }
 
-void Server::setNonblocking( int fd ) {
+void	Server::setNonblocking( int fd ) {
 
 	int flags = fcntl( fd, F_GETFL, 0 );
 	if ( flags == -1 ) {
@@ -73,42 +60,42 @@ void Server::setNonblocking( int fd ) {
 	return;
 }
 
-void Server::runServer( void ) {
+void	Server::runServer( void ) {
 
 	while ( true ) {
 
-		if ( poll( _fds.data(), _fds.size(), -1 ) == -1 ) {
+		if ( poll( Server::_fds.data(), Server::_fds.size(), -1 ) == -1 ) {
 
 			throw IrcException( "Poll error" );
 		}
 
-		for ( int i = 0; i < static_cast<int>( _fds.size() ); ++i ) {
+		for ( int i = 0; i < static_cast<int>( Server::_fds.size() ); ++i ) {
 
-			if ( _fds[i].revents & POLLIN ) {
+			if ( Server::_fds[i].revents & POLLIN ) {
 
-				if ( _fds[i].fd == _listeningSocket ) {
+				if ( Server::_fds[i].fd == Server::_listeningSocket ) {
 
 					handleNewConnection();
 				}
 				else {
 
-					handleClientMessage( _fds[i].fd );
+					handleClientMessage( Server::_fds[i].fd );
 				}
 			}
 		}
 		
-		_fds.erase( std::remove_if( _fds.begin(), _fds.end(), []( const pollfd &fd ) { return fd.revents & POLLHUP; } ), _fds.end() );
+		Server::_fds.erase( std::remove_if( Server::_fds.begin(), Server::_fds.end(), []( const pollfd &fd ) { return fd.revents & POLLHUP; } ), Server::_fds.end() );
 	}
 
-	close( _listeningSocket );
+	close( Server::_listeningSocket );
 	return;
 }
 
-void Server::handleNewConnection( void ) {
+void	Server::handleNewConnection( void ) {
 
 	sockaddr_in clientHint;
 	socklen_t clientSize = sizeof( clientHint );
-	int clientSocket = accept( _listeningSocket, (sockaddr*)&clientHint, &clientSize );
+	int clientSocket = accept( Server::_listeningSocket, (sockaddr*)&clientHint, &clientSize );
 	if ( clientSocket == -1 ) {
 
 		std::cerr << "Problem with client connecting!" << std::endl;
@@ -118,8 +105,8 @@ void Server::handleNewConnection( void ) {
 	try {
 		
 		setNonblocking( clientSocket );
-		clients[clientSocket] = new Client( clientSocket, inet_ntoa( clientHint.sin_addr ) );
-		_fds.push_back( { clientSocket, POLLIN, 0 } );
+		Server::_clients[clientSocket] = new Client( clientSocket, inet_ntoa( clientHint.sin_addr ) );
+		Server::_fds.push_back( { clientSocket, POLLIN, 0 } );
 		std::cout << "New connection from " << inet_ntoa( clientHint.sin_addr ) << std::endl;
 	} catch ( const IrcException &e ) {
 
@@ -130,7 +117,7 @@ void Server::handleNewConnection( void ) {
 	return;
 }
 
-void Server::handleClientMessage( int client_fd ) {
+void	Server::handleClientMessage( int client_fd ) {
 
 	char buffer[BUFFER_SIZE];
 	std::memset( buffer, 0, BUFFER_SIZE );
@@ -166,9 +153,9 @@ void Server::handleClientMessage( int client_fd ) {
 	return;
 }
 
-void Server::processCommand( int client_fd, const std::string &command ) {
+void	Server::processCommand( int client_fd, const std::string &command ) {
 
-    Client *client = _clients[client_fd];
+    Client *client = Server::_clients[client_fd];
 	CommandType commandType = getCommandType( command );
 
 	switch ( commandType ) {
@@ -200,7 +187,7 @@ void Server::processCommand( int client_fd, const std::string &command ) {
 			}
 			{
 				std::string channelName = command.substr( 5 );
-				Channel& channel = _channels[channelName];
+				Channel& channel = Server::_channels[channelName];
 				channel.addClient( client_fd );
 				client->joinChannel( channelName );
 				client->sendMessage(":" + client->getFullIdentity() + " JOIN :" + channelName);
@@ -218,7 +205,7 @@ void Server::processCommand( int client_fd, const std::string &command ) {
 					
 					std::string channelName = command.substr( 8, pos - 8 );
 					std::string message = command.substr( pos + 1 );
-					_channels[channelName].broadcastMessage( ":" + client->getFullIdentity() + " PRIVMSG " + channelName + " :" + message, client_fd );
+					Server::_channels[channelName].broadcastMessage( ":" + client->getFullIdentity() + " PRIVMSG " + channelName + " :" + message, client_fd );
 				}
 			}
 			break;
@@ -228,22 +215,22 @@ void Server::processCommand( int client_fd, const std::string &command ) {
 	}
 }
 
-void Server::closeClient( int client_fd ) {
+void	Server::closeClient( int client_fd ) {
 
 	close( client_fd );
-	delete _clients[client_fd];
-	_clients.erase( client_fd );
+	delete Server::_clients[client_fd];
+	Server::_clients.erase( client_fd );
 	
-	for ( auto& [channelName, channel] : _channels ) {
+	for ( auto& [channelName, channel] : Server::_channels ) {
 
 		channel.removeClient( client_fd );
 	}
 
-	for ( int i = 0; i < static_cast<int>( _fds.size() ); ++i ) {
+	for ( int i = 0; i < static_cast<int>( Server::_fds.size() ); ++i ) {
 
-		if ( _fds[i].fd == client_fd ) {
+		if ( Server::_fds[i].fd == client_fd ) {
 
-			_fds[i].fd = -1;
+			Server::_fds[i].fd = -1;
 			break;
 		}
 	}
@@ -251,18 +238,41 @@ void Server::closeClient( int client_fd ) {
 	return;
 }
 
-void Server::authenticateClient( int client_fd, const std::string &password) {
+void	Server::authenticateClient( int client_fd, const std::string &password) {
 
-	if (password == _serverPassword) {
+	if (password == Server::_serverPassword) {
 
-		_clients[client_fd]->setAuthenticated( true );
+		Server::_clients[client_fd]->setAuthenticated( true );
 	} else {
 
-		_clients[client_fd]->sendMessage("ERROR: Invalid password");
+		Server::_clients[client_fd]->sendMessage("ERROR: Invalid password");
 		closeClient( client_fd );
 	}
 
 	return;
 }
+
+void	Server::signalHandler( int signal ) {
+
+	std::cerr << "Signal " << signal << " received" << std::endl;
+	
+	for ( std::vector<pollfd>::iterator it = Server::_fds.begin(); it != Server::_fds.end(); ++it )
+		close( it->fd );
+
+	shutdown( Server::_listeningSocket, SHUT_RDWR );
+	close( Server::_listeningSocket );
+	Server::_fds.clear();
+	Server::_clients.clear();
+	Server::_channels.clear();
+	
+	exit ( signal );
+}
+
+int								Server::_listeningSocket = -1;
+std::string 					Server::_serverPassword = "";
+int								Server::_serverPort = -1;
+std::map<int, Client*>			Server::_clients;
+std::map<std::string, Channel>	Server::_channels;
+std::vector<pollfd>				Server::_fds;
 
 // Path: includes/Server.hpp

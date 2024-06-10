@@ -6,13 +6,15 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:45:59 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 07:48:05 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/09 12:21:39 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #ifndef COMMANDTYPE_HPP
 # define COMMANDTYPE_HPP
+
+#include <string>
 
 enum CommandType {
 	

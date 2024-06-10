@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 08:11:30 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/09 11:52:52 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <set>
 #include <string>
 #include <vector>
-#include "IrcException.hpp"
+#include <IrcException.hpp>
 #include <sys/socket.h>
 
 class Channel {

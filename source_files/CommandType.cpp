@@ -6,11 +6,11 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 07:52:06 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/09 11:54:10 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/CommandType.hpp"
+#include <CommandType.hpp>
 #include <string>
 
 CommandType getCommandType( const std::string &command ) {
