@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/10 14:37:49 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/11 06:02:55 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class Server {
 		static void		runServer( void );
 		static void		signalHandler( int signal );
 		static void		setServerPassword( const std::string &password ) { _serverPassword = password; }
-		static void		setServerPort( int port ) { _listeningSocket = port; }
+		static void		setServerPort( int port ) { _serverPort = port; }
 };
 
 #endif /* SERVER_HPP */

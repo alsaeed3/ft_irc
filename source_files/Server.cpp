@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/10 14:39:42 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/11 06:03:02 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,15 @@ void	Server::initServer( void ) {
 	
 	setNonblocking( Server::_listeningSocket );
 	Server::_fds.push_back( { Server::_listeningSocket, POLLIN, 0 } );
-	
-	gethostname( )
-	
+
+	char	hostname[NI_MAXHOST];
+
+	memset( hostname, 0, NI_MAXHOST );
+
+	gethostname( hostname, NI_MAXHOST );
+	std::cout << "IRC server Listening on " << hostname << " on port " << Server::_serverPort << std::endl;
+	std::cout << "Waiting for incoming connections..." << std::endl;
+
 	return;
 }
 
@@ -87,7 +93,6 @@ void	Server::runServer( void ) {
 		Server::_fds.erase( std::remove_if( Server::_fds.begin(), Server::_fds.end(), []( const pollfd &fd ) { return fd.revents & POLLHUP; } ), Server::_fds.end() );
 	}
 
-	close( Server::_listeningSocket );
 	return;
 }
 
@@ -98,19 +103,37 @@ void	Server::handleNewConnection( void ) {
 	int clientSocket = accept( Server::_listeningSocket, (sockaddr*)&clientHint, &clientSize );
 	if ( clientSocket == -1 ) {
 
-		std::cerr << "Problem with client connecting!" << std::endl;
-		return;
+		throw IrcException( "Can't accept client connection" );
 	}
+	std::cout << "Client socket: " << clientSocket << std::endl;
 
+	Client* tmpClient = NULL;
 	try {
 		
 		setNonblocking( clientSocket );
-		Server::_clients[clientSocket] = new Client( clientSocket, inet_ntoa( clientHint.sin_addr ) );
+		char host[NI_MAXHOST];
+		char service[NI_MAXSERV];
+	
+		memset( host, 0, NI_MAXHOST );
+		memset( service, 0, NI_MAXSERV );
+	
+		int result = getnameinfo( (sockaddr*)&clientHint, sizeof( clientHint ), host, NI_MAXHOST, service, NI_MAXSERV, 0 );
+		if ( result ) {
+
+			std::cout << host << " connected on " << service << std::endl;
+		} else {
+
+			inet_ntop( AF_INET, &clientHint.sin_addr, host, NI_MAXHOST );
+			std::cout << host << " connected on " << ntohs( clientHint.sin_port ) << std::endl;
+		}
+
+		tmpClient = new Client( clientSocket, inet_ntoa( clientHint.sin_addr ) );
 		Server::_fds.push_back( { clientSocket, POLLIN, 0 } );
-		std::cout << "New connection from " << inet_ntoa( clientHint.sin_addr ) << std::endl;
+		Server::_clients[clientSocket] = tmpClient;
 	} catch ( const IrcException &e ) {
 
 		std::cerr << "Error handling new connection: " << e.what() << std::endl;
+		delete tmpClient;
 		close( clientSocket );
 	}
 
@@ -120,7 +143,7 @@ void	Server::handleNewConnection( void ) {
 void	Server::handleClientMessage( int client_fd ) {
 
 	char buffer[BUFFER_SIZE];
-	std::memset( buffer, 0, BUFFER_SIZE );
+	memset( buffer, 0, BUFFER_SIZE );
 	
 	int bytesRecv = recv( client_fd, buffer, BUFFER_SIZE, 0 );
 	if ( bytesRecv <= 0 ) {
@@ -217,14 +240,16 @@ void	Server::processCommand( int client_fd, const std::string &command ) {
 
 void	Server::closeClient( int client_fd ) {
 
-	close( client_fd );
-	delete Server::_clients[client_fd];
-	Server::_clients.erase( client_fd );
-	
-	for ( auto& [channelName, channel] : Server::_channels ) {
+	std::map<int, Client*>::iterator it = Server::_clients.find( client_fd );
+	if ( it != Server::_clients.end() ) {
 
-		channel.removeClient( client_fd );
+		close( client_fd );
+		delete it->second;
+		Server::_clients.erase( it );
 	}
+
+	for (std::map<std::string, Channel>::iterator it = Server::_channels.begin(); it != Server::_channels.end(); ++it)
+		it->second.removeClient( client_fd );
 
 	for ( int i = 0; i < static_cast<int>( Server::_fds.size() ); ++i ) {
 
@@ -258,6 +283,9 @@ void	Server::signalHandler( int signal ) {
 	
 	for ( std::vector<pollfd>::iterator it = Server::_fds.begin(); it != Server::_fds.end(); ++it )
 		close( it->fd );
+
+	for (std::map<int, Client*>::iterator it = Server::_clients.begin(); it != Server::_clients.end(); ++it)
+        delete it->second;
 
 	shutdown( Server::_listeningSocket, SHUT_RDWR );
 	close( Server::_listeningSocket );
