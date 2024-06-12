@@ -6,13 +6,13 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/11 06:02:55 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/12 13:20:19 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #ifndef SERVER_HPP
-# define SERVER_HPP
+#define SERVER_HPP
 
 #include <string>
 #include <map>
@@ -38,35 +38,38 @@
 class Client;
 class Channel;
 class Server {
+private:
+    static const int						MAX_CLIENTS = FD_SETSIZE;
+    static const int						BUFFER_SIZE = 1024;
 
-	private:
+    static int								_listeningSocket;
+    static std::string						_serverPassword;
+    static int								_serverPort;
+    static struct sockaddr_in				_serverHint;
+	static int								_hintLen;
+    static char								_host[NI_MAXHOST];
+    static char								_svc[NI_MAXSERV];
+    static std::map<int, Client*>			_clients;
+    static std::map<std::string, Channel>	_channels;
+    static std::vector<pollfd>				_fds;
+    static bool                             _interruptSignal;
 
-		static const int						MAX_CLIENTS = FD_SETSIZE;
-		static const int						BUFFER_SIZE = 1024;
+    Server(void);
 
-		static int								_listeningSocket;
-		static std::string 						_serverPassword;
-		static int								_serverPort;
-		static std::map<int, Client*>			_clients;
-		static std::map<std::string, Channel>	_channels;
-		static std::vector<pollfd>				_fds;
+    static void setNonblocking(int fd);
+    static void handleNewConnection(void);
+    static void handleClientMessage(int client_fd);
+    static void closeClient(int client_fd);
+    static void processCommand(int client_fd, const std::string& command);
+    static void authenticateClient(int client_fd, const std::string& password);
+    static void cleanupServer(void);
 
-		Server( void );
-
-		static void 	setNonblocking( int fd );
-		static void 	handleNewConnection( void );
-		static void 	handleClientMessage( int client_fd );
-		static void 	closeClient( int client_fd );
-		static void		processCommand( int client_fd, const std::string &command );
-		static void		authenticateClient( int client_fd, const std::string &password);
-
-	public:
-
-		static void 	initServer( void );
-		static void		runServer( void );
-		static void		signalHandler( int signal );
-		static void		setServerPassword( const std::string &password ) { _serverPassword = password; }
-		static void		setServerPort( int port ) { _serverPort = port; }
+public:
+    static void initServer(void);
+    static void runServer(void);
+    static void signalHandler(int signal);
+    static void setServerPassword(const std::string& password) { _serverPassword = password; }
+    static void setServerPort(int port) { _serverPort = port; }
 };
 
 #endif /* SERVER_HPP */

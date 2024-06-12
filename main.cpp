@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:55:22 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/10 14:23:13 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/12 12:30:15 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,6 @@ int main( int ac, char* av[] ) {
 		std::cerr << "Server's password is not given" << std::endl;
 		return -3;
 	}
-
-	signal( SIGINT, Server::signalHandler );
-	signal( SIGQUIT, Server::signalHandler );
 
 		// Initialize and run the server
 	try {
