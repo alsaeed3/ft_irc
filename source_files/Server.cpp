@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/12 19:21:13 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/12 19:28:15 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void Server::setNonblocking(int fd) {
 
 void    Server::runServer(void) {
 
+    signal( SIGINT, Server::signalHandler );
+    signal( SIGQUIT, Server::signalHandler );
     while (Server::_interruptSignal == false) {
 
         int pollCount = poll((&Server::_fds[0]), Server::_fds.size(), 1000);
@@ -78,20 +80,16 @@ void    Server::runServer(void) {
             throw IrcException("Poll error");
         }
 
-        signal( SIGINT, Server::signalHandler );
-	    signal( SIGQUIT, Server::signalHandler );
+        if ( Server::_fds[0].revents & POLLIN ) {
+
+            handleNewConnection();
+        }
 
         for (std::vector<pollfd>::iterator it = Server::_fds.begin(); it != Server::_fds.end(); ++it) {
 
-            if (it->revents & POLLIN) {
-
-                if (it->fd == Server::_listeningSocket) {
-
-                    handleNewConnection();
-                } /* else {
+            if (it->fd != Server::_listeningSocket && it->revents & POLLIN) {
 
                     handleClientMessage(it->fd);
-                } */
             }
         }
 
