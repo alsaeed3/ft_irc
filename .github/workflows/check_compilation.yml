@@ -13,6 +13,9 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Display current branch
+      run: echo "Current branch: ${{ github.ref }}"
+
     - name: Build project
       run: make
 
@@ -22,6 +25,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    - name: Display current branch
+      run: echo "Current branch: ${{ github.ref }}"
 
     - name: Build project
       run: make
