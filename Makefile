@@ -6,14 +6,14 @@
 #    By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/05 23:41:54 by alsaeed           #+#    #+#              #
-#    Updated: 2024/06/12 07:01:29 by alsaeed          ###   ########.fr        #
+#    Updated: 2024/06/14 15:13:04 by alsaeed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
 CXX = c++
-CXXFLAGS = -Wall -Werror -Wextra #-std=c++98
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
 INCLUDES = -Iincludes/
 
 SRCS =	Server.cpp \
@@ -53,11 +53,12 @@ $(OBJS):	Makefile \
 			includes/Client.hpp \
 			includes/Channel.hpp \
 			includes/CommandType.hpp \
+			includes/Reply.hpp \
 			includes/IrcException.hpp \
 			source_files/Server.cpp \
 			source_files/Channel.cpp \
 			source_files/Client.cpp \
-			source_files/CommandType.cpp
+			source_files/CommandType.cpp \
 
 clean:
 	@if [ -e $(OBJS_DIR) ]; then \

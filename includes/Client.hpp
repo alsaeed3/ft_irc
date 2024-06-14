@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 11:53:01 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/13 10:12:26 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ class Client {
 		bool	isAuthenticated( void ) const;
 		void	setNickname( const std::string &nickname );
 		void	setUsername( const std::string &username );
+		
 		std::string getFullIdentity( void ) const;
+		std::string getNickname( void ) const;
+		std::string getUsername( void ) const;
+		std::string getIp( void ) const;
 };
 
 #endif /* CLIENT_HPP */

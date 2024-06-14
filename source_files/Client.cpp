@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 11:54:00 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/14 15:30:34 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,24 @@ void		Client::setUsername( const std::string &username ) {
 	return;
 }
 
+std::string	Client::getNickname( void ) const {
+
+	return _nickname;
+}
+
+std::string	Client::getUsername( void ) const {
+
+	return _username;
+}
+
 std::string	Client::getFullIdentity( void ) const {
 
 	return _nickname + "!" + _username + "@" + _ip;
+}
+
+std::string	Client::getIp( void ) const {
+
+	return _ip;
 }
 
 // Path: includes/Client.hpp
