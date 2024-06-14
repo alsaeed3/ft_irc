@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/14 16:59:02 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/14 17:08:44 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ void Server::handleClientDisconnection(int client_fd, int bytesRecv) {
             break;
         }
     }
- 
+
 	return;
 }
 
