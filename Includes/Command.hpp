@@ -10,8 +10,13 @@ class Command
 		Command();
 		~Command();
 
+
+		//Only operator can eject(kick, changemode or invite if in invite mode or change topic if in t channle mode)
+		//JOIN command
 		void join();
+		//KICK command
 		void kick();
+		//INVITE
 		void invite();
 		void topic();
 		void privmsg();
