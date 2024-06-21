@@ -1,6 +1,6 @@
 
 
-
+//handle the not enough params before in passing into command already
 
 
 // quitMessage(User user, std::string reason)
