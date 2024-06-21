@@ -6,7 +6,7 @@
 #    By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/05 23:41:54 by alsaeed           #+#    #+#              #
-#    Updated: 2024/06/14 15:13:04 by alsaeed          ###   ########.fr        #
+#    Updated: 2024/06/19 17:56:59 by alsaeed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ INCLUDES = -Iincludes/
 SRCS =	Server.cpp \
 		Channel.cpp \
 		Client.cpp \
-		CommandType.cpp
+		ParseMessage.cpp \
+		Commands.cpp
 
 OBJS_DIR = object_files
 OBJS = $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
@@ -52,13 +53,16 @@ $(OBJS):	Makefile \
 			includes/Server.hpp \
 			includes/Client.hpp \
 			includes/Channel.hpp \
-			includes/CommandType.hpp \
 			includes/Reply.hpp \
 			includes/IrcException.hpp \
+			includes/IrcLibs.hpp \
+			includes/ParseMessage.hpp \
+			includes/Reply.hpp \
 			source_files/Server.cpp \
 			source_files/Channel.cpp \
 			source_files/Client.cpp \
-			source_files/CommandType.cpp \
+			source_files/Commands.cpp \
+			source_files/ParseMessage.cpp \
 
 clean:
 	@if [ -e $(OBJS_DIR) ]; then \

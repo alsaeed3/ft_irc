@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/14 17:08:44 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/20 19:32:45 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,9 @@ void Server::setNonblocking(int fd) {
 
 void    Server::runServer(void) {
 
+	signal(SIGTSTP, Server::signalHandler);
+	signal(SIGINT, Server::signalHandler);
+
 	while ( signalInterrupt == false ) {
 
 		int pollCount = poll((&Server::_fds[0]), Server::_fds.size(), 1000);
@@ -84,8 +87,11 @@ void    Server::runServer(void) {
 			perror("poll");
 			throw IrcException("Poll error");
 		}
+		
+		if ( Server::_fds[0].revents & POLLIN ) {
 
-		handleNewConnection();
+			handleNewConnection();
+		}
 
 		std::vector<pollfd>::iterator it = Server::_fds.begin();
 		while (it != Server::_fds.end()) {
@@ -93,8 +99,11 @@ void    Server::runServer(void) {
 			if (it->fd != Server::_listeningSocket && it->revents & POLLIN) {
 
 				handleClientMessage(it->fd);
+			} else if ( it->fd != Server::_listeningSocket && it->revents & POLLOUT ) {
+
+				sendToClient( it->fd );
 			}
-			
+
 			if ( it->fd == -1 ) {
 			
 				closeClient(it->fd);
@@ -109,46 +118,60 @@ void    Server::runServer(void) {
 	return;
 }
 
+void Server::sendToClient( int client_fd ) {
+
+	Client* client = Server::_clients[client_fd];
+	std::vector<std::string>::iterator it = client->serverReplies.begin();
+
+	for ( ; it != client->serverReplies.end(); ++it ) {
+
+		std::cout << "............................................" << std::endl;
+		std::cout << "Sending message to client " << client->getNickname() << ": " << *it << std::endl;
+		std::cout << "............................................" << std::endl;
+		if ( send( client_fd, it->c_str(), it->size(), 0 ) == -1 ) {
+
+			std::cerr << "Error sending message to client " << client->getNickname() << " (" << strerror(errno) << ")" << std::endl;
+			return;
+		}
+	}
+
+	client->serverReplies.clear();
+
+	return;
+}
+
 void Server::handleNewConnection(void) {
 
-	signal(SIGTSTP, Server::signalHandler);
-	signal(SIGINT, Server::signalHandler);
-	if ( Server::_fds[0].revents & POLLIN ) {
+	sockaddr_in clientHint;
+	socklen_t clientSize = sizeof(clientHint);
+	int clientSocket = accept(Server::_listeningSocket, (sockaddr*)&clientHint, &clientSize);
+	if (clientSocket == -1) {
 
-		sockaddr_in clientHint;
-		socklen_t clientSize = sizeof(clientHint);
-		int clientSocket = accept(Server::_listeningSocket, (sockaddr*)&clientHint, &clientSize);
-		if (clientSocket == -1) {
-
-			if (errno == EAGAIN || errno == EWOULDBLOCK) {
-				// Resource temporarily unavailable, just continue the loop
-				return;
-			} else {
-				perror("accept");
-				throw IrcException("Can't accept client connection");
-			}
-		}
-
-		int result = getnameinfo((sockaddr*)&clientHint, clientSize, Server::_host, NI_MAXHOST, Server::_svc, NI_MAXSERV, 0);
-		if (result) {
-
-			std::cout <<  Server::_host << " connected on " << Server::_svc << std::endl;
-		} else {
-
-			inet_ntop(AF_INET, &clientHint.sin_addr, Server::_host, NI_MAXHOST);
-			std::cout <<  Server::_host << " connected on " << ntohs(clientHint.sin_port) << std::endl;
-		}
-
-		Client* tmpClient = new Client( clientSocket, inet_ntoa(clientHint.sin_addr) );
-		Server::_clients[clientSocket] = tmpClient;
-		pollfd clientPoll;
-		memset(&clientPoll, 0, sizeof(clientPoll));
-		clientPoll.fd = clientSocket;
-		clientPoll.events = POLLIN | POLLOUT;
-		clientPoll.revents = 0;
-		Server::_fds.push_back( clientPoll );
-		setNonblocking(clientSocket);
+		perror("accept");
+		throw IrcException("Can't accept client connection");
 	}
+
+	int result = getnameinfo((sockaddr*)&clientHint, clientSize, Server::_host, NI_MAXHOST, Server::_svc, NI_MAXSERV, 0);
+	if (result) {
+
+		std::cout <<  Server::_host << " connected on " << Server::_svc << std::endl;
+	} else {
+
+		inet_ntop(AF_INET, &clientHint.sin_addr, Server::_host, NI_MAXHOST);
+		std::cout <<  Server::_host << " connected on " << ntohs(clientHint.sin_port) << std::endl;
+	}
+
+	Client* tmpClient = new Client( clientSocket, inet_ntoa(clientHint.sin_addr) );
+	Server::_clients[clientSocket] = tmpClient;
+	pollfd clientPoll;
+	memset(&clientPoll, 0, sizeof(clientPoll));
+	clientPoll.fd = clientSocket;
+	clientPoll.events = POLLIN | POLLOUT;
+	clientPoll.revents = 0;
+	Server::_fds.push_back( clientPoll );
+	setNonblocking(clientSocket);
+
+	return;
 }
 
 int    Server::ft_recv( int fd ) {
@@ -176,93 +199,35 @@ void Server::handleClientDisconnection(int client_fd, int bytesRecv) {
 	}
 
 	for (std::vector<pollfd>::iterator it = Server::_fds.begin(); it != Server::_fds.end(); ++it) {
-        if (it->fd == client_fd) {
-            it->fd = -1;
-            break;
-        }
-    }
+		if (it->fd == client_fd) {
+			it->fd = -1;
+			break;
+		}
+	}
 
 	return;
 }
 
 void Server::handleClientMessage( int client_fd ) {
 
-	try {
+	int bytesRecv = Server::ft_recv( client_fd );
+	if (bytesRecv <= 0) {
 
-		int bytesRecv = Server::ft_recv( client_fd );
-		if (bytesRecv <= 0) {
-
-			handleClientDisconnection(client_fd, bytesRecv);
-			return;
-		}
-
-		if (Server::_message.empty() || (Server::_message[Server::_message.size() - 1] != '\n' && (Server::_message.size() >= 2 && Server::_message.substr(Server::_message.size() - 2) != "\r\n"))) {
-            std::cerr << "Invalid message format from client " << client_fd << std::endl;
-            return;
-        }
-		std::cout << "Received message from client " << client_fd << ": " << Server::_message << std::endl;
-		processCommand(client_fd, Server::_message);
-	} catch (const IrcException& e) {
-		std::cerr << "Error processing command from client " << client_fd << ": " << e.what() << std::endl;
+		handleClientDisconnection(client_fd, bytesRecv);
+		return;
 	}
+
+	if (Server::_message.empty() || (Server::_message[Server::_message.size() - 1] != '\n' && (Server::_message.size() >= 2 && Server::_message.substr(Server::_message.size() - 2) != "\r\n"))) {
+		std::cerr << "Invalid message format from client " << client_fd << std::endl;
+		Server::_message.clear();
+		return;
+	}
+	std::cout << "Received message from client " << client_fd << ": " << Server::_message << std::endl;
 	
+	processCommand(client_fd, ParseMessage(Server::_message));
+	Server::_message.clear();
+
 	return;
-}
-
-void Server::processCommand(int client_fd, const std::string& command) {
-
-	Client* client = Server::_clients[client_fd];
-	CommandType commandType = getCommandType(command);
-
-	switch (commandType) {
-		case CMD_PASS:
-			authenticateClient(client_fd, command.substr(5));
-			break;
-		case CMD_NICK:
-			if (!client->isAuthenticated()) {
-				client->sendMessage("ERROR: You must authenticate first");
-				break;
-			}
-			client->setNickname(command.substr(5));
-			break;
-		case CMD_USER:
-			if (!client->isAuthenticated()) {
-				client->sendMessage("ERROR: You must authenticate first");
-				break;
-			}
-			client->setUsername(command.substr(5));
-			break;
-		case CMD_JOIN:
-			if (!client->isAuthenticated()) {
-				client->sendMessage("ERROR: You must authenticate first");
-				break;
-			}
-			{
-				std::string channelName = command.substr(5);
-				Channel& channel = Server::_channels[channelName];
-				channel.addClient(client_fd);
-				client->joinChannel(channelName);
-				client->sendMessage(":" + client->getFullIdentity() + " JOIN :" + channelName);
-			}
-			break;
-		case CMD_PRIVMSG:
-			if (!client->isAuthenticated()) {
-				client->sendMessage("ERROR: You must authenticate first");
-				break;
-			}
-			{
-				std::size_t pos = command.find(' ', 8);
-				if (pos != std::string::npos) {
-					std::string channelName = command.substr(8, pos - 8);
-					std::string message = command.substr(pos + 1);
-					Server::_channels[channelName].broadcastMessage(":" + client->getFullIdentity() + " PRIVMSG " + channelName + " :" + message, client_fd);
-				}
-			}
-			break;
-		default:
-			client->sendMessage("ERROR: Unknown command");
-			break;
-	}
 }
 
 void Server::closeClient( int client_fd ) {
@@ -280,14 +245,14 @@ void Server::closeClient( int client_fd ) {
 
 	for ( std::vector<pollfd>::iterator it = Server::_fds.begin(); it != Server::_fds.end(); ) {
 
-        if ( it->fd == client_fd ) {
+		if ( it->fd == client_fd ) {
 
-            it = Server::_fds.erase(it);
-        } else {
+			it = Server::_fds.erase(it);
+		} else {
 
-            ++it;
-        }
-    }
+			++it;
+		}
+	}
 }
 
 void Server::authenticateClient(int client_fd, const std::string& password) {

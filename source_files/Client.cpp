@@ -6,45 +6,61 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/14 15:30:34 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/19 18:43:12 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Client.hpp>
 
-// Constructor
-Client::Client( int fd, const std::string &ip ) :	_fd( fd ), 
-													_ip( ip ), 
-													_authenticated( false ) {
+Client::Client( void ) :	_fd( 0 ),
+							_ip( "" ),
+							_isCorrectPassword( false ),
+							_nickname( "" ),
+							_username( "" ),
+							_realname( "" ),
+							_channel( "" ) {
 
 	return;
 }
 
-void		Client::sendMessage( const std::string &message ) {
+Client::Client( int fd, const std::string &ip ) :	_fd( fd ), 
+													_ip( ip ), 
+													_isCorrectPassword( false ),
+													_nickname( "" ),
+													_username( "" ),
+													_realname( "" ),
+													_channel( "" ) {
+
+	return;
+}
+
+bool		Client::sendMessage( const std::string &message ) {
 
 	if ( send( _fd, message.c_str(), message.size(), 0 ) == -1 ) {
 
-		throw IrcException( "Can't send message to client" );
+		return false;
 	}
 
-	return;
+	return true;
 }
 
 void		Client::joinChannel( const std::string &channel ) {
 
-	_channels.push_back( channel );
+	
 	return;
 }
 
-void		Client::setAuthenticated( bool authenticated ) {
 
-	_authenticated = authenticated;
-	return;
+bool		Client::isRegistered( void ) const {
+
+	return _isCorrectPassword && _username != "" && _nickname != "" && _realname != "";
 }
 
-bool		Client::isAuthenticated( void ) const {
+void		Client::setIsCorrectPassword( bool isCorrectPassword ) {
 
-	return _authenticated;
+	_isCorrectPassword = isCorrectPassword;
+
+	return;
 }
 
 void		Client::setNickname( const std::string &nickname ) {

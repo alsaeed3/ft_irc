@@ -1,46 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CommandType.cpp                                    :+:      :+:    :+:   */
+/*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/09 11:54:10 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/19 18:58:33 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <CommandType.hpp>
-#include <string>
+#include <Server.hpp>
 
-CommandType getCommandType( const std::string &command ) {
+int	Server::registerConnection( Client* client, const ParseMessage& parsedMsg ) {
 
-	if ( command.find( "PASS " ) == 0 ) {
+	if ( client->isRegistered() ) {
 
-		return CMD_PASS;
+		
 	}
-
-	if ( command.find( "NICK " ) == 0 ) {
-
-		return CMD_NICK;
-	}
-
-	if ( command.find( "USER " ) == 0 ) {
-
-		return CMD_USER;
-	}
-
-	if ( command.find( "JOIN " ) == 0 ) {
-
-		return CMD_JOIN;
-	}
-
-	if ( command.find( "PRIVMSG " ) == 0 ) {
-
-		return CMD_PRIVMSG;
-	}
-
-	return CMD_UNKNOWN;
+	
+	
+	return 0;
 }
 
-// Path: includes/CommandType.hpp
+void Server::processCommand( Client *client, const ParseMessage& parsedMsg) {
+
+	std::string command = parsedMsg.getCommand();
+
+	if (  )
+	
+	return;
+}
