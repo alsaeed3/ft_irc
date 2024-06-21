@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/20 19:32:45 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/21 15:54:53 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void Server::initServer(void) {
 	listeningSocketPoll.events = POLLIN;
 	listeningSocketPoll.revents = 0;
 	Server::_fds.push_back( listeningSocketPoll );
+
+	return;
 }
 
 
@@ -80,8 +82,7 @@ void    Server::runServer(void) {
 
 	while ( signalInterrupt == false ) {
 
-		int pollCount = poll((&Server::_fds[0]), Server::_fds.size(), 1000);
-		if (pollCount == -1) {
+		if ( poll((&Server::_fds[0]), Server::_fds.size(), 1000) == -1 ) {
 
 			Server::cleanupServer();
 			perror("poll");
@@ -169,7 +170,6 @@ void Server::handleNewConnection(void) {
 	clientPoll.events = POLLIN | POLLOUT;
 	clientPoll.revents = 0;
 	Server::_fds.push_back( clientPoll );
-	setNonblocking(clientSocket);
 
 	return;
 }
@@ -223,8 +223,9 @@ void Server::handleClientMessage( int client_fd ) {
 		return;
 	}
 	std::cout << "Received message from client " << client_fd << ": " << Server::_message << std::endl;
-	
-	processCommand(client_fd, ParseMessage(Server::_message));
+
+	ParseMessage parsedMsg(Server::_message);
+	processCommand( client_fd, parsedMsg );
 	Server::_message.clear();
 
 	return;

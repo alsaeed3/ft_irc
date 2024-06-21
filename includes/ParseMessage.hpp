@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:20:06 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/20 19:38:20 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/21 16:02:57 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,9 @@ class ParseMessage {
 
 		int 						_msgLen;
 		std::string					_msg;
-		std::string					_command;
+		std::string					_cmd;
 		std::vector<std::string>	_params;
-		std::vector<std::string>	_tags;
 		std::string					_trailing;
-		std::string					_prefix;
 		bool						_notValidParam;
 		std::string					_errorMsg;
 
@@ -38,18 +36,12 @@ class ParseMessage {
 		bool						isValid( const std::string &param ) const;
 		std::string					ft_trim( const std::string &str ) const;
 
-		void						setMsgLen( int msgLen ) { _msgLen = msgLen; }
-		void 						setMsg( const std::string &msg ) { _msg = msg; }
-		void 						setCommand( const std::string &command ) { _command = command; }
-		void 						setParams( const std::vector<std::string> &params ) { _params = params; }
-		void 						setTrailing( const std::string &trailing ) { _trailing = trailing; }
-		void 						setPrefix( const std::string &prefix ) { _prefix = prefix; }
-
 		int							getMsgLen( void ) const { return _msgLen; }
-		std::string					getCommand( void ) const { return _command; }
+		std::string					getMsg( void ) const { return _msg; }
+		std::string					getCmd( void ) const { return _cmd; }
 		std::vector<std::string>	getParams( void ) const { return _params; }
 		std::string					getTrailing( void ) const { return _trailing; }
-		std::string					getPrefix( void ) const { return _prefix; }
+		std::string					getErrorMsg( void ) const { return _errorMsg; }
 };
 
 #endif /* PARSEMSG_HPP */

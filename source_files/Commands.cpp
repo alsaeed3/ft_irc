@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/19 18:58:33 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/21 16:05:59 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ int	Server::registerConnection( Client* client, const ParseMessage& parsedMsg ) 
 void Server::processCommand( Client *client, const ParseMessage& parsedMsg) {
 
 	std::string command = parsedMsg.getCommand();
+	std::string 
 
-	if (  )
+	if ( parsedMsg. )
 	
 	return;
 }

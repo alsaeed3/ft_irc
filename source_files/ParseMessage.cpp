@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/20 20:14:16 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/21 16:03:54 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,9 @@ ParseMessage::ParseMessage( const std::string& message ) {
 
 	_msg = message;
 	_msgLen = static_cast<int>(message.length());
-	_command = "";
+	_cmd = "";
 	_params.clear();
 	_trailing = "";
-	_prefix = "";
 	_notValidParam = false;
 	_errorMsg = "";
 	std::string	trimmedMsg = ft_trim( message );
@@ -57,24 +56,38 @@ ParseMessage::ParseMessage( const std::string& message ) {
 
 			if ( token[0] == ':' ) {
 
-				_command = token.substr( 1 );
+				_cmd = token.substr( 1 );
 				tagFlag = false;
 				tagCmd = false;
 				continue;
 			}
-			_tags.push_back( token );
+
 			continue;
 		}
 		
 		if ( tagCmd ) {
 			
-			_command = token;
+			_cmd = token;
 			tagCmd = false;
 			continue;
 		}
 
-		
-		
+		if ( token[0] == ':' ) {
+			
+			_trailing = ft_trim( message.substr( message.find( token ) ) );
+			break;
+		} else {
+	
+			if ( isValid( token ) ) {
+				
+				_params.push_back( token );
+			} else {
+				
+				_notValidParam = true;
+				_errorMsg = "Invalid character in parameter: " + token;
+				break;
+			}	
+		}
 	}
 
 	return;
