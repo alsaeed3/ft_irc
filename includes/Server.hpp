@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/21 16:28:23 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/22 17:26:05 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class Server {
 		static char								_host[NI_MAXHOST];
 		static char								_svc[NI_MAXSERV];
 		static std::map<int, Client*>			_clients;
+		
 		static std::vector<pollfd>				_fds;
 
 		Server( void );
@@ -47,12 +48,12 @@ class Server {
 		static void				handleClientDisconnection(int client_fd, int bytesRecv);
 		static void             handleClientMessage(int client_fd);
 		static void             closeClient(int client_fd);
-		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
-		static void             authenticateClient(int client_fd, const std::string& password);
+		// static void             authenticateClient(int client_fd, const std::string& password);
 		static void				sendToClient( int client_fd );
 		static void             cleanupServer(void);
 
-		static int				registerConnection( Client* client, const ParseMessage& parsedMsg )
+		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
+		static int				registerConnection( Client* client, const ParseMessage& parsedMsg );
 
 	public:
 

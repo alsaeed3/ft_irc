@@ -6,14 +6,13 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/19 18:43:12 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/22 17:28:30 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Client.hpp>
 
 Client::Client( void ) :	_fd( 0 ),
-							_ip( "" ),
 							_isCorrectPassword( false ),
 							_nickname( "" ),
 							_username( "" ),
@@ -23,8 +22,7 @@ Client::Client( void ) :	_fd( 0 ),
 	return;
 }
 
-Client::Client( int fd, const std::string &ip ) :	_fd( fd ), 
-													_ip( ip ), 
+Client::Client( int fd ) :	_fd( fd ), 
 													_isCorrectPassword( false ),
 													_nickname( "" ),
 													_username( "" ),
@@ -44,11 +42,11 @@ bool		Client::sendMessage( const std::string &message ) {
 	return true;
 }
 
-void		Client::joinChannel( const std::string &channel ) {
+// void		Client::joinChannel( const std::string &channel ) {
 
 	
-	return;
-}
+// 	return;
+// }
 
 
 bool		Client::isRegistered( void ) const {
@@ -85,14 +83,14 @@ std::string	Client::getUsername( void ) const {
 	return _username;
 }
 
-std::string	Client::getFullIdentity( void ) const {
+// std::string	Client::getFullIdentity( void ) const {
 
-	return _nickname + "!" + _username + "@" + _ip;
-}
+// 	return _nickname + "!" + _username + "@" + _ip;
+// }
 
-std::string	Client::getIp( void ) const {
+// std::string	Client::getIp( void ) const {
 
-	return _ip;
-}
+// 	return _ip;
+// }
 
 // Path: includes/Client.hpp

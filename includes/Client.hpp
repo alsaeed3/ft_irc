@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/19 18:43:32 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/22 17:26:56 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class Client {
 
 		int							_fd;
 		bool						_isCorrectPassword;
-		std::string					_ip;
+		// std::string					_ip;
 		std::string					_nickname;
 		std::string					_username;
 		std::string					_realname;
@@ -38,7 +38,7 @@ class Client {
 		std::vector<std::string>	serverReplies;
 
 		Client( void );
-		Client( int fd, const std::string &ip );
+		Client( int fd );
 
 		bool		sendMessage( const std::string &message );
 		void		joinChannel( const std::string &channel );
@@ -50,7 +50,7 @@ class Client {
 		std::string getFullIdentity( void ) const;
 		std::string getNickname( void ) const;
 		std::string getUsername( void ) const;
-		std::string getIp( void ) const;
+		// std::string getIp( void ) const;
 
 		bool		isRegistered( void ) const;
 };

@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/21 16:03:54 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/22 17:28:47 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ ParseMessage::ParseMessage( const std::string& message ) {
 
 		if ( token[0] == ':' ) {
 			
-			_trailing = ft_trim( message.substr( message.find( token ) ) );
+			_trailing = ft_trim( message.substr( message.find( token ) ) ); // maybe add + 1
 			break;
 		} else {
 	
@@ -105,7 +105,7 @@ bool	ParseMessage::isValid( const std::string &param ) const {
 
 void ParseMessage::displayCommand(  const ParseMessage &parsedMessage ) const {
 
-	std::cout << "Command: " << parsedMessage.getCommand() << std::endl;
+	std::cout << "Command: " << parsedMessage.getCmd() << std::endl;
 	std::cout << "Params: ";
 	for ( int i = 0; i < static_cast<int>(parsedMessage._params.size()); i++ ) {
 		
@@ -113,7 +113,6 @@ void ParseMessage::displayCommand(  const ParseMessage &parsedMessage ) const {
 	}
 	std::cout << std::endl;
 	std::cout << "Trailing: " << parsedMessage._trailing << std::endl;
-	std::cout << "Prefix: " << parsedMessage._prefix << std::endl;
 
 	return;
 }

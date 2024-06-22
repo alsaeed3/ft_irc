@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/21 15:54:53 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/22 17:27:27 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,13 @@ void    Server::runServer(void) {
 			handleNewConnection();
 		}
 
-		std::vector<pollfd>::iterator it = Server::_fds.begin();
-		while (it != Server::_fds.end()) {
+		std::vector<pollfd>::iterator it = Server::_fds.begin() + 1;
+		while ( it != Server::_fds.end() ) {
 
-			if (it->fd != Server::_listeningSocket && it->revents & POLLIN) {
+			if ( it->revents & POLLIN ) {
 
 				handleClientMessage(it->fd);
-			} else if ( it->fd != Server::_listeningSocket && it->revents & POLLOUT ) {
+			} else if ( it->revents & POLLOUT ) {
 
 				sendToClient( it->fd );
 			}
@@ -162,8 +162,9 @@ void Server::handleNewConnection(void) {
 		std::cout <<  Server::_host << " connected on " << ntohs(clientHint.sin_port) << std::endl;
 	}
 
-	Client* tmpClient = new Client( clientSocket, inet_ntoa(clientHint.sin_addr) );
+	Client* tmpClient = new Client( clientSocket );
 	Server::_clients[clientSocket] = tmpClient;
+
 	pollfd clientPoll;
 	memset(&clientPoll, 0, sizeof(clientPoll));
 	clientPoll.fd = clientSocket;
@@ -224,8 +225,8 @@ void Server::handleClientMessage( int client_fd ) {
 	}
 	std::cout << "Received message from client " << client_fd << ": " << Server::_message << std::endl;
 
-	ParseMessage parsedMsg(Server::_message);
-	processCommand( client_fd, parsedMsg );
+	// ParseMessage parsedMsg(Server::_message);
+	// processCommand( _clients[client_fd] , parsedMsg );
 	Server::_message.clear();
 
 	return;
@@ -241,8 +242,8 @@ void Server::closeClient( int client_fd ) {
 		Server::_clients.erase(it);
 	}
 
-	for (std::map<std::string, Channel>::iterator it = Server::_channels.begin(); it != Server::_channels.end(); ++it)
-		it->second.removeClient(client_fd);
+	// for (std::map<std::string, Channel>::iterator it = Server::_channels.begin(); it != Server::_channels.end(); ++it)
+	// 	it->second.removeClient(client_fd);
 
 	for ( std::vector<pollfd>::iterator it = Server::_fds.begin(); it != Server::_fds.end(); ) {
 
@@ -256,18 +257,18 @@ void Server::closeClient( int client_fd ) {
 	}
 }
 
-void Server::authenticateClient(int client_fd, const std::string& password) {
+// void Server::authenticateClient(int client_fd, const std::string& password) {
 
-	std::cout << "_password: " << Server::_serverPassword << std::endl;
-	std::cout << "password: " << password << std::endl;
-	if (password == Server::_serverPassword) {
-		Server::_clients[client_fd]->setAuthenticated(true);
-		std::cout << "Client " << client_fd << " authenticated" << std::endl;
-	} else {
-		Server::_clients[client_fd]->sendMessage("ERROR: Invalid password");
-		std::cout << "Please enter the correct password" << std::endl;
-	}
-}
+// 	std::cout << "_password: " << Server::_serverPassword << std::endl;
+// 	std::cout << "password: " << password << std::endl;
+// 	if (password == Server::_serverPassword) {
+// 		Server::_clients[client_fd]->setAuthenticated(true);
+// 		std::cout << "Client " << client_fd << " authenticated" << std::endl;
+// 	} else {
+// 		Server::_clients[client_fd]->sendMessage("ERROR: Invalid password");
+// 		std::cout << "Please enter the correct password" << std::endl;
+// 	}
+// }
 
 void Server::signalHandler(int signal) {
 
@@ -290,7 +291,7 @@ void Server::cleanupServer(void) {
 	close(Server::_listeningSocket);
 	Server::_fds.clear();
 	Server::_clients.clear();
-	Server::_channels.clear();
+	// Server::_channels.clear();
 	
 	exit (0);
 }
@@ -304,7 +305,7 @@ std::string Server::_message = "";
 char Server::_host[NI_MAXHOST];
 char Server::_svc[NI_MAXSERV];
 std::map<int, Client*> Server::_clients;
-std::map<std::string, Channel> Server::_channels;
+// std::map<std::string, Channel> Server::_channels;
 std::vector<pollfd> Server::_fds;
 
 // Path: includes/Server.hpp
