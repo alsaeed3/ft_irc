@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/21 16:05:59 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/21 18:45:58 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 int	Server::registerConnection( Client* client, const ParseMessage& parsedMsg ) {
 
-	if ( client->isRegistered() ) {
+	if ( client->isRegistered() == true ) {
 
-		
+		client->serverReplies.push_back( ERR_ALREADYREGISTRED);
+		return 0;
 	}
 	
 	
@@ -25,10 +26,12 @@ int	Server::registerConnection( Client* client, const ParseMessage& parsedMsg ) 
 
 void Server::processCommand( Client *client, const ParseMessage& parsedMsg) {
 
-	std::string command = parsedMsg.getCommand();
-	std::string 
+	std::string command = parsedMsg.getCmd();
 
-	if ( parsedMsg. )
+	if ( command == "QUIT" )
+		quitCmd( parsedMsg.getTrailing(), client );	
+
 	
+
 	return;
 }

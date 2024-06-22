@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/19 19:06:02 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/21 16:28:23 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class Server {
 		static std::map<int, Client*>			_clients;
 		static std::vector<pollfd>				_fds;
 
-		Server(void);
+		Server( void );
 
 		static void             setNonblocking(int fd);
 		static void             handleNewConnection(void);
@@ -47,7 +47,7 @@ class Server {
 		static void				handleClientDisconnection(int client_fd, int bytesRecv);
 		static void             handleClientMessage(int client_fd);
 		static void             closeClient(int client_fd);
-		static void             processCommand(int client_fd, const ParseMessage& command);
+		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
 		static void             authenticateClient(int client_fd, const std::string& password);
 		static void				sendToClient( int client_fd );
 		static void             cleanupServer(void);
