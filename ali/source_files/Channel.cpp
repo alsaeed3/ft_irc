@@ -6,20 +6,20 @@
 /*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 18:06:42 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/23 19:40:50 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Server.hpp>
 #include <Channel.hpp>
 
-Channel::Channel(std::string &channelName, Client &client) : channelName(channelName), topic(""), pass("")
+//CONSTRUCTOR
+Channel::Channel(std::string &channelName, Client &client) : channelName(channelName), _topic(""), _key("")
 {
-	topic = "";
-	pass = "";
-	operators[client->getNick()] = client;
-	users[client->getNick()] = client;
-	//users.push_back(nickname);
+	_topic = "";
+	_key = "";
+	operators[client.getNickname()] = client;
+	users[client.getNickname()] = client;
 	modes['i'] = false;
 	modes['t'] = false;
 	modes['k'] = false;
@@ -27,43 +27,98 @@ Channel::Channel(std::string &channelName, Client &client) : channelName(channel
 	modes['l'] = false;
 }
 
-
-Channel &Server::getChannel(std:string channelName)
+//GETTER
+Channel &Server::getChannel(std::string channelName)
 {
-	std::map<std::string, Channel>::iterator chan = this->_channels(channelName);
+	std::map<std::string, Channel>::iterator chan = this->_channels.find(channelName);
 	return chan->second;
 }
 
+bool	Server::isChannelInServer(std::string &channelName)
+{
+	std::map<std::string, Channel>::iterator chan = this->_channels.find(channelName);
+	if(chan != this->_channels.end())
+	{
+		return true;
+	}
+	return false;
+}
+void Channel::addClient(Client &client)
+{
+	std::string nick = client.getNickname();
+	users[nick] = client;
+	if(isInInvite(nick))
+	{
+		inviteList.erase(nick);
+	}
+	if(operators.size() == 0)
+	{
+		operators[nick] = client;
+	}
+}
 
-// void	Channel::addClient( int client_fd ) {
+void Channel::setTopic(std::string &topic)
+{
+		_topic = topic;
+}
 
-// 	_clients.insert( client_fd );
 
-// 	return;
-// }
+bool Channel::isClientInChannel(std::string &nickname)
+{
+	if(std::find(users.begin(), users.end(), nickname) != users.end())
+	{
+		return true;
+	}
 
-// void	Channel::removeClient( int client_fd ) {
+	return false;
+}
 
-// 	_clients.erase( client_fd );
+bool Channel::isInInvite(std::string &nickname)
+{
+	if(this->inviteList.find(nickname) != inviteList.end())
+	{
+		return true;
+	}
+	return false;
+}
 
-// 	return;
-// }
 
-// void	Channel::broadcastMessage( const std::string &message, int sender_fd ) {
+std::map<std::string, Client> Channel::getUsers()
+{
+	return this->users;
+}
 
-// 	for ( std::set<int>::iterator it = _clients.begin(); it != _clients.end(); ++it ) {
+bool Channel::checkMode(char c)
+{
+	if(this->modes.find(c) != this->modes.end())
+	{
+		return this->modes.find(c)->second;
+	}
+	return false;
+}
 
-// 		int client_fd = *it;
-// 		if ( client_fd != sender_fd ) {
+bool Channel::isOperator(std::string &nickname)
+{
+	if(std::find(operators.begin(), operators.end(), nickname) != operators.end())
+	{
+		return true;
+	}
 
-// 			if ( send( client_fd, message.c_str(), message.length(), 0 ) == -1 ) {
+	return false;
+}
 
-// 				throw IrcException( "Can't send message to client" );
-// 			}
-// 		}
-// 	}
+void Channel::inviteClient(Client &client)
+{
+	std::string nick = client.getNickname();
+	this->inviteList[nick] = client;
+}
 
-// 	return;
-// }
+void Channel::setKey(std::string &password)
+{
+	this->_key = password;
+}
 
-// Path: includes/Channel.hpp
+std::string Channel::getKey()
+{
+	return this->_key;
+}

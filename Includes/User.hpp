@@ -18,6 +18,7 @@ class User
 		User(std::string name, int fd);
 		std::string getNick();
 		void setNick(std::string nick);
+		
 };
 
 

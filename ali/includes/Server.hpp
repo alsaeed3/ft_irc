@@ -6,7 +6,7 @@
 /*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 18:07:13 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/23 18:32:57 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <Channel.hpp>
 
 #include <map>
+#include <vector>
 
 
 class Server {
@@ -40,7 +41,7 @@ class Server {
 		static char								_host[NI_MAXHOST];
 		static char								_svc[NI_MAXSERV];
 		static std::map<int, Client*>			_clients;
-		std::map<std::string, Channel>			_channels;
+		static std::map<std::string, Channel>	_channels;
 		
 		static std::vector<pollfd>				_fds;
 
@@ -57,16 +58,16 @@ class Server {
 		static void             cleanupServer(void);
 
 		// Commands
-		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
-		static void 			joinCommand(Client &client, std::string &channels, std::string &keys);
-		static void 			kickCommand(Client &client, std::string channel, std::string removerUsers, std::string &comment);
-		static void 			inviteCommand(Client &client, std::string nickname, std::string channel);
+		void				processCommand( Client *client, const ParseMessage& parsedMsg);
+		void 			joinCommand(Client &client, std::string &channels, std::string &keys);
+		void 			kickCommand(Client &client, std::string channel, std::string removerUsers, std::string &comment);
+		void 			inviteCommand(Client &client, std::string nickname, std::string channel);
 		static int				registerConnection( Client* client, const ParseMessage& parsedMsg );
 
 		//Channels
 		static void 			addChannel(Channel &channel);
-		bool					isChannelinServer(std::string channelName);
 		Channel 	 			&getChannel(std::string channelName);
+			bool				isChannelInServer(std::string &channelName);
 		
 
 	public:
@@ -78,5 +79,10 @@ class Server {
 		static void 			setServerPassword(const std::string& password) { _serverPassword = password; }
 		static void 			setServerPort(int port) { _serverPort = port; }
 };
+
+
+std::vector<std::string>  ft_split(std::string str, char delimiter);
+std::vector<std::string> remove_spaces(std::string &str);
+
 
 #endif /* SERVER_HPP */

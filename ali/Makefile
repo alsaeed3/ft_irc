@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+         #
+#    By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/05 23:41:54 by alsaeed           #+#    #+#              #
-#    Updated: 2024/06/19 17:56:59 by alsaeed          ###   ########.fr        #
+#    Updated: 2024/06/23 18:20:34 by tmususa          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ $(OBJS):	Makefile \
 			source_files/Client.cpp \
 			source_files/Commands.cpp \
 			source_files/ParseMessage.cpp \
+			source_files/Utils.cpp \
 
 clean:
 	@if [ -e $(OBJS_DIR) ]; then \

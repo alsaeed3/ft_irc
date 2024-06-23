@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/22 17:28:30 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/23 19:03:43 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ void		Client::setUsername( const std::string &username ) {
 	return;
 }
 
-std::string	Client::getNickname( void ) const {
+std::string	&Client::getNickname( void ) const 
+{
 
 	return _nickname;
 }

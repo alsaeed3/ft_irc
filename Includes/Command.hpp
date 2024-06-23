@@ -39,6 +39,6 @@ class Command
 };
 
 std::vector<std::string>  ft_split(std::string string, char delimiter);
-std::vector<std::string> remove_spaces(std::string &str);
+// std::vector<std::string> remove_spaces(std::string &str);
 
 #endif

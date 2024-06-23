@@ -6,7 +6,7 @@
 /*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 17:59:21 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/23 21:26:37 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class Client {
 		std::string					_username;
 		std::string					_realname;
 		std::string					_channel;
+		
 
 	public:
 
@@ -41,19 +42,18 @@ class Client {
 		Client( int fd );
 
 		// bool		sendMessage( const std::string &message );
-		void		joinChannel( const std::string &channel );
-		void	leaveChannel( const std::string &channel );
+		// void		joinChannel( const std::string &channel );
+		// void	leaveChannel( const std::string &channel );
 		
-		void		setIsCorrectPassword( bool isCorrectPassword );
+		// void		setIsCorrectPassword( bool isCorrectPassword );
 		void		setNickname( const std::string &nickname );
 		void		setUsername( const std::string &username );
 		
 		std::string getFullIdentity( void ) const;
-		std::string getNickname( void ) const;
+		std::string &getNickname( void ) const;
 		std::string getUsername( void ) const;
 		// std::string getIp( void ) const;
 		int			getFd( void ) const;
-
 		bool		isRegistered( void ) const;
 };
 

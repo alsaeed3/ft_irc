@@ -6,7 +6,7 @@
 /*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 16:55:41 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/23 21:04:58 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,8 @@ void Server::handleClientDisconnection(int client_fd, int bytesRecv) {
 	return;
 }
 
-void Server::handleClientMessage( int client_fd ) {
+void Server::handleClientMessage( int client_fd )
+{
 
 	int bytesRecv = Server::ft_recv( client_fd );
 	if (bytesRecv <= 0) {
