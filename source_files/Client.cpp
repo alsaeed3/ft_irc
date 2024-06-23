@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: shamzaou <shamzaou@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/14 15:30:34 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/23 17:47:08 by shamzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Client.hpp>
+#include "../includes/Client.hpp"
 
 // Constructor
 Client::Client( int fd, const std::string &ip ) :	_fd( fd ), 
@@ -80,3 +80,28 @@ std::string	Client::getIp( void ) const {
 }
 
 // Path: includes/Client.hpp
+
+
+
+// changes by Salim
+
+void Client::leaveChannel(const std::string &channel) {
+    std::vector<std::string>::iterator it = std::find(_channels.begin(), _channels.end(), channel);
+    if (it != _channels.end()) {
+        _channels.erase(it);
+    }
+}
+
+void Client::inviteToChannel(const std::string &channel) {
+    if (std::find(_invitedChannels.begin(), _invitedChannels.end(), channel) == _invitedChannels.end()) {
+        _invitedChannels.push_back(channel);
+    }
+}
+
+bool Client::isInvited(const std::string &channel) const {
+    return std::find(_invitedChannels.begin(), _invitedChannels.end(), channel) != _invitedChannels.end();
+}
+
+int Client::getFd() const {
+    return _fd;
+}
