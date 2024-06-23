@@ -27,14 +27,18 @@ class Channel
 		~Channel();
 	//getters and setters
 	//kickout the user function
-		void kickUser(User &user);
-		void addUser(User &user);
+		void kickUser(User &user); 
+
+		void addUser(User &user); //add user
+		void addInvite(std::string &invite);
+		void addOperator(User &user);
+
 		void setTopic(std::string &topic);
+
 		bool isInChannel(std::string &nickname);
 		bool isOperator(std::string &nickname);
 		std::vector<std::string> getUsers();
 		bool checkMode(char c);
-		void addInvite(std::string &invite);
 		void setPass(std::string &password);
 		std::string getPass();
 

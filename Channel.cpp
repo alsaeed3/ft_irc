@@ -2,7 +2,7 @@
 
 Channel::Channel() : channelName(channelName), topic(""), pass("") {}
 
-Channel::Channel(std::string &nickname, std::string &channelName) : channelName(channelName), topic(""), pass("")
+Channel::Channel(std::string &channelName, Client &client) : channelName(channelName), topic(""), pass("")
 {
 	topic = "";
 	pass = "";

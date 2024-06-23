@@ -32,7 +32,7 @@ class Command
 		void mode();
 		void part();
 		void notice();
-
+	
 		//function to split the message passed
 		//channel exist
 		//user exist
