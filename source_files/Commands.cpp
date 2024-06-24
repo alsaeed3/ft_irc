@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 21:22:07 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/25 01:30:33 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,16 @@ bool Server::isValidIRCCommand(const std::string& command)
     return false;
 }
 
+void printCommand(ParseMessage message)
+{
+	std::vector<std::string> params = message.getParams();
+    std::cout << "Command: " << message.getCmd() << std::endl;
+    for (size_t i = 0; i < params.size(); i++) {
+        std::cout << "Param " << i << ": " << params[i] << std::endl;
+    }
+    std::cout << "Trailing: " << message.getTrailing() << std::endl;
+}
+
 void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 {
 	std::string command;
@@ -129,6 +139,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	{
 		return;
 	}
+	printCommand(parsedMsg);
 	command = parsedMsg.getCmd();
 	params = parsedMsg.getParams();
 	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING")
