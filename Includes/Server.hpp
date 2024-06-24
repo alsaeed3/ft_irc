@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 17:43:02 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/24 19:17:16 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,21 @@ class Server {
 		static void             cleanupServer(void);
 
 		// Commands
+		static void				quitCommand(std::string reason, Client *client);
+		static void				nickCommand(Client *client, const std::vector<std::string> &params);
 		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
 		static void 			joinCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			kickCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			inviteCommand(Client *client, const ParseMessage& parsedMsg);
-		static void				nickCommand(Client *client, const std::vector<std::string> &params);
 		static void				handleCapCommand(Client *client, const std::vector<std::string> &params);
 		static bool 			handlePassCommand(Client *client, const std::vector<std::string> &params);
-		static void				quitCommand(std::string reason, Client *client);
 		
 		static bool				registerConnection( Client* client, const ParseMessage& parsedMsg );
 
 		//Channels
 		static void 			addChannel(Channel &channel);
-		Channel 	 			&getChannel(std::string channelName);
-			bool				isChannelInServer(std::string &channelName);
+		static Channel 	 		&getChannel(std::string channelName);
+		static bool				isChannelInServer(std::string &channelName);
 		
 		static	void			addNewUser(Client* client, const ParseMessage &parsedMsg);
 
@@ -89,9 +89,9 @@ class Server {
 		static bool				isValidIRCCommand(const std::string& command);
 };
 
-
 std::vector<std::string>  ft_split(std::string str, char delimiter);
 std::vector<std::string> remove_spaces(std::string &str);
+
 
 
 #endif /* SERVER_HPP */

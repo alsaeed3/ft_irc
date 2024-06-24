@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 16:48:21 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/24 19:57:59 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -312,5 +312,7 @@ char Server::_svc[NI_MAXSERV];
 std::map<int, Client*> Server::_clients;
 // std::map<std::string, Channel> Server::_channels;
 std::vector<pollfd> Server::_fds;
+std::map<std::string, Channel>	Server::_channels;
+std::vector<std::string>			Server::_nicknames;
 
 // Path: includes/Server.hpp

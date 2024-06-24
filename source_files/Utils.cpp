@@ -1,10 +1,12 @@
 #include <Server.hpp>
 
+//function to split based on comma in C++98
 std::vector<std::string>  ft_split(std::string str, char delimiter)
 {
 	std::vector<std::string> result;
 	std::string word;
 
+	if(str.empty())
 	for (size_t i = 0; i < str.length(); ++i)
 	{
 		if(str[i] != delimiter)

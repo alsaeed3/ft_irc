@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 16:33:34 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/24 19:54:27 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,10 @@ bool		Client::getIsCorrectPassword( void ) const {
 void	Client::setFd(int value)
 {
 	_fd = value;
+}
+int 	Client::getFd( void ) const
+{
+	return _fd;
 }
 
 // std::string	Client::getFullIdentity( void ) const {

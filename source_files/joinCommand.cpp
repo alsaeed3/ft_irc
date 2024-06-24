@@ -1,11 +1,23 @@
 #include <Server.hpp>
 
 
-void Server::joinCommand(Client &client, const ParseMessage &message)
+void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 {
 	//need to make some changes and add some new checks for params
-	std::vector<std::string> chan_list = ft_split(channels, ',');
-	std::vector<std::string> key_list = ft_split(keys, ',');
+	std::vector<std::string> params = ParsedMsg.getParams();
+	std::vector<std::string> key_list;
+	if(params.size() < 1)
+	{
+		client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getNickname(), "JOIN"));
+	}
+
+	std::vector<std::string> chan_list = ft_split(params[0], ',');
+
+	if(params.size() > 1)
+	{
+		 key_list = ft_split(params[1], ',');
+	}
+
 	std::vector<std::string>::iterator itr_key;
 	std::vector<std::string>::iterator itr_chan;
 	std::string response;
@@ -19,35 +31,35 @@ void Server::joinCommand(Client &client, const ParseMessage &message)
 			continue ;
 		}
 		itr_key = key_list.begin();
-		if (this->isChannelInServer(chanName))
+		if (isChannelInServer(chanName))
 		{
-			Channel tempChannel = this->getChannel(chanName);
+			Channel tempChannel = getChannel(chanName);
 			if (tempChannel.checkMode('i')
-				&& !tempChannel.isInInvite(client.getNickname()))
+				&& !tempChannel.isInInvite(client->getNickname()))
 			{
 				response = "NOT ON INVITE LIST";
 				continue ;
 			}
 			if (tempChannel.checkMode('k'))
 			{
-				if (*itr_key == tempChannel.getKey())
+				if (itr_key != key_list.end() && *itr_key == tempChannel.getKey())
 				{
 					++itr_key;
 				}
 				else
 				{
-					response = "WRONG PASSWORD";
+					response = "WRONG_PASSWORD";
 					continue ;
 				}
 			}
-			tempChannel.addClient(client);
+			tempChannel.addClient(*client);
 		}
 		else
 		{
-			this->_channels.insert(make_pair(chanName, Channel(chanName,
-						client)));
+			_channels.insert(make_pair(chanName, Channel(chanName,
+						*client)));
 			response = "CHANNEL CREATED USER ADDED";
 		}
 	}
-	client.serverReplies.push_back(response);
+	client->serverReplies.push_back(response);
 }

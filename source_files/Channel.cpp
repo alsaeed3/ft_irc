@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 19:40:50 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/24 19:31:29 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 //CONSTRUCTOR
 Channel::Channel(std::string &channelName, Client &client) : channelName(channelName), _topic(""), _key("")
 {
-	_topic = "";
-	_key = "";
 	operators[client.getNickname()] = client;
 	users[client.getNickname()] = client;
 	modes['i'] = false;
@@ -27,17 +25,19 @@ Channel::Channel(std::string &channelName, Client &client) : channelName(channel
 	modes['l'] = false;
 }
 
+Channel::~Channel(){}
+
 //GETTER
 Channel &Server::getChannel(std::string channelName)
 {
-	std::map<std::string, Channel>::iterator chan = this->_channels.find(channelName);
+	std::map<std::string, Channel>::iterator chan = _channels.find(channelName);
 	return chan->second;
 }
 
 bool	Server::isChannelInServer(std::string &channelName)
 {
-	std::map<std::string, Channel>::iterator chan = this->_channels.find(channelName);
-	if(chan != this->_channels.end())
+	std::map<std::string, Channel>::iterator chan = _channels.find(channelName);
+	if(chan != _channels.end())
 	{
 		return true;
 	}
@@ -65,16 +65,17 @@ void Channel::setTopic(std::string &topic)
 
 bool Channel::isClientInChannel(std::string &nickname)
 {
-	if(std::find(users.begin(), users.end(), nickname) != users.end())
+	std::map<std::string, Client>::iterator user_itr = this->users.find(nickname);
+	if(user_itr != this->users.end())
 	{
 		return true;
 	}
-
 	return false;
 }
 
-bool Channel::isInInvite(std::string &nickname)
+bool Channel::isInInvite(std::string nickname)
 {
+	
 	if(this->inviteList.find(nickname) != inviteList.end())
 	{
 		return true;
@@ -99,7 +100,8 @@ bool Channel::checkMode(char c)
 
 bool Channel::isOperator(std::string &nickname)
 {
-	if(std::find(operators.begin(), operators.end(), nickname) != operators.end())
+	
+	if(this->operators.find(nickname) != operators.end())
 	{
 		return true;
 	}

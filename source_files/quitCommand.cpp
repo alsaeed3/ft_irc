@@ -12,10 +12,12 @@ void				Server::quitCommand(std::string reason, Client *client)
 			//remove user from all channels
 			if(reason.empty())
 			{
-				itr->second.broadcastMessage(RPL_QUIT(user_id(client->getNickname(), client->getUsername()), message));
+				// itr->second.broadcastMessage(RPL_QUIT(user_id(client->getNickname(), client->getUsername()), message));
 			}
 			else
-				itr->second.broadcastMessage(RPL_ERROR(user_id(client->getNickname(), client->getUsername()), reason));
+			{
+				// itr->second.broadcastMessage(RPL_ERROR(user_id(client->getNickname(), client->getUsername()), reason));
+			}
 		}
 	}
 	closeClient(client->getFd());
