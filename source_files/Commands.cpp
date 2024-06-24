@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 21:45:50 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/24 13:12:46 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Channel.hpp>
 #include <Server.hpp>
 
-// int	Server::registerConnection( Client* client,
-		const ParseMessage& parsedMsg ) {
+// int	Server::registerConnection( Client* client, const ParseMessage& parsedMsg ) {
 
 // 	if ( client->isRegistered() == true ) {
 
