@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 12:57:30 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/24 21:06:24 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class Client {
 		// std::string					_ip;
 		std::string					_nickname;
 		std::string					_username;
-		std::string					_realname;
+		// std::string					_realname;
 		std::string					_channel;
 		
 

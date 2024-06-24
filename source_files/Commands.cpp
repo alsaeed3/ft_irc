@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 17:15:18 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/24 21:22:07 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,30 @@ void Server::addNewUser(Client* client, const ParseMessage &parsedMsg)
     }
 }
 
-bool Server::registerConnection(Client *client, const ParseMessage &parsedMsg) {
+bool Server::connectUser(Client *client, const ParseMessage &parsedMsg) 
+{
     const std::string &command = parsedMsg.getCmd();
     const std::vector<std::string> &params = parsedMsg.getParams();
 
-    if (client->isRegistered() == true) {
-        if (command == "USER" || command == "PASS") {
+    if (client->isRegistered() == true) 
+	{
+        if (command == "USER" || command == "PASS")
+		 {
             client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
             return true;
         }
         return false;
     }
 
-    if (command == "CAP") {
+    if (command == "CAP")
+	{
         handleCapCommand(client, params);
         return true;
     }
 
-    if (command == "PASS") {
+    if (command == "PASS") 
+	{
+		std::cout << "HERE" << std::endl;
         return handlePassCommand(client, params);
     }
 
@@ -60,7 +66,8 @@ bool Server::registerConnection(Client *client, const ParseMessage &parsedMsg) {
         return true;
     }
 
-    if (command == "NICK" && client->getIsCorrectPassword() && !client->isRegistered()) {
+    if (command == "NICK" && client->getIsCorrectPassword() && !client->isRegistered()) 
+	{
         nickCommand(client, params);
         // TODO: Call message of the day function
         return true;
@@ -81,7 +88,8 @@ void Server::handleCapCommand(Client *client, const std::vector<std::string> &pa
 }
 
 bool Server::handlePassCommand(Client *client, const std::vector<std::string> &params) {
-    if (!client->getIsCorrectPassword()) {
+    if (client->getIsCorrectPassword() == false) 
+	{
         if (params[0] == getServerPassword())
 		{
             client->setIsCorrectPassword(true);
@@ -115,12 +123,15 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 {
 	std::string command;
 	//create print command debugger message
+	
+	std::vector<std::string> params;
 	if(parsedMsg.getCmd().empty() == true)
 	{
 		return;
 	}
 	command = parsedMsg.getCmd();
-	if(parsedMsg.getParams().size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING")
+	params = parsedMsg.getParams();
+	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING")
 	{
 		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getUsername() ,command));
 	}
@@ -137,14 +148,17 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		{
 			// joinCommand();
 		}
+		if(command == "PING")
+		{
+			 client->serverReplies.push_back(RPL_PONG(user_id(client->getNickname(),client->getUsername()),params[0]));
+		}
 		if(command == "NICK")
 		{
-			nickCommand(client, parsedMsg.getParams());
+			nickCommand(client, params);
 		}
-
 		return;
 	}
-	if(registerConnection(client, parsedMsg) == false)
+	if(connectUser(client, parsedMsg) == false)
 	{
 		//send message that says register user first
 	}

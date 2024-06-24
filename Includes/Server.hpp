@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 19:17:16 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/24 21:02:27 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ class Server {
 		static void				handleCapCommand(Client *client, const std::vector<std::string> &params);
 		static bool 			handlePassCommand(Client *client, const std::vector<std::string> &params);
 		
-		static bool				registerConnection( Client* client, const ParseMessage& parsedMsg );
+		static bool				connectUser( Client* client, const ParseMessage& parsedMsg );
 
 		//Channels
 		static void 			addChannel(Channel &channel);
