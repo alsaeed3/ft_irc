@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 19:03:43 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/24 16:33:34 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void		Client::setUsername( const std::string &username ) {
 	return;
 }
 
-std::string	&Client::getNickname( void ) const 
+std::string	Client::getNickname( void ) const 
 {
 
 	return _nickname;
@@ -82,6 +82,15 @@ std::string	&Client::getNickname( void ) const
 std::string	Client::getUsername( void ) const {
 
 	return _username;
+}
+
+bool		Client::getIsCorrectPassword( void ) const {
+		return _isCorrectPassword;
+}
+
+void	Client::setFd(int value)
+{
+	_fd = value;
 }
 
 // std::string	Client::getFullIdentity( void ) const {

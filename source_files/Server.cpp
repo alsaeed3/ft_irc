@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 21:04:58 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/24 16:48:21 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,10 @@ void Server::closeClient( int client_fd ) {
 	}
 }
 
+std::string Server::getServerPassword( void )
+{
+	return _serverPassword;
+}
 // void Server::authenticateClient(int client_fd, const std::string& password) {
 
 // 	std::cout << "_password: " << Server::_serverPassword << std::endl;
