@@ -4,6 +4,8 @@
 void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 {
 	//need to make some changes and add some new checks for params
+
+	std::cout << "here" << std::endl;
 	std::vector<std::string> params = ParsedMsg.getParams();
 	std::vector<std::string> key_list;
 	if(params.size() < 1)
