@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 21:02:27 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/25 23:59:16 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ class Server {
 		static void 			inviteCommand(Client *client, const ParseMessage& parsedMsg);
 		static void				handleCapCommand(Client *client, const std::vector<std::string> &params);
 		static bool 			handlePassCommand(Client *client, const std::vector<std::string> &params);
+		static void 			privateMessage(Client *client, const ParseMessage &ParsedMsg);
 		
 		static bool				connectUser( Client* client, const ParseMessage& parsedMsg );
 
@@ -85,8 +86,9 @@ class Server {
 		
 		static void 			setServerPassword(const std::string& password) { _serverPassword = password; };
 		static void 			setServerPort(int port) { _serverPort = port; };
-		static std::string				getServerPassword( void );
+		static std::string		getServerPassword( void );
 		static bool				isValidIRCCommand(const std::string& command);
+		static void 			printCommand(ParseMessage message);
 };
 
 std::vector<std::string>  ft_split(std::string str, char delimiter);

@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/25 13:45:36 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/25 15:14:42 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ std::vector<std::string>  ft_split(std::string str, char delimiter)
 {
 	std::vector<std::string> result;
 	std::string word;
-
-	if(str.empty())
+	
 	for (size_t i = 0; i < str.length(); ++i)
 	{
 		if(str[i] != delimiter)

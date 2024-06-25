@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/25 13:54:04 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/25 15:15:29 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ void    Server::runServer(void) {
 			throw IrcException("Poll error");
 		}
 		
-		if ( Server::_fds[0].revents & POLLIN ) {
-
+		if ( Server::_fds[0].revents & POLLIN )
+		{
 			handleNewConnection();
 		}
 
@@ -181,7 +181,6 @@ int    Server::ft_recv( int fd ) {
 	Server::_message.clear();
 	Server::_message.resize(Server::BUFFER_SIZE);
 	int bytesRecv = recv(fd, &Server::_message[0], Server::BUFFER_SIZE, 0);
-
 	if (bytesRecv <= 0) {
 		return bytesRecv;
 	}

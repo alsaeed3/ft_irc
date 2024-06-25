@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/25 13:39:49 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/25 23:59:32 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ bool Server::connectUser(Client *client, const ParseMessage &parsedMsg)
 	{
         nickCommand(client, params);
         // TODO: Call message of the day function
-		std::cout << "CONNECTION DONE" << std::endl;
+		// std::cout << "CONNECTION DONE" << std::endl;
+		client->serverReplies.push_back( RPL_MOTDSTART(client->getUsername(),client->getUsername()));
         return true;
     }
 
@@ -110,7 +111,7 @@ bool Server::isValidIRCCommand(const std::string& command)
 {
     static const char* validCommands[] = {
         "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG",
-        "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", 0
+        "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "NOTICE", 0
     };
 
     for (const char** cmd = validCommands; *cmd; ++cmd) {
@@ -120,7 +121,7 @@ bool Server::isValidIRCCommand(const std::string& command)
     return false;
 }
 
-void printCommand(ParseMessage message)
+void Server::printCommand(ParseMessage message)
 {
 	std::vector<std::string> params = message.getParams();
     std::cout << "Command: " << message.getCmd() << std::endl;
@@ -155,11 +156,20 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	}
 	if (command == "QUIT")
 		quitCommand(parsedMsg.getTrailing(), client);
+		
+	if(connectUser(client, parsedMsg) == false)
+	{
+		//send message that says register user first
+	}
 	if (client->isRegistered() == true)
 	{
 		if (command == "JOIN")
 		{
-			// joinCommand();
+			joinCommand()
+		}
+		if(command == "PRIVMSG")
+		{
+			privateMessage(client, parsedMsg);	
 		}
 		if(command == "PING")
 		{
@@ -169,10 +179,32 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		{
 			nickCommand(client, params);
 		}
+		if (command == "MODE")
+		{
+			
+		}
+		if(command == "TOPIC")
+		{
+			
+		}
+		if(command == "INVITE")
+		{
+			
+		}
+		if(command == "MOTD")
+		{
+			
+		}
+		if(command == "PART")
+		{
+			
+		}
+		if(command == "NOTICE")
+		{
+			
+		}
 		return;
 	}
-	if(connectUser(client, parsedMsg) == false)
-	{
-		//send message that says register user first
-	}
+	command.clear();
+	params.clear();
 }
