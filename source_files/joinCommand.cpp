@@ -12,14 +12,11 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 	{
 		client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getNickname(), "JOIN"));
 	}
-
 	std::vector<std::string> chan_list = ft_split(params[0], ',');
-
 	if(params.size() > 1)
 	{
 		 key_list = ft_split(params[1], ',');
 	}
-
 	std::vector<std::string>::iterator itr_key;
 	std::vector<std::string>::iterator itr_chan;
 	std::string response;

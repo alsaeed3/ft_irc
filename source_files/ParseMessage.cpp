@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 20:00:35 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/25 13:45:36 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ ParseMessage::ParseMessage( const std::string& message ) {
 	bool tagCmd = true;
 
 	if ( trimmedMsg[0] == '@' ) {
-
 		tagFlag = true;
 	}
 	
@@ -111,8 +110,8 @@ ParseMessage::ParseMessage( const std::string& message ) {
 
 		if ( tagFlag ) {
 
-			if ( token[0] == ':' ) {
-
+			if ( token[0] == ':' )
+			{
 				_cmd = token.substr( 1 );
 				tagFlag = false;
 				tagCmd = false;

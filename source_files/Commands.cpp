@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/25 01:30:33 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/25 13:39:49 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ bool Server::connectUser(Client *client, const ParseMessage &parsedMsg)
 	{
         nickCommand(client, params);
         // TODO: Call message of the day function
+		std::cout << "CONNECTION DONE" << std::endl;
         return true;
     }
 
@@ -123,7 +124,8 @@ void printCommand(ParseMessage message)
 {
 	std::vector<std::string> params = message.getParams();
     std::cout << "Command: " << message.getCmd() << std::endl;
-    for (size_t i = 0; i < params.size(); i++) {
+    for (size_t i = 0; i < params.size(); i++) 
+	{
         std::cout << "Param " << i << ": " << params[i] << std::endl;
     }
     std::cout << "Trailing: " << message.getTrailing() << std::endl;
