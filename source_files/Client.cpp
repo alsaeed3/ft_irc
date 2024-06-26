@@ -6,11 +6,11 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 21:06:39 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/26 14:33:37 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Client.hpp>
+#include <Server.hpp>
 
 Client::Client( void ) :	_fd( 0 ),
 							_isCorrectPassword( false ),
@@ -95,6 +95,25 @@ void	Client::setFd(int value)
 int 	Client::getFd( void ) const
 {
 	return _fd;
+}
+
+bool Server::isUserInServer(std::string nickname)
+{
+	    return std::find(_nicknames.begin(),_nicknames.end(), nickname) != _nicknames.end();
+}
+
+Client	*Server::getClient(std::string nickname)
+{
+    std::map<int, Client*>::iterator it;
+	
+    for (it = _clients.begin(); it != _clients.end(); ++it) {
+        Client* client = it->second;
+        if (client->getNickname() == nickname) 
+		{
+            return client;
+        }
+    }
+    return NULL;
 }
 
 // std::string	Client::getFullIdentity( void ) const {

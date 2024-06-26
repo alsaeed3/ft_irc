@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/25 23:59:16 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/26 15:53:10 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,21 @@ class Server {
 		static void             setNonblocking(int fd);
 		static void             handleNewConnection(void);
 		static int     			ft_recv( int fd );
+		static void             cleanupServer(void);
+
+		//CLIENT FUNCTIONS
 		static void				handleClientDisconnection(int client_fd, int bytesRecv);
 		static void             handleClientMessage(int client_fd);
 		static void             closeClient(int client_fd);
 		// static void             authenticateClient(int client_fd, const std::string& password);
 		static void				sendToClient( int client_fd );
-		static void             cleanupServer(void);
+		static bool				connectUser( Client* client, const ParseMessage& parsedMsg );
+		static	void			addNewUser(Client* client, const ParseMessage &parsedMsg);
+		static Client					*getClient(std::string nickname);
 
 		// Commands
 		static void				quitCommand(std::string reason, Client *client);
-		static void				nickCommand(Client *client, const std::vector<std::string> &params);
+		static bool				nickCommand(Client *client, const std::vector<std::string> &params);
 		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
 		static void 			joinCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			kickCommand(Client *client, const ParseMessage& parsedMsg);
@@ -69,14 +74,12 @@ class Server {
 		static bool 			handlePassCommand(Client *client, const std::vector<std::string> &params);
 		static void 			privateMessage(Client *client, const ParseMessage &ParsedMsg);
 		
-		static bool				connectUser( Client* client, const ParseMessage& parsedMsg );
 
 		//Channels
 		static void 			addChannel(Channel &channel);
 		static Channel 	 		&getChannel(std::string channelName);
 		static bool				isChannelInServer(std::string &channelName);
 		
-		static	void			addNewUser(Client* client, const ParseMessage &parsedMsg);
 
 	public:
 
@@ -89,6 +92,7 @@ class Server {
 		static std::string		getServerPassword( void );
 		static bool				isValidIRCCommand(const std::string& command);
 		static void 			printCommand(ParseMessage message);
+		static bool					isUserInServer(std::string nickname);
 };
 
 std::vector<std::string>  ft_split(std::string str, char delimiter);

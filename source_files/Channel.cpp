@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 19:31:29 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/26 17:48:04 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void Channel::setTopic(std::string &topic)
 }
 
 
-bool Channel::isClientInChannel(std::string &nickname)
+bool Channel::isClientInChannel(std::string nickname)
 {
 	std::map<std::string, Client>::iterator user_itr = this->users.find(nickname);
 	if(user_itr != this->users.end())
@@ -84,7 +84,7 @@ bool Channel::isInInvite(std::string nickname)
 }
 
 
-std::map<std::string, Client> Channel::getUsers()
+std::map<std::string, Client> Channel::getUsers( void )
 {
 	return this->users;
 }
@@ -123,4 +123,35 @@ void Channel::setKey(std::string &password)
 std::string Channel::getKey()
 {
 	return this->_key;
+}
+
+int Channel::getMaxUsers()
+{
+	return maxUsers;
+}
+
+void Channel::broadcastMessage(const std::string message)
+{
+    std::map<std::string, Client>::iterator it;
+    for (it = users.begin(); it != users.end(); ++it)
+    {
+        int fd = it->second.getFd();
+        if (fd != -1)
+        {
+            send(fd, message.c_str(), message.length(), 0);
+        }
+    }
+}
+
+void Channel::sendToOthers(Client *client, std::string message)
+{
+    std::map<std::string, Client>::iterator it;
+    for (it = users.begin(); it != users.end(); ++it)
+    {
+		int fd = it->second.getFd();
+        if (fd != -1 && &it->second != client)
+        {
+            send(fd, message.c_str(), message.length(), 0);
+        }
+    }
 }
