@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/25 15:15:29 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/26 21:44:43 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ void Server::handleClientMessage( int client_fd )
 	//split on newline using ft_split and return a vector of strings and loop through that and push to 
 	std::cout << "Received message from client " << client_fd << ": " << Server::_message << std::endl;
 	commandList = ft_split(Server::_message, '\n');
-	for(size_t i = 0; i < commandList.size(); i++)
+	for(std::size_t i = 0; i < commandList.size(); i++)
 	{
 		ParseMessage parsedMsg(commandList[i]);
 		processCommand( _clients[client_fd] , parsedMsg );
