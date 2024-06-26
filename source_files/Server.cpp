@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 21:04:58 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/25 15:15:29 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,18 +89,19 @@ void    Server::runServer(void) {
 			throw IrcException("Poll error");
 		}
 		
-		if ( Server::_fds[0].revents & POLLIN ) {
-
+		if ( Server::_fds[0].revents & POLLIN )
+		{
 			handleNewConnection();
 		}
 
-		std::vector<pollfd>::iterator it = Server::_fds.begin() + 1;
+		std::vector<pollfd>::iterator it = Server::_fds.begin();
 		while ( it != Server::_fds.end() ) {
 
-			if ( it->revents & POLLIN ) {
-
+			if (it->fd != Server::_listeningSocket && it->revents & POLLIN ) 
+			{
+				
 				handleClientMessage(it->fd);
-			} else if ( it->revents & POLLOUT ) {
+			} else if (it->fd != Server::_listeningSocket && it->revents & POLLOUT ) {
 
 				sendToClient( it->fd );
 			}
@@ -180,9 +181,7 @@ int    Server::ft_recv( int fd ) {
 	Server::_message.clear();
 	Server::_message.resize(Server::BUFFER_SIZE);
 	int bytesRecv = recv(fd, &Server::_message[0], Server::BUFFER_SIZE, 0);
-
 	if (bytesRecv <= 0) {
-
 		return bytesRecv;
 	}
 	
@@ -213,23 +212,28 @@ void Server::handleClientMessage( int client_fd )
 {
 
 	int bytesRecv = Server::ft_recv( client_fd );
+	
 	if (bytesRecv <= 0) {
 
 		handleClientDisconnection(client_fd, bytesRecv);
 		return;
 	}
-
+	std::vector<std::string> commandList;
 	if (Server::_message.empty() || (Server::_message[Server::_message.size() - 1] != '\n' && (Server::_message.size() >= 2 && Server::_message.substr(Server::_message.size() - 2) != "\r\n"))) {
 		std::cerr << "Invalid message format from client " << client_fd << std::endl;
 		Server::_message.clear();
 		return;
 	}
+	//split on newline using ft_split and return a vector of strings and loop through that and push to 
 	std::cout << "Received message from client " << client_fd << ": " << Server::_message << std::endl;
-
-	ParseMessage parsedMsg(Server::_message);
-	processCommand( _clients[client_fd] , parsedMsg );
-	Server::_message.clear();
-
+	commandList = ft_split(Server::_message, '\n');
+	for(size_t i = 0; i < commandList.size(); i++)
+	{
+		ParseMessage parsedMsg(commandList[i]);
+		processCommand( _clients[client_fd] , parsedMsg );
+		commandList[i].clear();
+	}
+	commandList.clear();
 	return;
 }
 
@@ -258,6 +262,10 @@ void Server::closeClient( int client_fd ) {
 	}
 }
 
+std::string Server::getServerPassword( void )
+{
+	return _serverPassword;
+}
 // void Server::authenticateClient(int client_fd, const std::string& password) {
 
 // 	std::cout << "_password: " << Server::_serverPassword << std::endl;
@@ -308,5 +316,7 @@ char Server::_svc[NI_MAXSERV];
 std::map<int, Client*> Server::_clients;
 // std::map<std::string, Channel> Server::_channels;
 std::vector<pollfd> Server::_fds;
+std::map<std::string, Channel>	Server::_channels;
+std::vector<std::string>			Server::_nicknames;
 
 // Path: includes/Server.hpp

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 21:26:37 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/24 21:06:24 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class Client {
 		// std::string					_ip;
 		std::string					_nickname;
 		std::string					_username;
-		std::string					_realname;
+		// std::string					_realname;
 		std::string					_channel;
 		
 
@@ -41,17 +41,21 @@ class Client {
 		Client( void );
 		Client( int fd );
 
-		// bool		sendMessage( const std::string &message );
+		bool		sendMessage( const std::string &message );
 		// void		joinChannel( const std::string &channel );
 		// void	leaveChannel( const std::string &channel );
 		
-		// void		setIsCorrectPassword( bool isCorrectPassword );
+		//SETTERS
+		void		setIsCorrectPassword( bool isCorrectPassword );
 		void		setNickname( const std::string &nickname );
 		void		setUsername( const std::string &username );
+		void		setFd(int value);
 		
+		//GETTERS
 		std::string getFullIdentity( void ) const;
-		std::string &getNickname( void ) const;
+		std::string getNickname( void ) const;
 		std::string getUsername( void ) const;
+		bool		getIsCorrectPassword( void ) const;
 		// std::string getIp( void ) const;
 		int			getFd( void ) const;
 		bool		isRegistered( void ) const;

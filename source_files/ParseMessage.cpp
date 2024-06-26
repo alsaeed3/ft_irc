@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ParseMessage.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 17:03:52 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/25 15:14:42 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <ParseMessage.hpp>
+#include <Server.hpp>
 
 std::string	ParseMessage::ft_trim( const std::string &str ) const {
 
@@ -29,7 +29,7 @@ std::vector<std::string>  ft_split(std::string str, char delimiter)
 {
 	std::vector<std::string> result;
 	std::string word;
-
+	
 	for (size_t i = 0; i < str.length(); ++i)
 	{
 		if(str[i] != delimiter)
@@ -51,6 +51,7 @@ std::vector<std::string>  ft_split(std::string str, char delimiter)
 	}
 	return result;
 }
+
 
 //function to remove and split and remove all the spaces
 std::vector<std::string> remove_spaces(std::string &str)
@@ -101,7 +102,6 @@ ParseMessage::ParseMessage( const std::string& message ) {
 	bool tagCmd = true;
 
 	if ( trimmedMsg[0] == '@' ) {
-
 		tagFlag = true;
 	}
 	
@@ -109,8 +109,8 @@ ParseMessage::ParseMessage( const std::string& message ) {
 
 		if ( tagFlag ) {
 
-			if ( token[0] == ':' ) {
-
+			if ( token[0] == ':' )
+			{
 				_cmd = token.substr( 1 );
 				tagFlag = false;
 				tagCmd = false;

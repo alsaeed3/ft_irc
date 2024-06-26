@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/23 19:03:43 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/26 14:33:37 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Client.hpp>
+#include <Server.hpp>
 
 Client::Client( void ) :	_fd( 0 ),
 							_isCorrectPassword( false ),
 							_nickname( "" ),
 							_username( "" ),
-							_realname( "" ),
+							// _realname( "" ),
 							_channel( "" ) {
 
 	return;
@@ -26,7 +26,7 @@ Client::Client( int fd ) :	_fd( fd ),
 													_isCorrectPassword( false ),
 													_nickname( "" ),
 													_username( "" ),
-													_realname( "" ),
+													// _realname( "" ),
 													_channel( "" ) {
 
 	return;
@@ -51,7 +51,7 @@ bool		Client::sendMessage( const std::string &message ) {
 
 bool		Client::isRegistered( void ) const {
 
-	return _isCorrectPassword && _username != "" && _nickname != "" && _realname != "";
+	return _isCorrectPassword && _username != "" && _nickname != "";
 }
 
 void		Client::setIsCorrectPassword( bool isCorrectPassword ) {
@@ -73,7 +73,7 @@ void		Client::setUsername( const std::string &username ) {
 	return;
 }
 
-std::string	&Client::getNickname( void ) const 
+std::string	Client::getNickname( void ) const 
 {
 
 	return _nickname;
@@ -82,6 +82,38 @@ std::string	&Client::getNickname( void ) const
 std::string	Client::getUsername( void ) const {
 
 	return _username;
+}
+
+bool		Client::getIsCorrectPassword( void ) const {
+		return _isCorrectPassword;
+}
+
+void	Client::setFd(int value)
+{
+	_fd = value;
+}
+int 	Client::getFd( void ) const
+{
+	return _fd;
+}
+
+bool Server::isUserInServer(std::string nickname)
+{
+	    return std::find(_nicknames.begin(),_nicknames.end(), nickname) != _nicknames.end();
+}
+
+Client	*Server::getClient(std::string nickname)
+{
+    std::map<int, Client*>::iterator it;
+	
+    for (it = _clients.begin(); it != _clients.end(); ++it) {
+        Client* client = it->second;
+        if (client->getNickname() == nickname) 
+		{
+            return client;
+        }
+    }
+    return NULL;
 }
 
 // std::string	Client::getFullIdentity( void ) const {

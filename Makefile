@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+         #
+#    By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/05 23:41:54 by alsaeed           #+#    #+#              #
-#    Updated: 2024/06/23 18:20:34 by tmususa          ###   ########.fr        #
+#    Updated: 2024/06/26 15:11:03 by tofaramusus      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,12 @@ SRCS =	Server.cpp \
 		Channel.cpp \
 		Client.cpp \
 		ParseMessage.cpp \
-		Commands.cpp
+		Commands.cpp \
+		nickCommand.cpp \
+		quitCommand.cpp \
+		joinCommand.cpp  \
+		privateMessage.cpp \
+		
 
 OBJS_DIR = object_files
 OBJS = $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
@@ -57,13 +62,15 @@ $(OBJS):	Makefile \
 			includes/IrcException.hpp \
 			includes/IrcLibs.hpp \
 			includes/ParseMessage.hpp \
-			includes/Reply.hpp \
 			source_files/Server.cpp \
+			source_files/nickCommand.cpp \
+			source_files/quitCommand.cpp \
 			source_files/Channel.cpp \
 			source_files/Client.cpp \
 			source_files/Commands.cpp \
+			source_files/joinCommand.cpp \
 			source_files/ParseMessage.cpp \
-			source_files/Utils.cpp \
+			source_files/privateMessage.cpp \
 
 clean:
 	@if [ -e $(OBJS_DIR) ]; then \

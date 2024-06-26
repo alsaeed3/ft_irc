@@ -3,126 +3,204 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 13:12:46 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:50:52 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Channel.hpp>
 #include <Server.hpp>
 
-// int	Server::registerConnection( Client* client, const ParseMessage& parsedMsg ) {
-
-// 	if ( client->isRegistered() == true ) {
-
-// 		client->serverReplies.push_back( ERR_ALREADYREGISTRED);
-// 		return (0);
-// 	}
-
-// 	return (0);
-// }
-
-bool Server::UserRegi(Client *client, const ParseMessage &parsedMsg)
+void Server::addNewUser(Client* client, const ParseMessage &parsedMsg)
 {
-	std::string command = parsedMsg.getCmd();
-	if (client->isRegistered() == true)
+	std::vector<std::string> params = parsedMsg.getParams();
+	
+    if (client->getUsername().empty() == true && !params.empty())
+    {
+        client->setUsername(params[0]);
+        if (params.size() > 2 && params[1] != "0" && params[2] != "*" && !parsedMsg.getTrailing().empty())
+        {
+            client->setUsername(parsedMsg.getTrailing());
+        }
+        else if (params.size() > 1)
+        {
+            client->setUsername(params[1]);
+        }
+        std::cout << "User registered: " << client->getUsername() 
+                  << " (Real name: " << client->getUsername() << ")" << std::endl;
+		//call the message of the day
+    }
+}
+
+bool Server::connectUser(Client *client, const ParseMessage &parsedMsg) 
+{
+    const std::string &command = parsedMsg.getCmd();
+    const std::vector<std::string> &params = parsedMsg.getParams();
+
+    if (client->isRegistered() == true) 
 	{
-		if (command == "USER" || command == "PASS")
-			client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
-	}
-	else
+        if (command == "USER" || command == "PASS")
+		 {
+            client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
+            return true;
+        }
+		else
+        	return false;
+    }
+
+    if (command == "CAP")
 	{
-		if (command == "CAP")
+        handleCapCommand(client, params);
+        return true;
+    }
+
+    if (command == "PASS") 
+	{
+        return handlePassCommand(client, params);
+    }
+
+    if (command == "USER" && client->getIsCorrectPassword()) {
+        addNewUser(client, parsedMsg);
+        return true;
+    }
+
+    if (command == "NICK" && client->getIsCorrectPassword() && !client->isRegistered()) 
+	{
+        if(nickCommand(client, params))
+			client->serverReplies.push_back( RPL_MOTDSTART(client->getUsername(),client->getUsername()));
+        return true;
+    }
+    return false;
+}
+
+// Helper functions
+
+void Server::handleCapCommand(Client *client, const std::vector<std::string> &params) 
+{
+    if (params[0] == "LS") {
+        client->serverReplies.push_back(":irssi CAP * LS :  \r\n");
+    } else if (params[0] == "REQ") {
+        client->serverReplies.push_back(":irssi CAP * REQ:  \r\n");
+    }
+}
+
+bool Server::handlePassCommand(Client *client, const std::vector<std::string> &params) {
+    if (client->getIsCorrectPassword() == false) 
+	{
+        if (params[0] == getServerPassword())
 		{
-		}
-	}
+            client->setIsCorrectPassword(true);
+        } else 
+		{
+            client->serverReplies.push_back(ERR_PASSWDMISMATCH(client->getNickname()));
+            closeClient(client->getFd());
+            client->setFd(-1);
+        }
+    } else {
+        client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
+    }
+    return true;
+}
+
+bool Server::isValidIRCCommand(const std::string& command) 
+{
+    static const char* validCommands[] = {
+        "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG",
+        "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "NOTICE", 0
+    };
+
+    for (const char** cmd = validCommands; *cmd; ++cmd) {
+        if (command == *cmd) 
+			return true;
+    }
+    return false;
+}
+
+void Server::printCommand(ParseMessage message)
+{
+	std::vector<std::string> params = message.getParams();
+    std::cout << "Command: " << message.getCmd() << std::endl;
+    for (size_t i = 0; i < params.size(); i++) 
+	{
+        std::cout << "Param " << i << ": " << params[i] << std::endl;
+    }
+    std::cout << "Trailing: " << message.getTrailing() << std::endl;
 }
 
 void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 {
-	std::string command = parsedMsg.getCmd();
-	if (command == "QUIT")
-		quitCmd(parsedMsg.getTrailing(), client);
-	if (userRegi(client, parsedMsg) == false)
+	std::string command;
+	//create print command debugger message
+	
+	std::vector<std::string> params;
+	if(parsedMsg.getCmd().empty() == true)
 	{
+		return;
 	}
-	else
+	printCommand(parsedMsg);
+	command = parsedMsg.getCmd();
+	params = parsedMsg.getParams();
+	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING")
+	{
+		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getUsername() ,command));
+	}
+	if(isValidIRCCommand(parsedMsg.getCmd()) == false) //this will check the type of command
+	{
+		client->serverReplies.push_back(ERR_UNKNOWNCOMMAND(client->getNickname(), parsedMsg.getCmd()));
+		return;
+	}
+	if (command == "QUIT")
+		quitCommand(parsedMsg.getTrailing(), client);
+	if (client->isRegistered() == true)
 	{
 		if (command == "JOIN")
 		{
-			// joinCommand();
+			joinCommand(client, parsedMsg);
 		}
-		else if (command == "KICK")
+		if(command == "PRIVMSG")
 		{
+			privateMessage(client, parsedMsg);	
 		}
-		else if (command == "INVITE")
+		if(command == "PING")
 		{
+			 client->serverReplies.push_back(RPL_PONG(user_id(client->getNickname(),client->getUsername()),params[0]));
 		}
-		else if (command == "PING")
+		if(command == "NICK")
 		{
+			nickCommand(client, params);
 		}
-		else if (command == "TOPIC")
+		if (command == "MODE")
 		{
+			
 		}
-		else if (command == "MODE")
+		if(command == "TOPIC")
 		{
+			
 		}
-		else if (command == "MOTD")
+		if(command == "INVITE")
 		{
+			
 		}
+		if(command == "MOTD")
+		{
+			
+		}
+		if(command == "PART")
+		{
+			
+		}
+		if(command == "NOTICE")
+		{
+			
+		}
+		return;
 	}
-	if (command == "NICK")
-		return ;
-}
-
-void Server::joinCommand(Client &client, const ParseMessage &message)
-{
-	std::vector<std::string> chan_list = ft_split(channels, ',');
-	std::vector<std::string> key_list = ft_split(keys, ',');
-	std::vector<std::string>::iterator itr_key;
-	std::vector<std::string>::iterator itr_chan;
-	std::string response;
-
-	for (itr_chan = chan_list.begin(); itr_chan != chan_list.end(); ++itr_chan)
+	if(connectUser(client, parsedMsg) == false)
 	{
-		std::string chanName = *itr_chan;
-		if (chanName.at(0) != '#' && chanName.at(0) != '&')
-		{
-			response = "ERR_BADCHANMASK";
-			continue ;
-		}
-		itr_key = key_list.begin();
-		if (this->isChannelInServer(chanName))
-		{
-			Channel tempChannel = this->getChannel(chanName);
-			if (tempChannel.checkMode('i')
-				&& !tempChannel.isInInvite(client.getNickname()))
-			{
-				response = "NOT ON INVITE LIST";
-				continue ;
-			}
-			if (tempChannel.checkMode('k'))
-			{
-				if (*itr_key == tempChannel.getKey())
-				{
-					++itr_key;
-				}
-				else
-				{
-					response = "WRONG PASSWORD";
-					continue ;
-				}
-			}
-			tempChannel.addClient(client);
-		}
-		else
-		{
-			this->_channels.insert(make_pair(chanName, Channel(chanName,
-						client)));
-			response = "CHANNEL CREATED USER ADDED";
-		}
+		//send message that says register user first
 	}
-	client.serverReplies.push_back(response);
+	command.clear();
+	params.clear();
 }
