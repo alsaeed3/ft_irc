@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 17:50:52 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/26 20:15:11 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,10 @@ bool Server::handlePassCommand(Client *client, const std::vector<std::string> &p
         } else 
 		{
             client->serverReplies.push_back(ERR_PASSWDMISMATCH(client->getNickname()));
-            closeClient(client->getFd());
-            client->setFd(-1);
+            // closeClient(client->getFd());
+            // client->setFd(-1);
+			//ADD message to say try again password
+			throw(std::exception());
         }
     } else {
         client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
@@ -122,7 +124,7 @@ void Server::printCommand(ParseMessage message)
 {
 	std::vector<std::string> params = message.getParams();
     std::cout << "Command: " << message.getCmd() << std::endl;
-    for (size_t i = 0; i < params.size(); i++) 
+    for (std::size_t i = 0; i < params.size(); i++) 
 	{
         std::cout << "Param " << i << ": " << params[i] << std::endl;
     }

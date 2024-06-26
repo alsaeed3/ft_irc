@@ -20,6 +20,8 @@ void				Server::quitCommand(std::string reason, Client *client)
 			}
 		}
 	}
-	closeClient(client->getFd());
+	// closeClient(client->getFd());
+	// close(client->getFd());
+	throw(std::exception());
 	client->setFd(-1);
 }

@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 17:48:04 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/26 19:15:15 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 //CONSTRUCTOR
 Channel::Channel(std::string &channelName, Client &client) : channelName(channelName), _topic(""), _key("")
 {
-	operators[client.getNickname()] = client;
-	users[client.getNickname()] = client;
+	operators[client.getNickname()] = &client;
+	users[client.getNickname()] = &client;
 	modes['i'] = false;
 	modes['t'] = false;
 	modes['k'] = false;
@@ -46,14 +46,14 @@ bool	Server::isChannelInServer(std::string &channelName)
 void Channel::addClient(Client &client)
 {
 	std::string nick = client.getNickname();
-	users[nick] = client;
+	users[nick] = &client;
 	if(isInInvite(nick))
 	{
 		inviteList.erase(nick);
 	}
 	if(operators.size() == 0)
 	{
-		operators[nick] = client;
+		operators[nick] = &client;
 	}
 }
 
@@ -65,7 +65,7 @@ void Channel::setTopic(std::string &topic)
 
 bool Channel::isClientInChannel(std::string nickname)
 {
-	std::map<std::string, Client>::iterator user_itr = this->users.find(nickname);
+	std::map<std::string, Client *>::iterator user_itr = this->users.find(nickname);
 	if(user_itr != this->users.end())
 	{
 		return true;
@@ -84,7 +84,7 @@ bool Channel::isInInvite(std::string nickname)
 }
 
 
-std::map<std::string, Client> Channel::getUsers( void )
+std::map<std::string, Client *> Channel::getUsers( void )
 {
 	return this->users;
 }
@@ -112,7 +112,7 @@ bool Channel::isOperator(std::string &nickname)
 void Channel::inviteClient(Client &client)
 {
 	std::string nick = client.getNickname();
-	this->inviteList[nick] = client;
+	this->inviteList[nick] = &client;
 }
 
 void Channel::setKey(std::string &password)
@@ -132,26 +132,26 @@ int Channel::getMaxUsers()
 
 void Channel::broadcastMessage(const std::string message)
 {
-    std::map<std::string, Client>::iterator it;
+    std::map<std::string, Client *>::iterator it;
     for (it = users.begin(); it != users.end(); ++it)
     {
-        int fd = it->second.getFd();
-        if (fd != -1)
+        if (it->second->getFd() != -1)
         {
-            send(fd, message.c_str(), message.length(), 0);
+			// it->second->serverReplies.push_back(message);
+			send(it->second->getFd(), message.c_str(), message.size(), 0);
         }
     }
 }
 
 void Channel::sendToOthers(Client *client, std::string message)
 {
-    std::map<std::string, Client>::iterator it;
+    std::map<std::string, Client *>::iterator it;
     for (it = users.begin(); it != users.end(); ++it)
     {
-		int fd = it->second.getFd();
-        if (fd != -1 && &it->second != client)
+        if (it->second->getFd() != -1 && it->second != client)
         {
-            send(fd, message.c_str(), message.length(), 0);
+            // it->second->serverReplies.push_back(message);
+			send(it->second->getFd(), message.c_str(), message.size(), 0);
         }
     }
 }

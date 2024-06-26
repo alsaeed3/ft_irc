@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/25 15:15:29 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/26 20:11:11 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,15 @@ void    Server::runServer(void) {
 
 			if (it->fd != Server::_listeningSocket && it->revents & POLLIN ) 
 			{
-				
-				handleClientMessage(it->fd);
+				try
+				{
+					handleClientMessage(it->fd);	
+				}
+				catch(...)
+				{
+					it->fd = -1;
+				}
+				// for(std::size_t)
 			} else if (it->fd != Server::_listeningSocket && it->revents & POLLOUT ) {
 
 				sendToClient( it->fd );
@@ -120,8 +127,8 @@ void    Server::runServer(void) {
 	return;
 }
 
-void Server::sendToClient( int client_fd ) {
-
+void Server::sendToClient( int client_fd )
+{
 	Client* client = Server::_clients[client_fd];
 	std::vector<std::string>::iterator it = client->serverReplies.begin();
 
@@ -130,8 +137,8 @@ void Server::sendToClient( int client_fd ) {
 		std::cout << "............................................" << std::endl;
 		std::cout << "Sending message to client " << client->getNickname() << ": " << *it << std::endl;
 		std::cout << "............................................" << std::endl;
-		if ( send( client_fd, it->c_str(), it->size(), 0 ) == -1 ) {
-
+		if ( send( client_fd, it->c_str(), it->size(), 0 ) == -1 )
+		{
 			std::cerr << "Error sending message to client " << client->getNickname() << " (" << strerror(errno) << ")" << std::endl;
 			return;
 		}
@@ -227,7 +234,7 @@ void Server::handleClientMessage( int client_fd )
 	//split on newline using ft_split and return a vector of strings and loop through that and push to 
 	std::cout << "Received message from client " << client_fd << ": " << Server::_message << std::endl;
 	commandList = ft_split(Server::_message, '\n');
-	for(size_t i = 0; i < commandList.size(); i++)
+	for(std::size_t i = 0; i < commandList.size(); i++)
 	{
 		ParseMessage parsedMsg(commandList[i]);
 		processCommand( _clients[client_fd] , parsedMsg );

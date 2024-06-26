@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 14:12:56 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/26 18:45:12 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ class Channel
 		std::string channelName;
 		std::string _topic;
 		std::string _key;
-		std::map<std::string, Client> operators;
-		std::map<std::string, Client> users;
-		std::map<std::string, Client> inviteList;
+		std::map<std::string, Client *> operators;
+		std::map<std::string, Client *> users;
+		std::map<std::string, Client *> inviteList;
 		std::map<char, bool> modes;
 		bool	_inviteOnly;
 		bool	_topicRestricted;
@@ -53,7 +53,7 @@ class Channel
 		
 		//GETTERS
 		std::string getKey( void );
-		std::map<std::string, Client> getUsers();
+		std::map<std::string, Client *> getUsers();
 		int		getMaxUsers();
 		
 		//SETTERS
