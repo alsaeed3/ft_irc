@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 15:53:10 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/27 17:46:10 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,6 @@
 #define SERVER_HPP
 
 #include <IrcLibs.hpp>
-#include <Reply.hpp>
-#include <IrcException.hpp>
-#include <ParseMessage.hpp>
-#include <Client.hpp>
-#include <Channel.hpp>
-
-#include <map>
-#include <vector>
-
 
 class Server {
 
@@ -92,7 +83,7 @@ class Server {
 		static std::string		getServerPassword( void );
 		static bool				isValidIRCCommand(const std::string& command);
 		static void 			printCommand(ParseMessage message);
-		static bool					isUserInServer(std::string nickname);
+		static bool				isUserInServer(std::string nickname);
 };
 
 std::vector<std::string>  ft_split(std::string str, char delimiter);

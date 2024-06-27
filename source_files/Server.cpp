@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/25 15:15:29 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/27 17:33:48 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,13 @@ void    Server::runServer(void) {
 
 			if (it->fd != Server::_listeningSocket && it->revents & POLLIN ) 
 			{
-				
+				try {
+
 				handleClientMessage(it->fd);
+				} catch (const CloseClientException &e) {
+
+					it->fd = -1;
+				}
 			} else if (it->fd != Server::_listeningSocket && it->revents & POLLOUT ) {
 
 				sendToClient( it->fd );

@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IrcException.hpp                                   :+:      :+:    :+:   */
+/*   CloseClientException.hpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/08 09:24:21 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 17:45:10 by alsaeed          ###   ########.fr       */
+/*   Created: 2024/06/27 17:34:16 by alsaeed           #+#    #+#             */
+/*   Updated: 2024/06/27 17:44:56 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#ifndef IRCEXCEPTION_HPP
-# define IRCEXCEPTION_HPP
+#ifndef CLOSECLIENTEXCEPTION_HPP
+# define CLOSECLIENTEXCEPTION_HPP
 
 #include <IrcLibs.hpp>
 
-class IrcException : public std::exception {
-
-	private:
-
-		std::string _message;
+class CloseClientException : public std::exception {
 
 	public:
 
-		explicit IrcException( const std::string &message ) : _message( message ) {}
-		virtual ~IrcException() throw() {}
-		virtual const char *what() const throw() {
-			
-			return _message.c_str();
-		}
+		explicit CloseClientException() {}
+		virtual ~CloseClientException() throw() {}
 };
 
-#endif /* IRCEXCEPTION_HPP */
+#endif /* CLOSECLIENTEXCEPTION_HPP */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 21:06:24 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/27 17:44:04 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,7 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-#include <string>
-#include <vector>
-#include <IrcException.hpp>
-#include <unistd.h>
-#include <cstring>
-#include <sys/socket.h>
+#include <IrcLibs.hpp>
 
 class Client {
 
