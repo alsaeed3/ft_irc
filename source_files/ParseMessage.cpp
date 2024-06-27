@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseMessage.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 21:45:03 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/25 15:14:42 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 std::string	ParseMessage::ft_trim( const std::string &str ) const {
 
-	std::size_t start = str.find_first_not_of( " \n\r\t" );
-	std::size_t end = str.find_last_not_of( " \n\r\t" );
+	size_t start = str.find_first_not_of( " \n\r\t" );
+	size_t end = str.find_last_not_of( " \n\r\t" );
 
 	if ( start == std::string::npos || end == std::string::npos ) {
 
@@ -30,7 +30,7 @@ std::vector<std::string>  ft_split(std::string str, char delimiter)
 	std::vector<std::string> result;
 	std::string word;
 	
-	for (std::size_t i = 0; i < str.length(); ++i)
+	for (size_t i = 0; i < str.length(); ++i)
 	{
 		if(str[i] != delimiter)
 		{
@@ -59,7 +59,7 @@ std::vector<std::string> remove_spaces(std::string &str)
 	std::vector<std::string> result;
 	std::string word;
 
-	for (std::size_t i = 0; i < str.length(); ++i)
+	for (size_t i = 0; i < str.length(); ++i)
 	{
 		if(str[i] != ' ')
 		{

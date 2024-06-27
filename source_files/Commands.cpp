@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 21:44:43 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/26 17:50:52 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void Server::printCommand(ParseMessage message)
 {
 	std::vector<std::string> params = message.getParams();
     std::cout << "Command: " << message.getCmd() << std::endl;
-    for (std::size_t i = 0; i < params.size(); i++) 
+    for (size_t i = 0; i < params.size(); i++) 
 	{
         std::cout << "Param " << i << ": " << params[i] << std::endl;
     }
