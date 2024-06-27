@@ -1,7 +1,7 @@
 #include <Server.hpp>
 
 
-void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
+void Server::joinCommand(Client &client, const ParseMessage &ParsedMsg)
 {
 	//need to make some changes and add some new checks for params
 	std::vector<std::string> params = ParsedMsg.getParams();

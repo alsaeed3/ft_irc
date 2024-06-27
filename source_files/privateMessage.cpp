@@ -1,7 +1,7 @@
 #include <Channel.hpp>
 #include <Server.hpp>
 
-void Server::privateMessage(Client *client, const ParseMessage &ParsedMsg)
+void Server::privateMessage(Client &client, const ParseMessage &ParsedMsg)
 {
 	std::vector<std::string> params = ParsedMsg.getParams();
 	std::string trailing = ParsedMsg.getTrailing();

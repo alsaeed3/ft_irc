@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 17:33:48 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/27 17:51:59 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,16 +89,16 @@ void    Server::runServer(void) {
 			throw IrcException("Poll error");
 		}
 		
-		if ( Server::_fds[0].revents & POLLIN )
-		{
+		if ( Server::_fds[0].revents & POLLIN ) {
+
 			handleNewConnection();
 		}
 
 		std::vector<pollfd>::iterator it = Server::_fds.begin();
 		while ( it != Server::_fds.end() ) {
 
-			if (it->fd != Server::_listeningSocket && it->revents & POLLIN ) 
-			{
+			if (it->fd != Server::_listeningSocket && it->revents & POLLIN ) {
+
 				try {
 
 				handleClientMessage(it->fd);
@@ -205,8 +205,8 @@ void Server::handleClientDisconnection(int client_fd, int bytesRecv) {
 
 	for (std::vector<pollfd>::iterator it = Server::_fds.begin(); it != Server::_fds.end(); ++it) {
 		if (it->fd == client_fd) {
-			it->fd = -1;
-			break;
+
+			throw ( CloseClientException() );
 		}
 	}
 
@@ -232,7 +232,7 @@ void Server::handleClientMessage( int client_fd )
 	//split on newline using ft_split and return a vector of strings and loop through that and push to 
 	std::cout << "Received message from client " << client_fd << ": " << Server::_message << std::endl;
 	commandList = ft_split(Server::_message, '\n');
-	for(size_t i = 0; i < commandList.size(); i++)
+	for(std::size_t i = 0; i < commandList.size(); i++)
 	{
 		ParseMessage parsedMsg(commandList[i]);
 		processCommand( _clients[client_fd] , parsedMsg );

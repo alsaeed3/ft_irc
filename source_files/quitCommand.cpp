@@ -4,7 +4,7 @@ void				Server::quitCommand(std::string reason, Client *client)
 {
 	std::map<std::string, Channel>::iterator	itr;
 	std::string nickname = client->getNickname();
-	std::string message = "has quit";
+	std::string message = " has quit";
 	for(itr = _channels.begin(); itr != _channels.end(); itr++) {
 
 		if(itr->second.isClientInChannel(nickname)) {
@@ -21,6 +21,7 @@ void				Server::quitCommand(std::string reason, Client *client)
 		}
 	}
 
-	closeClient(client->getFd());
-	client->setFd(-1);
+	throw( CloseClientException() );
+	// closeClient(client->getFd());
+	// client->setFd(-1);
 }

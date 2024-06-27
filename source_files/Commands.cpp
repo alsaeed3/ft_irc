@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 17:50:52 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/27 17:59:09 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void Server::printCommand(ParseMessage message)
 {
 	std::vector<std::string> params = message.getParams();
     std::cout << "Command: " << message.getCmd() << std::endl;
-    for (size_t i = 0; i < params.size(); i++) 
+    for (std::size_t i = 0; i < params.size(); i++) 
 	{
         std::cout << "Param " << i << ": " << params[i] << std::endl;
     }
@@ -135,71 +135,65 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	//create print command debugger message
 	
 	std::vector<std::string> params;
-	if(parsedMsg.getCmd().empty() == true)
-	{
+	if(parsedMsg.getCmd().empty() == true) {
+
 		return;
 	}
 	printCommand(parsedMsg);
 	command = parsedMsg.getCmd();
 	params = parsedMsg.getParams();
-	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING")
-	{
+
+	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING") {
+
 		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getUsername() ,command));
 	}
-	if(isValidIRCCommand(parsedMsg.getCmd()) == false) //this will check the type of command
-	{
+	if(isValidIRCCommand(parsedMsg.getCmd()) == false) {
+		//this will check the type of command and send the appropriate error message
 		client->serverReplies.push_back(ERR_UNKNOWNCOMMAND(client->getNickname(), parsedMsg.getCmd()));
 		return;
 	}
-	if (command == "QUIT")
+	if (command == "QUIT") {
+
 		quitCommand(parsedMsg.getTrailing(), client);
-	if (client->isRegistered() == true)
-	{
-		if (command == "JOIN")
-		{
+	}
+	if (client->isRegistered() == true) {
+
+		if (command == "JOIN") {
+
 			joinCommand(client, parsedMsg);
-		}
-		if(command == "PRIVMSG")
-		{
+		} else if(command == "PRIVMSG") {
+
 			privateMessage(client, parsedMsg);	
-		}
-		if(command == "PING")
-		{
+		} else if(command == "PING") {
+
 			 client->serverReplies.push_back(RPL_PONG(user_id(client->getNickname(),client->getUsername()),params[0]));
-		}
-		if(command == "NICK")
-		{
+		} else if(command == "NICK") {
+
 			nickCommand(client, params);
-		}
-		if (command == "MODE")
-		{
-			
-		}
-		if(command == "TOPIC")
-		{
-			
-		}
-		if(command == "INVITE")
-		{
-			
-		}
-		if(command == "MOTD")
-		{
-			
-		}
-		if(command == "PART")
-		{
-			
-		}
-		if(command == "NOTICE")
-		{
-			
+		} else if (command == "MODE") {
+
+
+		} else if(command == "TOPIC") {
+
+
+		} else if(command == "INVITE") {
+
+
+		} else if(command == "MOTD") {
+
+
+		} else if(command == "PART") {
+
+
+		} else if(command == "NOTICE") {
+
+
 		}
 		return;
 	}
-	if(connectUser(client, parsedMsg) == false)
-	{
+	if(connectUser(client, parsedMsg) == false) {
 		//send message that says register user first
+
 	}
 	command.clear();
 	params.clear();

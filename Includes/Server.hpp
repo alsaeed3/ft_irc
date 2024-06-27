@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 17:46:10 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/27 20:16:50 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #define SERVER_HPP
 
 #include <IrcLibs.hpp>
+
 
 class Server {
 
@@ -55,9 +56,10 @@ class Server {
 		static Client					*getClient(std::string nickname);
 
 		// Commands
+		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
+	
 		static void				quitCommand(std::string reason, Client *client);
 		static bool				nickCommand(Client *client, const std::vector<std::string> &params);
-		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
 		static void 			joinCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			kickCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			inviteCommand(Client *client, const ParseMessage& parsedMsg);
@@ -83,7 +85,7 @@ class Server {
 		static std::string		getServerPassword( void );
 		static bool				isValidIRCCommand(const std::string& command);
 		static void 			printCommand(ParseMessage message);
-		static bool				isUserInServer(std::string nickname);
+		static bool					isUserInServer(std::string nickname);
 };
 
 std::vector<std::string>  ft_split(std::string str, char delimiter);
