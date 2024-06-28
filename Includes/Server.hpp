@@ -6,7 +6,7 @@
 /*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/28 20:10:37 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/28 20:33:04 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,20 @@ class Server {
 		static bool				nickCommand(Client *client, const std::vector<std::string> &params);
 		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
 		static void 			joinCommand(Client *client, const ParseMessage& parsedMsg);
+		static void 			privateMessage(Client *client, const ParseMessage &ParsedMsg);
+		
+		//to implement
 		static void 			kickCommand(Client *client, const ParseMessage& parsedMsg);
+		static void 			modeCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			inviteCommand(Client *client, const ParseMessage& parsedMsg);
+		static void 			topicCommand(Client *client, const ParseMessage& parsedMsg);
+		static void 			partCommand(Client *client, const ParseMessage& parsedMsg);
+		static void 			noticeCommand(Client *client, const ParseMessage& parsedMsg);
+		static void 			motdCommand(Client *client, const ParseMessage& parsedMsg);
+		
+
 		static void				handleCapCommand(Client *client, const std::vector<std::string> &params);
 		static bool 			handlePassCommand(Client *client, const std::vector<std::string> &params);
-		static void 			privateMessage(Client *client, const ParseMessage &ParsedMsg);
 		
 
 		//Channels

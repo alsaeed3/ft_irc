@@ -6,7 +6,7 @@
 /*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/28 20:18:18 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/28 20:47:42 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ void Channel::broadcastMessage(const std::string message)
         if (it->second->getFd() != -1)
         {
 			it->second->serverReplies.push_back(message);
-			// send(it->second->getFd(), message.c_str(), message.size(), 0);
         }
     }
 }
@@ -151,7 +150,12 @@ void Channel::sendToOthers(Client *client, std::string message)
         if (it->second->getFd() != -1 && it->second != client)
         {
             it->second->serverReplies.push_back(message);
-			// send(it->second->getFd(), message.c_str(), message.size(), 0);
         }
     }
+}
+
+void setMode(char c)
+{
+	std::map<char, bool>::iterator itr = modes.find(c);
+	if(itr != )
 }

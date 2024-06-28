@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 20:15:11 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/28 20:33:28 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,10 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 			
 		}
 		if(command == "NOTICE")
+		{
+			
+		}
+		if(command == "WHOIS")
 		{
 			
 		}
