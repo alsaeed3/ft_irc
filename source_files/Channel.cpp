@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 19:15:15 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/28 20:18:18 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include <Channel.hpp>
 
 //CONSTRUCTOR
-Channel::Channel(std::string &channelName, Client &client) : channelName(channelName), _topic(""), _key("")
+Channel::Channel(std::string &channelName, Client *client) : channelName(channelName), _topic(""), _key("")
 {
-	operators[client.getNickname()] = &client;
-	users[client.getNickname()] = &client;
+	operators[client->getNickname()] = client;
+	users[client->getNickname()] = client;
 	modes['i'] = false;
 	modes['t'] = false;
 	modes['k'] = false;
@@ -43,17 +43,17 @@ bool	Server::isChannelInServer(std::string &channelName)
 	}
 	return false;
 }
-void Channel::addClient(Client &client)
+void Channel::addClient(Client *client)
 {
-	std::string nick = client.getNickname();
-	users[nick] = &client;
+	std::string nick = client->getNickname();
+	users[nick] = client;
 	if(isInInvite(nick))
 	{
 		inviteList.erase(nick);
 	}
 	if(operators.size() == 0)
 	{
-		operators[nick] = &client;
+		operators[nick] = client;
 	}
 }
 
@@ -109,10 +109,10 @@ bool Channel::isOperator(std::string &nickname)
 	return false;
 }
 
-void Channel::inviteClient(Client &client)
+void Channel::inviteClient(Client *client)
 {
-	std::string nick = client.getNickname();
-	this->inviteList[nick] = &client;
+	std::string nick = client->getNickname();
+	this->inviteList[nick] = client;
 }
 
 void Channel::setKey(std::string &password)
@@ -137,8 +137,8 @@ void Channel::broadcastMessage(const std::string message)
     {
         if (it->second->getFd() != -1)
         {
-			// it->second->serverReplies.push_back(message);
-			send(it->second->getFd(), message.c_str(), message.size(), 0);
+			it->second->serverReplies.push_back(message);
+			// send(it->second->getFd(), message.c_str(), message.size(), 0);
         }
     }
 }
@@ -150,8 +150,8 @@ void Channel::sendToOthers(Client *client, std::string message)
     {
         if (it->second->getFd() != -1 && it->second != client)
         {
-            // it->second->serverReplies.push_back(message);
-			send(it->second->getFd(), message.c_str(), message.size(), 0);
+            it->second->serverReplies.push_back(message);
+			// send(it->second->getFd(), message.c_str(), message.size(), 0);
         }
     }
 }

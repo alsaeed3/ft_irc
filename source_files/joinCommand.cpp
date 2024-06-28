@@ -62,7 +62,7 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 			{
 				response = RPL_JOIN(user_id(client->getNickname(), client->getUsername()), chanName); //change this to welcome message
 				tempChannel.broadcastMessage(response);
-				tempChannel.addClient(*client);
+				tempChannel.addClient(client);
 				// response = //send the messsages.
 			}
 			client->serverReplies.push_back(response);
@@ -72,7 +72,7 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 		{
 			response = RPL_JOIN(user_id(client->getNickname(), client->getUsername()), chanName);
 			_channels.insert(make_pair(chanName, Channel(chanName,
-						*client)));
+						client)));
 		}
 		client->serverReplies.push_back(response);
 		//send server reply

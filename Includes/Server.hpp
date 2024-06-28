@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 15:53:10 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/28 20:10:37 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,13 @@ class Server {
 		static void 			addChannel(Channel &channel);
 		static Channel 	 		&getChannel(std::string channelName);
 		static bool				isChannelInServer(std::string &channelName);
-		
 
 	public:
 
 		static void 			initServer(void);
 		static void 			runServer(void);
 		static void 			signalHandler(int signal);
-		
+
 		static void 			setServerPassword(const std::string& password) { _serverPassword = password; };
 		static void 			setServerPort(int port) { _serverPort = port; };
 		static std::string		getServerPassword( void );

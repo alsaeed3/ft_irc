@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 18:45:12 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/28 20:14:15 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@ class Channel
 		int maxUsers; 
 
 	public:
-		Channel(std::string &channelName, Client &client);
+		Channel(std::string &channelName, Client *client);
 		~Channel();
 
 		//SEND TO OTHERS
 		void	broadcastMessage(const std::string message);
 		void	sendToOthers(Client *client, std::string message);
 		//ADD FUNCTIONS		
-		void addClient(Client &client);
-		void inviteClient(Client &client);
-		void addOperator(Client &client);
+		void addClient(Client *client);
+		void inviteClient(Client *client);
+		void addOperator(Client *client);
 
 		//REMOVE FUNCTIONS
-		void removeUser(Client &client, Client *kickedBy, const std::string &reason);
+		void removeUser(Client *client, Client *kickedBy, const std::string &reason);
 		void removeInvite(std::string &invite);
-		void removeOperator(Client &client);
+		void removeOperator(Client *client);
 		
 		//GETTERS
 		std::string getKey( void );
