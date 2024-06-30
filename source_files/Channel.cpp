@@ -6,7 +6,7 @@
 /*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/28 20:47:42 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/29 15:59:47 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,8 +154,11 @@ void Channel::sendToOthers(Client *client, std::string message)
     }
 }
 
-void setMode(char c)
+void Channel::setMode(char c, bool setting)
 {
 	std::map<char, bool>::iterator itr = modes.find(c);
-	if(itr != )
+	if(itr != modes.end())
+	{
+		itr->second = setting;
+	}
 }

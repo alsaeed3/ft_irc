@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 14:33:37 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/29 16:14:07 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,6 @@ bool		Client::sendMessage( const std::string &message ) {
 
 	return true;
 }
-
-// void		Client::joinChannel( const std::string &channel ) {
-
-	
-// 	return;
-// }
-
 
 bool		Client::isRegistered( void ) const {
 

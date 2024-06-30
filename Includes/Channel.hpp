@@ -6,7 +6,7 @@
 /*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/28 20:45:01 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/29 15:59:34 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ class Channel
 		void setUserLimit(int userLimit, Client* client);
 		void setKey(std::string &password);
 		void setMaxUser(int limit);
-		void setMode(char c);
+		void setMode(char c, bool setting);
 
 		//CHECK FUNCTIONS
 		bool isClientInChannel(std::string nickname);

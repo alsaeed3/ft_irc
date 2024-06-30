@@ -6,7 +6,7 @@
 /*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/28 20:33:04 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/06/29 16:07:33 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,12 @@ class Server {
 		static bool 			handlePassCommand(Client *client, const std::vector<std::string> &params);
 		
 
+	public:
+
 		//Channels
 		static void 			addChannel(Channel &channel);
 		static Channel 	 		&getChannel(std::string channelName);
 		static bool				isChannelInServer(std::string &channelName);
-
-	public:
 
 		static void 			initServer(void);
 		static void 			runServer(void);
