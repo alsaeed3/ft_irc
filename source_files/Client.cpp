@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 14:33:37 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/30 04:46:37 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ Client	*Server::getClient(std::string nickname)
 	
     for (it = _clients.begin(); it != _clients.end(); ++it) {
         Client* client = it->second;
-        if (client->getNickname() == nickname) 
-		{
+        if (client->getNickname() == nickname) {
+
             return client;
         }
     }

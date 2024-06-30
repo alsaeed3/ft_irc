@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 20:16:50 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/30 16:33:46 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ class Server {
 		static void				handleCapCommand(Client *client, const std::vector<std::string> &params);
 		static bool 			handlePassCommand(Client *client, const std::vector<std::string> &params);
 		static void 			privateMessage(Client *client, const ParseMessage &ParsedMsg);
+		static void				modeCommand(Client *client, const ParseMessage &parsedMsg);
 		
 
 		//Channels

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 17:48:04 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/06/30 04:53:50 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,26 +132,33 @@ int Channel::getMaxUsers()
 
 void Channel::broadcastMessage(const std::string message)
 {
-    std::map<std::string, Client>::iterator it;
+    std::map<std::string, Client *>::iterator it;
     for (it = users.begin(); it != users.end(); ++it)
     {
-        int fd = it->second.getFd();
-        if (fd != -1)
+        if (it->second->getFd() != -1)
         {
-            send(fd, message.c_str(), message.length(), 0);
+			it->second->serverReplies.push_back(message);
         }
     }
 }
 
 void Channel::sendToOthers(Client *client, std::string message)
 {
-    std::map<std::string, Client>::iterator it;
+    std::map<std::string, Client *>::iterator it;
     for (it = users.begin(); it != users.end(); ++it)
     {
-		int fd = it->second.getFd();
-        if (fd != -1 && &it->second != client)
+        if (it->second->getFd() != -1 && it->second != client)
         {
-            send(fd, message.c_str(), message.length(), 0);
+            it->second->serverReplies.push_back(message);
         }
     }
+}
+
+void setMode(char c)
+{
+	std::map<char, bool>::iterator it = modes.find(c);
+	if(it != modes.end())
+	{
+		it->second = true;
+	}
 }

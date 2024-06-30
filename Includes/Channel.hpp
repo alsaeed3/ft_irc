@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 17:44:10 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/30 16:22:53 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ class Channel
 		std::string channelName;
 		std::string _topic;
 		std::string _key;
-		std::map<std::string, Client> operators;
-		std::map<std::string, Client> users;
-		std::map<std::string, Client> inviteList;
+		std::map<std::string, Client *> operators;
+		std::map<std::string, Client *> users;
+		std::map<std::string, Client *> inviteList;
 		std::map<char, bool> modes;
 		bool	_inviteOnly;
 		bool	_topicRestricted;
@@ -50,12 +50,17 @@ class Channel
 		void removeOperator(Client &client);
 		
 		//GETTERS
-		std::string getKey( void );
-		std::map<std::string, Client> getUsers();
-		int		getMaxUsers();
+		std::string 					getKey( void );
+		std::map<std::string, Client>	getUsers();
+		int								getMaxUsers();
+		std::string						getChannelName();
+		std::string						getTopic();
+		std::map<std::string, Client *>	getOperators();
+		std::map<std::string, Client *>	getInviteList();
 		
 		//SETTERS
 		void setTopic(std::string &topic);
+		void setMode(char mode, bool value, Client* client);
 		void setInviteOnly(bool inviteOnly, Client* client);
 		void setTopicRestricted(bool topicRestricted, Client* client);
 		void setUserLimit(int userLimit, Client* client);
