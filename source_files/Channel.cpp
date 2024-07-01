@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/29 15:59:47 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/07/01 22:33:30 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <Channel.hpp>
 
 //CONSTRUCTOR
-Channel::Channel(std::string &channelName, Client *client) : channelName(channelName), _topic(""), _key("")
+Channel::Channel(std::string &channelName, Client *client) : channelName(channelName)
 {
 	operators[client->getNickname()] = client;
 	users[client->getNickname()] = client;
@@ -161,4 +161,46 @@ void Channel::setMode(char c, bool setting)
 	{
 		itr->second = setting;
 	}
+}
+
+std::string Channel::getChannelName() const
+{
+	return channelName;
+}
+
+void Channel::removeKey()
+{
+	_key.clear();
+}
+
+void Channel::setMaxUsers(int limit)
+{
+	if(limit > 0)
+		maxUsers = limit;
+	else
+		std::cout << "Invalid user limit inputted by the user" << std::endl;
+}
+
+void Channel::removeMaxUsers()
+{
+	maxUsers = -1;
+}
+
+void Channel::addOperator(std::string nickname)
+{
+	std::map<std::string, Client *>::iterator user_itr = this->users.find(nickname);
+	
+	if (user_itr != this->users.end())
+	{
+		this->operators[user_itr->second->getNickname()] = user_itr->second;
+	}
+}
+
+void Channel::removeOperator(std::string nickname)
+{
+	std::map<std::string, Client*>::iterator operator_itr = this->operators.find(nickname);
+    if (operator_itr != this->operators.end())
+	{
+        this->operators.erase(operator_itr);
+    }
 }

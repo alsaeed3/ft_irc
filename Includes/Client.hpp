@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/24 21:06:24 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/01 19:32:49 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ class Client {
 		
 		//GETTERS
 		std::string getFullIdentity( void ) const;
-		std::string getNickname( void ) const;
+		std::string &getNickname( void ) const;
 		std::string getUsername( void ) const;
 		bool		getIsCorrectPassword( void ) const;
 		// std::string getIp( void ) const;
