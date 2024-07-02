@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/01 22:33:30 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/02 21:14:55 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void Channel::addClient(Client *client)
 void Channel::setTopic(std::string &topic)
 {
 		_topic = topic;
+		this->setMode('t', true);
 }
 
 
@@ -105,7 +106,6 @@ bool Channel::isOperator(std::string &nickname)
 	{
 		return true;
 	}
-
 	return false;
 }
 
@@ -118,6 +118,7 @@ void Channel::inviteClient(Client *client)
 void Channel::setKey(std::string &password)
 {
 	this->_key = password;
+	this->setMode('k', true);
 }
 
 std::string Channel::getKey()
@@ -125,11 +126,22 @@ std::string Channel::getKey()
 	return this->_key;
 }
 
-int Channel::getMaxUsers()
+int Channel::getUserLimit()
 {
-	return maxUsers;
+	return UserLimit;
 }
 
+std::string Channel::getModes() const
+{
+    std::string result;
+
+    for (std::map<char, bool>::const_iterator it = modes.begin(); it != modes.end(); ++it) {
+        if (it->second) {
+            result += it->first;
+        }
+    }
+    return result;
+}
 void Channel::broadcastMessage(const std::string message)
 {
     std::map<std::string, Client *>::iterator it;
@@ -171,19 +183,24 @@ std::string Channel::getChannelName() const
 void Channel::removeKey()
 {
 	_key.clear();
+	this->setMode('k', false);
 }
 
-void Channel::setMaxUsers(int limit)
+void Channel::setUserLimit(int limit)
 {
 	if(limit > 0)
-		maxUsers = limit;
+	{
+		UserLimit = limit;
+		this->setMode('l', true);
+	}
 	else
 		std::cout << "Invalid user limit inputted by the user" << std::endl;
 }
 
-void Channel::removeMaxUsers()
+void Channel::removeUserLimit()
 {
-	maxUsers = -1;
+	UserLimit = -1;
+	this->setMode('l', false);
 }
 
 void Channel::addOperator(std::string nickname)
@@ -193,6 +210,7 @@ void Channel::addOperator(std::string nickname)
 	if (user_itr != this->users.end())
 	{
 		this->operators[user_itr->second->getNickname()] = user_itr->second;
+		this->setMode('o', true);
 	}
 }
 
@@ -202,5 +220,34 @@ void Channel::removeOperator(std::string nickname)
     if (operator_itr != this->operators.end())
 	{
         this->operators.erase(operator_itr);
+		this->setMode('o', false);
+    }
+	if(this->operators.empty() && !users.empty())
+	{
+		operators[users.begin()->first] = users.begin()->second;
+	}
+}
+
+std::string Channel::getTopic() const
+{
+	return _topic;
+}
+
+void Channel::removeInvite(std::string &invite)
+{
+	std::map<std::string, Client*>::iterator invite_itr = this->inviteList.find(invite);
+    if (invite_itr != this->inviteList.end())
+	{
+        this->inviteList.erase(invite_itr);
+    }
+}
+
+void Channel::removeClient(Client *client)
+{
+	this->removeOperator(client->getNickname());
+	std::map<std::string, Client*>::iterator users_itr = this->users.find(client->getNickname());
+    if (users_itr != this->users.end())
+	{
+        this->users.erase(users_itr);
     }
 }

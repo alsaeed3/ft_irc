@@ -6,7 +6,7 @@
 #    By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/05 23:41:54 by alsaeed           #+#    #+#              #
-#    Updated: 2024/06/26 15:11:03 by tofaramusus      ###   ########.fr        #
+#    Updated: 2024/07/02 16:30:39 by tofaramusus      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,8 @@ SRCS =	Server.cpp \
 		quitCommand.cpp \
 		joinCommand.cpp  \
 		privateMessage.cpp \
+		modeCommand.cpp \
+		inviteCommand.cpp \
 		
 
 OBJS_DIR = object_files
@@ -71,6 +73,8 @@ $(OBJS):	Makefile \
 			source_files/joinCommand.cpp \
 			source_files/ParseMessage.cpp \
 			source_files/privateMessage.cpp \
+			source_files/modeCommand.cpp \
+			source_files/inviteCommand.cpp \
 
 clean:
 	@if [ -e $(OBJS_DIR) ]; then \

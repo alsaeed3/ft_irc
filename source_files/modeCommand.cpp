@@ -22,12 +22,12 @@ static bool handleKeyMode(Client *client, Channel &channel, bool isAdding,
 static bool handleLimitMode(Client *client, Channel &channel, bool isAdding,
 	  std::vector<std::string> &params, size_t &paramIndex)
 {
-	int	maxUsers;
+	int	UserLimit;
 
 	if (isAdding && paramIndex < params.size())
 	{
-		maxUsers = std::atoi(params[paramIndex++].c_str());
-		channel.setMaxUsers(maxUsers);
+		UserLimit = std::atoi(params[paramIndex++].c_str());
+		channel.setUserLimit(UserLimit);
 		return (true);
 	}
 	else if (isAdding)
@@ -36,7 +36,7 @@ static bool handleLimitMode(Client *client, Channel &channel, bool isAdding,
 	}
 	else
 	{
-		channel.removeMaxUsers();
+		channel.removeUserLimit();
 	}
 	return (false);
 }
@@ -64,21 +64,6 @@ static bool handleOperatorMode(Client *client, Channel &channel, bool isAdding,
 	return (false);
 }
 
-// void Server::handleUserMode(Client *client,   std::string &target,
-// 	  std::vector<std::string> &params)
-// {
-// 	if (target != client->getNickname())
-// 	{
-// 		client->sendReply(ERR_USERSDONTMATCH(client->getNickname()));
-// 		return ;
-// 	}
-// 	if (params.size() > 1)
-// 	{
-// 		processUserModes(client, params[1]);
-// 	}
-// 	client->sendReply(RPL_UMODEIS(client->getNickname(), client->getModes()));
-// }
-
 static bool processSingleChannelMode(Client *client, Channel &channel,
 	char mode, bool isAdding,   std::vector<std::string> &params,
 	size_t &paramIndex)
@@ -104,33 +89,6 @@ static bool processSingleChannelMode(Client *client, Channel &channel,
 		return (false);
 	}
 }
-
-// static void Server::processUserModes(Client *client,   std::string &modeString)
-// {
-// 	bool	isAdding;
-// 	char	mode;
-
-// 	isAdding = true;
-// 	for (size_t i = 0; i < modeString.length(); ++i)
-// 	{
-// 		mode = modeString[i];
-// 		if (mode == '+' || mode == '-')
-// 		{
-// 			isAdding = (mode == '+');
-// 			continue ;
-// 		}
-// 		switch (mode)
-// 		{
-// 		case 'i':
-// 		case 'w':
-// 			client->setMode(mode, isAdding);
-// 			break ;
-// 		default:
-// 			client->serverReplies.push_back(ERR_UMODEUNKNOWNFLAG(client->getNickname()));
-// 			break ;
-// 		}
-// 	}
-// }
 
 void processChannelModes(Client *client, Channel &channel,
 	  std::vector<std::string> &params)
@@ -184,9 +142,8 @@ static void handleChannelMode(Client *client, std::string &channelName,
 	}
 	else
 	{
-		// client->sendReply(RPL_CHANNELMODEIS(client->getNickname(), channelName,
-		// 		channel.getModes()));
-		//send message that has the channel modes
+		client->serverReplies.push_back(RPL_CHANNELMODEIS(client->getNickname(), channelName,
+				channel.getModes()));
 	}
 }
 
@@ -194,10 +151,11 @@ void Server::modeCommand(Client *client, const ParseMessage &parsedMsg)
 {
 	  std::vector<std::string> params = parsedMsg.getParams();
 
-	  //l need to check the mode string for the letters that they are just  +- etc.
-	  //l need to add the trailing to the params also;
-	  //l also need to check that the par
-
+	if(parsedMsg.getTrailing().empty() == false)
+	{
+		std::vector<std::string> splitTrailing = ft_split(parsedMsg.getTrailing(), ' ');
+		params.insert(params.end(), splitTrailing.begin(), splitTrailing.end());
+	}
 
 	if (params.empty())
 	{

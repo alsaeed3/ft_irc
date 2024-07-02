@@ -9,7 +9,6 @@ bool 	Server::nickCommand(Client *client, const std::vector<std::string> &params
 	//check its not empty
 	//check if nickname not in use already
 	//check nickname doest contain these find_first_of("# @:&")
-
 	//if it checks out then add to nicknames vector
 	//erase the current nickname from nickname list
 	//send message with nickname reply

@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/01 19:33:14 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/02 22:31:31 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,15 +108,3 @@ Client	*Server::getClient(std::string nickname)
     }
     return NULL;
 }
-
-// std::string	Client::getFullIdentity( void ) const {
-
-// 	return _nickname + "!" + _username + "@" + _ip;
-// }
-
-// std::string	Client::getIp( void ) const {
-
-// 	return _ip;
-// }
-
-// Path: includes/Client.hpp

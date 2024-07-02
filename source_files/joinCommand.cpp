@@ -38,7 +38,7 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 				response = ERR_USERONCHANNEL(client->getUsername(), client->getNickname(), chanName);
 			}
 			else if(!tempChannel.isInInvite(client->getNickname()) && tempChannel.checkMode('l') 
-					&&  static_cast<int>(tempChannel.getUsers().size()) >= tempChannel.getMaxUsers())
+					&&  static_cast<int>(tempChannel.getUsers().size()) >= tempChannel.getUserLimit())
 			{
 				response = ERR_CHANNELISFULL(client->getNickname(), chanName);
 			}
@@ -61,9 +61,9 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 			else 
 			{
 				response = RPL_JOIN(user_id(client->getNickname(), client->getUsername()), chanName); //change this to welcome message
+				tempChannel.removeInvite(client->getNickname());
 				tempChannel.broadcastMessage(response);
 				tempChannel.addClient(client);
-				// response = //send the messsages.
 			}
 			client->serverReplies.push_back(response);
 			return;
@@ -75,6 +75,5 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 						client)));
 		}
 		client->serverReplies.push_back(response);
-		//send server reply
 	}
 }

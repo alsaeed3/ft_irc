@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/01 17:33:55 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/02 22:02:09 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,23 +175,27 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		}
 		if (command == "MODE")
 		{
-			
+			modeCommand(client, parsedMsg);
 		}
 		if(command == "TOPIC")
 		{
-			
+			topicCommand(client, parsedMsg);
+		}
+		if(command == "KICK")
+		{
+			kickCommand(client, parsedMsg); //implementing
 		}
 		if(command == "INVITE")
 		{
-			
+			inviteCommand(client, parsedMsg);
 		}
 		if(command == "MOTD")
 		{
-			
+				
 		}
 		if(command == "PART")
 		{
-			
+			partCommand(client, parsedMsg);
 		}
 		if(command == "NOTICE")
 		{

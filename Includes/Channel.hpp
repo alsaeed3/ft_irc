@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/01 20:47:36 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/02 21:12:04 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class Channel
 		bool	_inviteOnly;
 		bool	_topicRestricted;
 		
-		int maxUsers; 
+		int UserLimit; 
 
 	public:
 		Channel(std::string &channelName, Client *client);
@@ -47,26 +47,25 @@ class Channel
 		void addOperator(std::string nickname);
 
 		//REMOVE FUNCTIONS
-		void removeUser(Client *client, Client *kickedBy, const std::string &reason);
+		void removeClient(Client *client);
 		void removeInvite(std::string &invite);
-		void removeOperator(std::string);
+		void removeOperator(std::string nickname);
 		void removeKey();
-		void removeMaxUsers();
+		void removeUserLimit();
 		
 		//GETTERS
 		std::string getKey( void );
 		std::map<std::string, Client *> getUsers();
-		int		getMaxUsers();
-		// void getModes();
+		int		getUserLimit();
+		std::string getModes() const;
 		std::string getChannelName() const;
+		std::string getTopic() const;
 
 		//SETTERS
 		void setTopic(std::string &topic);
-		void setInviteOnly(bool inviteOnly, Client* client);
-		void setTopicRestricted(bool topicRestricted, Client* client);
-		void setUserLimit(int userLimit, Client* client);
+		// void setTopicRestricted(bool topicRestricted, Client* client);
+		void setUserLimit(int limit);
 		void setKey(std::string &password);
-		void setMaxUsers(int limit);
 		void setMode(char c, bool setting);
 
 		//CHECK FUNCTIONS

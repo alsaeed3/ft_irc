@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/29 16:07:33 by tmususa          ###   ########.fr       */
+/*   Updated: 2024/07/02 22:45:19 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ class Server {
 		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
 		static void 			joinCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			privateMessage(Client *client, const ParseMessage &ParsedMsg);
-		
-		//to implement
-		static void 			kickCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			modeCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			inviteCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			topicCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			partCommand(Client *client, const ParseMessage& parsedMsg);
+		static void 			kickCommand(Client *client, const ParseMessage& parsedMsg);
+		
+		//to implement
 		static void 			noticeCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			motdCommand(Client *client, const ParseMessage& parsedMsg);
 		
