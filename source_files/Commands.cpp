@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/02 22:02:09 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/03 00:04:02 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ bool Server::connectUser(Client *client, const ParseMessage &parsedMsg)
     if (command == "NICK" && client->getIsCorrectPassword() && !client->isRegistered()) 
 	{
         if(nickCommand(client, params))
-			client->serverReplies.push_back( RPL_MOTDSTART(client->getUsername(),client->getUsername()));
+		{
+			motdCommand(client);
+		}
         return true;
     }
     return false;
@@ -134,7 +136,6 @@ void Server::printCommand(ParseMessage message)
 void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 {
 	std::string command;
-	//create print command debugger message
 	
 	std::vector<std::string> params;
 	if(parsedMsg.getCmd().empty() == true)
@@ -183,7 +184,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		}
 		if(command == "KICK")
 		{
-			kickCommand(client, parsedMsg); //implementing
+			kickCommand(client, parsedMsg);
 		}
 		if(command == "INVITE")
 		{
@@ -191,7 +192,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		}
 		if(command == "MOTD")
 		{
-				
+			motdCommand(client);
 		}
 		if(command == "PART")
 		{
@@ -199,7 +200,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		}
 		if(command == "NOTICE")
 		{
-			
+			noticeCommand(client, parsedMsg);
 		}
 		if(command == "WHOIS")
 		{

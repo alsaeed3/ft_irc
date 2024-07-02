@@ -17,9 +17,8 @@ void Server::privateMessage(Client *client, const ParseMessage &parsedMsg)
     }
 
     std::string receiver = params[0];
-    const bool isChannelMessage = (receiver[0] == '#' || receiver[0] == '&');
 
-    if (isChannelMessage)
+    if(receiver[0] == '#' || receiver[0] == '&')
     {
         if (!isChannelInServer(receiver))
         {

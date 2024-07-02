@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/02 22:45:19 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/03 00:11:49 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 #include <map>
 #include <vector>
+#include <fstream>
 
 
 class Server {
@@ -74,11 +75,8 @@ class Server {
 		static void 			topicCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			partCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			kickCommand(Client *client, const ParseMessage& parsedMsg);
-		
-		//to implement
+		static void 			motdCommand(Client *client);
 		static void 			noticeCommand(Client *client, const ParseMessage& parsedMsg);
-		static void 			motdCommand(Client *client, const ParseMessage& parsedMsg);
-		
 
 		static void				handleCapCommand(Client *client, const std::vector<std::string> &params);
 		static bool 			handlePassCommand(Client *client, const std::vector<std::string> &params);

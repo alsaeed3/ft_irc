@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/02 21:14:55 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/03 00:13:32 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,4 +250,9 @@ void Channel::removeClient(Client *client)
 	{
         this->users.erase(users_itr);
     }
+}
+
+void	Server::addChannel(Channel &channel)
+{
+	_channels[channel.getChannelName()] = channel;
 }
