@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/03 00:13:32 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/03 14:57:47 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <Channel.hpp>
 
 //CONSTRUCTOR
-Channel::Channel(std::string &channelName, Client *client) : channelName(channelName)
+Channel::Channel(std::string &channelName, Client *client) : channelName(channelName), _topic(""), _key(""), UserLimit(0)
 {
 	operators[client->getNickname()] = client;
 	users[client->getNickname()] = client;
@@ -254,5 +254,11 @@ void Channel::removeClient(Client *client)
 
 void	Server::addChannel(Channel &channel)
 {
-	_channels[channel.getChannelName()] = channel;
+	// _channels[channel.getChannelName()] = channel;
+	_channels.insert(std::make_pair(channel.getChannelName(), channel));
 }
+
+std::map<std::string, Client *> operators;
+std::map<std::string, Client *> users;
+std::map<std::string, Client *> inviteList;
+std::map<char, bool> modes;

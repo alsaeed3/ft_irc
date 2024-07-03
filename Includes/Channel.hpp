@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/02 21:12:04 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/03 14:50:14 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 class Channel 
 {
 	private:
-		int totalUsers;
 		std::string channelName;
 		std::string _topic;
 		std::string _key;
@@ -29,8 +28,6 @@ class Channel
 		std::map<std::string, Client *> users;
 		std::map<std::string, Client *> inviteList;
 		std::map<char, bool> modes;
-		bool	_inviteOnly;
-		bool	_topicRestricted;
 		
 		int UserLimit; 
 

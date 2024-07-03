@@ -6,7 +6,7 @@
 #    By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/05 23:41:54 by alsaeed           #+#    #+#              #
-#    Updated: 2024/07/03 00:17:59 by tofaramusus      ###   ########.fr        #
+#    Updated: 2024/07/03 14:59:54 by tofaramusus      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,11 +20,11 @@ SRCS =	Server.cpp \
 		Channel.cpp \
 		Client.cpp \
 		ParseMessage.cpp \
-		Commands.cpp \
 		nickCommand.cpp \
 		quitCommand.cpp \
 		joinCommand.cpp  \
 		privateMessage.cpp \
+		Commands.cpp \
 		modeCommand.cpp \
 		inviteCommand.cpp \
 		kickCommand.cpp \
@@ -70,21 +70,21 @@ $(OBJS):	Makefile \
 			includes/IrcLibs.hpp \
 			includes/ParseMessage.hpp \
 			source_files/Server.cpp \
-			source_files/Commands.cpp \
 			source_files/Channel.cpp \
 			source_files/Client.cpp \
 			source_files/ParseMessage.cpp \
-			source_files/commands/joinCommand.cpp \
-			source_files/commands/nickCommand.cpp \
-			source_files/commands/quitCommand.cpp \
-			source_files/commands/privateMessage.cpp \
-			source_files/commands/modeCommand.cpp \
-			source_files/commands/inviteCommand.cpp \
-			source_files/commands/kickCommand.cpp \
-			source_files/commands/motdCommand.cpp \
-			source_files/commands/noticeCommand.cpp \
-			source_files/commands/partCommand.cpp \
-			source_files/commands/topicCommand.cpp \
+			source_files/joinCommand.cpp \
+			source_files/nickCommand.cpp \
+			source_files/quitCommand.cpp \
+			source_files/privateMessage.cpp \
+			source_files/modeCommand.cpp \
+			source_files/inviteCommand.cpp \
+			source_files/kickCommand.cpp \
+			source_files/motdCommand.cpp \
+			source_files/noticeCommand.cpp \
+			source_files/partCommand.cpp \
+			source_files/topicCommand.cpp \
+			source_files/Commands.cpp \
 		
 
 clean:
