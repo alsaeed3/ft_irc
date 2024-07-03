@@ -2,10 +2,10 @@
 
 
 
-bool 	Server::nickCommand(Client *client, const std::vector<std::string> &params)
+void 	Server::nickCommand(Client *client, const std::vector<std::string> &params)
 {
-	if(params.size() < 1)
-		return false;
+	if(params.size() != 1)
+		return ;
 	//check its not empty
 	//check if nickname not in use already
 	//check nickname doest contain these find_first_of("# @:&")
@@ -17,17 +17,17 @@ bool 	Server::nickCommand(Client *client, const std::vector<std::string> &params
 	if (newNick.empty())
     {
        client->serverReplies.push_back(ERR_NONICKNAMEGIVEN(client->getNickname()));
-	   return false;
+	   return ;
     }
     else if (newNick.find_first_of("#@:&") != std::string::npos)
     {
        client->serverReplies.push_back(ERR_ERRONEUSNICKNAME(client->getNickname(), newNick));
-	   return false;
+	   return ;
     }
     else if (std::find(_nicknames.begin(), _nicknames.end(), newNick) != _nicknames.end())
     {
        client->serverReplies.push_back(ERR_NICKNAMEINUSE(client->getNickname(), newNick));
-	   return false;
+	   return ;
     }
     else if (!client->getNickname().empty())
     {
@@ -36,5 +36,5 @@ bool 	Server::nickCommand(Client *client, const std::vector<std::string> &params
     }
 	_nicknames.push_back(newNick);
 	client->setNickname(newNick);
-	return true;
+	return ;
 }

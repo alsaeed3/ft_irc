@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/03 00:11:49 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/03 16:22:01 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,14 @@ class Server {
 		static void				handleClientDisconnection(int client_fd, int bytesRecv);
 		static void             handleClientMessage(int client_fd);
 		static void             closeClient(int client_fd);
-		// static void             authenticateClient(int client_fd, const std::string& password);
 		static void				sendToClient( int client_fd );
-		static bool				connectUser( Client* client, const ParseMessage& parsedMsg );
+		static void				connectUser( Client* client, const ParseMessage& parsedMsg );
 		static	void			addNewUser(Client* client, const ParseMessage &parsedMsg);
 		static Client					*getClient(std::string nickname);
 
 		// Commands
 		static void				quitCommand(std::string reason, Client *client);
-		static bool				nickCommand(Client *client, const std::vector<std::string> &params);
+		static void				nickCommand(Client *client, const std::vector<std::string> &params);
 		static void				processCommand( Client *client, const ParseMessage& parsedMsg);
 		static void 			joinCommand(Client *client, const ParseMessage& parsedMsg);
 		static void 			privateMessage(Client *client, const ParseMessage &ParsedMsg);

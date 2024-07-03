@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/03 00:04:02 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/03 18:37:44 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,54 +30,36 @@ void Server::addNewUser(Client* client, const ParseMessage &parsedMsg)
         }
         std::cout << "User registered: " << client->getUsername() 
                   << " (Real name: " << client->getUsername() << ")" << std::endl;
-		//call the message of the day
     }
 }
 
-bool Server::connectUser(Client *client, const ParseMessage &parsedMsg) 
+void Server::connectUser(Client *client, const ParseMessage &parsedMsg) 
 {
     const std::string &command = parsedMsg.getCmd();
     const std::vector<std::string> &params = parsedMsg.getParams();
 
-    if (client->isRegistered() == true) 
-	{
-        if (command == "USER" || command == "PASS")
-		 {
-            client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
-            return true;
-        }
-		else
-        	return false;
-    }
-
     if (command == "CAP")
 	{
         handleCapCommand(client, params);
-        return true;
     }
-
-    if (command == "PASS") 
+    else if (command == "PASS") 
 	{
-        return handlePassCommand(client, params);
+        handlePassCommand(client, params);
     }
-
-    if (command == "USER" && client->getIsCorrectPassword()) {
+    else if (command == "USER" && client->getIsCorrectPassword())
+	{
         addNewUser(client, parsedMsg);
-        return true;
     }
-
-    if (command == "NICK" && client->getIsCorrectPassword() && !client->isRegistered()) 
+    else if (command == "NICK" && client->getIsCorrectPassword()) 
 	{
-        if(nickCommand(client, params))
-		{
-			motdCommand(client);
-		}
-        return true;
+        nickCommand(client, params);
     }
-    return false;
+	if(client->isRegistered() == true)
+	{
+		motdCommand(client);
+	}
+    return ;
 }
-
-// Helper functions
 
 void Server::handleCapCommand(Client *client, const std::vector<std::string> &params) 
 {
@@ -91,7 +73,7 @@ void Server::handleCapCommand(Client *client, const std::vector<std::string> &pa
 bool Server::handlePassCommand(Client *client, const std::vector<std::string> &params) {
     if (client->getIsCorrectPassword() == false) 
 	{
-        if (params[0] == getServerPassword())
+        if (!params.empty() && params[0] == getServerPassword())
 		{
             client->setIsCorrectPassword(true);
         } else 
@@ -111,7 +93,7 @@ bool Server::handlePassCommand(Client *client, const std::vector<std::string> &p
 bool Server::isValidIRCCommand(const std::string& command) 
 {
     static const char* validCommands[] = {
-        "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG",
+        "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG", "KICK"
         "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "NOTICE", 0
     };
 
@@ -149,15 +131,23 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	{
 		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getUsername() ,command));
 	}
-	if(isValidIRCCommand(parsedMsg.getCmd()) == false) //this will check the type of command
+	if(isValidIRCCommand(parsedMsg.getCmd()) == false)
 	{
 		client->serverReplies.push_back(ERR_UNKNOWNCOMMAND(client->getNickname(), parsedMsg.getCmd()));
 		return;
 	}
 	if (command == "QUIT")
 		quitCommand(parsedMsg.getTrailing(), client);
-	if (client->isRegistered() == true)
+	if(client->isRegistered() == false )
 	{
+		connectUser(client, parsedMsg);	
+	}
+	else
+	{    
+		if (command == "USER" || command == "PASS")
+		{
+            client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
+        }
 		if (command == "JOIN")
 		{
 			joinCommand(client, parsedMsg);
@@ -202,15 +192,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		{
 			noticeCommand(client, parsedMsg);
 		}
-		if(command == "WHOIS")
-		{
-			
-		}
 		return;
-	}
-	if(connectUser(client, parsedMsg) == false)
-	{
-		//send message that says register user first
 	}
 	command.clear();
 	params.clear();
