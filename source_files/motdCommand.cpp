@@ -15,7 +15,6 @@ void	Server::motdCommand(Client *client)
 	client->serverReplies.push_back( RPL_CREATED(client->getUsername(), std::string("creation_date")));
 	client->serverReplies.push_back( RPL_MYINFO(client->getUsername(),"irssi", "1", "","",""));
 	client->serverReplies.push_back( RPL_ISUPPORT(client->getUsername(),"CHANMODES=ikolt"));
-	client->serverReplies.push_back( RPL_MOTDSTART(client->getUsername(),client->getUsername()));
 	client->serverReplies.push_back( RPL_MOTDSTART(client->getUsername(),std::string("ft_irc_server")));
     if (infile.is_open())
     {

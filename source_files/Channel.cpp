@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/03 14:57:47 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/06 21:14:41 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <Channel.hpp>
 
 //CONSTRUCTOR
-Channel::Channel(std::string &channelName, Client *client) : channelName(channelName), _topic(""), _key(""), UserLimit(0)
+Channel::Channel(std::string &channelName, Client *client) : channelName(channelName), UserLimit(0)
 {
 	operators[client->getNickname()] = client;
 	users[client->getNickname()] = client;
@@ -76,8 +76,7 @@ bool Channel::isClientInChannel(std::string nickname)
 
 bool Channel::isInInvite(std::string nickname)
 {
-	
-	if(this->inviteList.find(nickname) != inviteList.end())
+	if (this->inviteList.find(nickname) != inviteList.end())
 	{
 		return true;
 	}
@@ -230,7 +229,7 @@ void Channel::removeOperator(std::string nickname)
 
 std::string Channel::getTopic() const
 {
-	return _topic;
+		return _topic;
 }
 
 void Channel::removeInvite(std::string &invite)
@@ -252,13 +251,54 @@ void Channel::removeClient(Client *client)
     }
 }
 
+std::string ft_trim(std::string text)
+{
+    size_t first = text.find_first_not_of(" \n\r\t");
+    size_t last = text.find_last_not_of(" \n\r\t");
+
+    if (first == std::string::npos || last == std::string::npos) {
+        return "";
+    }
+    return text.substr(first, (last - first + 1));
+}
+
 void	Server::addChannel(Channel &channel)
 {
 	// _channels[channel.getChannelName()] = channel;
 	_channels.insert(std::make_pair(channel.getChannelName(), channel));
 }
 
+std::string Server::greetJoinedUser(Client *client, Channel &channel)
+{
+	std::string response;
+	
+	response = RPL_JOIN(user_id(client->getNickname(), client->getUsername()), channel.getChannelName());
+    if (channel.getUsers().size() == 1)
+        response += MODE_CHANNELMSG(channel.getChannelName(), channel.getModes());
+    if (channel.getTopic().empty() == false) // if has a topic append it to the message
+        response += RPL_TOPIC(client->getNickname(), channel.getChannelName(), channel.getTopic());
+    response += RPL_NAMREPLY(client->getNickname(), '@', channel.getChannelName(), channel.getUsersList());
+    response += RPL_ENDOFNAMES(client->getUsername(), channel.getChannelName());
+	return response;
+}
+
+std::string Channel::getUsersList()
+{
+    std::string memberList;
+	std::map<std::string, Client *> users = this->getUsers();
+    for (std::map<std::string, Client*>::const_iterator iter = users.begin(); iter != users.end(); ++iter) {
+        const Client* currentMember = iter->second;
+        if (isOperator(currentMember->getNickname())) {
+            memberList += "@";
+        }
+        memberList += currentMember->getNickname() + " ";
+    }
+    return ft_trim(memberList);
+}
+
 std::map<std::string, Client *> operators;
 std::map<std::string, Client *> users;
 std::map<std::string, Client *> inviteList;
 std::map<char, bool> modes;
+std::string _topic;
+std::string _key;

@@ -27,8 +27,8 @@ void Server::topicCommand(Client *client, const ParseMessage &ParsedMsg)
         client->serverReplies.push_back(response);
         return;
     }
-    // If no topic is provided, return current topic
-    if (params.size() == 1) {
+    // If no topic is provided as second param or trailing message
+    if (params.size() == 1 && ParsedMsg.getTrailing().empty()) {
         if (channel.getTopic().empty()) {
             response = RPL_NOTOPIC(client->getNickname(), channelName);
         } else 
@@ -43,13 +43,12 @@ void Server::topicCommand(Client *client, const ParseMessage &ParsedMsg)
         client->serverReplies.push_back(response);
         return;
     }
-    newTopic = params[1];
+    newTopic = ParsedMsg.getTrailing().empty() ? params[1] : ParsedMsg.getTrailing();
     if (newTopic == channel.getTopic()) 
 	{
         return;
     }
     channel.setTopic(newTopic);
-
-    std::string topicChangeMsg = ":" + client->getNickname() + "!" + client->getUsername() + "@" + "localhost" " TOPIC " + channelName + " :" + newTopic + "\r\n";
+    std::string topicChangeMsg = RPL_CHANGETOPIC(user_id(client->getNickname(), client->getUsername()), channel.getChannelName(), newTopic);
 	channel.broadcastMessage(topicChangeMsg);
 }

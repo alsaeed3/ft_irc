@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/03 18:37:44 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/06 21:12:26 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void Server::connectUser(Client *client, const ParseMessage &parsedMsg)
 	{
         nickCommand(client, params);
     }
-	if(client->isRegistered() == true)
+	if (client->isRegistered() == true)
 	{
 		motdCommand(client);
 	}
@@ -78,14 +78,14 @@ bool Server::handlePassCommand(Client *client, const std::vector<std::string> &p
             client->setIsCorrectPassword(true);
         } else 
 		{
-            client->serverReplies.push_back(ERR_PASSWDMISMATCH(client->getNickname()));
+            client->serverReplies.push_back(ERR_PASSWDMISMATCH(std::string("ircserver")));
             // closeClient(client->getFd());
             // client->setFd(-1);
 			//ADD message to say try again password
 			throw(std::exception());
         }
     } else {
-        client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
+        client->serverReplies.push_back(ERR_ALREADYREGISTERED(std::string("ircserver")));
     }
     return true;
 }
@@ -93,7 +93,7 @@ bool Server::handlePassCommand(Client *client, const std::vector<std::string> &p
 bool Server::isValidIRCCommand(const std::string& command) 
 {
     static const char* validCommands[] = {
-        "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG", "KICK"
+        "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG", "KICK",
         "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "NOTICE", 0
     };
 
@@ -120,25 +120,25 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	std::string command;
 	
 	std::vector<std::string> params;
-	if(parsedMsg.getCmd().empty() == true)
+	if(parsedMsg.getCmd().empty() == true) //check if it is empty 
 	{
 		return;
 	}
 	printCommand(parsedMsg);
 	command = parsedMsg.getCmd();
 	params = parsedMsg.getParams();
-	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING")
+	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING" &&  command != "QUIT")
 	{
-		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getUsername() ,command));
+		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(std::string("ircserver") ,command));
 	}
 	if(isValidIRCCommand(parsedMsg.getCmd()) == false)
 	{
-		client->serverReplies.push_back(ERR_UNKNOWNCOMMAND(client->getNickname(), parsedMsg.getCmd()));
+		client->serverReplies.push_back(ERR_UNKNOWNCOMMAND(std::string("ircserver"), parsedMsg.getCmd()));
 		return;
 	}
 	if (command == "QUIT")
 		quitCommand(parsedMsg.getTrailing(), client);
-	if(client->isRegistered() == false )
+	if(client->isRegistered() == false)
 	{
 		connectUser(client, parsedMsg);	
 	}
@@ -148,52 +148,50 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		{
             client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
         }
-		if (command == "JOIN")
+		else if (command == "JOIN")
 		{
 			joinCommand(client, parsedMsg);
 		}
-		if(command == "PRIVMSG")
+		else if(command == "PRIVMSG")
 		{
 			privateMessage(client, parsedMsg);	
 		}
-		if(command == "PING")
+		else if(command == "PING")
 		{
 			 client->serverReplies.push_back(RPL_PONG(user_id(client->getNickname(),client->getUsername()),params[0]));
 		}
-		if(command == "NICK")
+		else if(command == "NICK")
 		{
 			nickCommand(client, params);
 		}
-		if (command == "MODE")
+		else if (command == "MODE")
 		{
 			modeCommand(client, parsedMsg);
 		}
-		if(command == "TOPIC")
+		else if(command == "TOPIC")
 		{
 			topicCommand(client, parsedMsg);
 		}
-		if(command == "KICK")
+		else if(command == "KICK")
 		{
 			kickCommand(client, parsedMsg);
 		}
-		if(command == "INVITE")
+		else if(command == "INVITE")
 		{
 			inviteCommand(client, parsedMsg);
 		}
-		if(command == "MOTD")
+		else if(command == "MOTD")
 		{
 			motdCommand(client);
 		}
-		if(command == "PART")
+		else if(command == "PART")
 		{
 			partCommand(client, parsedMsg);
 		}
-		if(command == "NOTICE")
+		else if(command == "NOTICE")
 		{
 			noticeCommand(client, parsedMsg);
 		}
-		return;
 	}
-	command.clear();
-	params.clear();
+	return;
 }

@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/03 14:50:14 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/05 19:25:24 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ class Channel
 		//GETTERS
 		std::string getKey( void );
 		std::map<std::string, Client *> getUsers();
+		std::string  getUsersList();
 		int		getUserLimit();
 		std::string getModes() const;
 		std::string getChannelName() const;

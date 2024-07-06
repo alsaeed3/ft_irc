@@ -1,6 +1,6 @@
 #include <Server.hpp>
 
-void				Server::quitCommand(std::string reason, Client *client)
+void	Server::quitCommand(std::string reason, Client *client) //there are some changes to take care of 
 {
 	std::map<std::string, Channel>::iterator	itr;
 	std::string nickname = client->getNickname();

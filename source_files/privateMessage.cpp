@@ -6,8 +6,9 @@ void Server::privateMessage(Client *client, const ParseMessage &parsedMsg)
 {
     const std::vector<std::string>& params = parsedMsg.getParams();
     const std::string& trailing = parsedMsg.getTrailing();
+	std::string receiver; 
 
-    if (params.empty() || trailing.empty())
+    if (params.empty() && trailing.empty())
     {
         if (params.empty())
             client->serverReplies.push_back(ERR_NORECIPIENT(client->getNickname()));
@@ -16,7 +17,10 @@ void Server::privateMessage(Client *client, const ParseMessage &parsedMsg)
         return;
     }
 
-    std::string receiver = params[0];
+	if(params.empty() == false)
+	{
+		receiver = params[0];
+	}
 
     if(receiver[0] == '#' || receiver[0] == '&')
     {
