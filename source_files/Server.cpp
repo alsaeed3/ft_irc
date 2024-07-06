@@ -152,7 +152,6 @@ void Server::handleNewConnection(void) {
 }
 
 int    Server::ft_recv( int fd ) {
-
 	Server::_message.clear();
 	Server::_message.resize(Server::BUFFER_SIZE);
 	int bytesRecv = recv(fd, &Server::_message[0], Server::BUFFER_SIZE, 0);
