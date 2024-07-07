@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/06 21:14:41 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/07 16:30:42 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,6 +279,7 @@ std::string Server::greetJoinedUser(Client *client, Channel &channel)
         response += RPL_TOPIC(client->getNickname(), channel.getChannelName(), channel.getTopic());
     response += RPL_NAMREPLY(client->getNickname(), '@', channel.getChannelName(), channel.getUsersList());
     response += RPL_ENDOFNAMES(client->getUsername(), channel.getChannelName());
+	client->serverReplies.push_back(response);
 	return response;
 }
 

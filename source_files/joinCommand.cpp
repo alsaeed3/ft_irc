@@ -79,8 +79,8 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 			response = RPL_JOIN(user_id(client->getNickname(), client->getUsername()), chanName);
 			_channels.insert(make_pair(chanName, Channel(chanName,
 						client)));
-		response = greetJoinedUser(client, getChannel(chanName));
-		client->serverReplies.push_back(response);
+		greetJoinedUser(client, getChannel(chanName));
+		// client->serverReplies.push_back(response);
 		}
 	}
 }

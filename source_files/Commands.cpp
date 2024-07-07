@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/06 21:12:26 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/07 17:13:29 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	{    
 		if (command == "USER" || command == "PASS")
 		{
-            client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
+            client->serverReplies.push_back(ERR_ALREADYREGISTERED(std::string("ircserver")));
         }
 		else if (command == "JOIN")
 		{
