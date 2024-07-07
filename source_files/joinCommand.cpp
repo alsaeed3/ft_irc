@@ -68,7 +68,7 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 				tempChannel.removeInvite(client->getNickname());
 				tempChannel.broadcastMessage(response);
 				tempChannel.addClient(client);
-				response = greetJoinedUser(client, tempChannel);
+				response = greetJoinedUser(*client, tempChannel);
 			}
 			client->serverReplies.push_back(response);
 			// return;
@@ -79,8 +79,8 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 			response = RPL_JOIN(user_id(client->getNickname(), client->getUsername()), chanName);
 			_channels.insert(make_pair(chanName, Channel(chanName,
 						client)));
-		greetJoinedUser(client, getChannel(chanName));
-		// client->serverReplies.push_back(response);
+			response = greetJoinedUser(*client, getChannel(chanName));
+			client->serverReplies.push_back(response);
 		}
 	}
 }

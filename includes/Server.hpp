@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/07 16:29:36 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/07 17:50:50 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ class Server {
 		static void 			addChannel(Channel &channel);
 		static Channel 	 		&getChannel(std::string channelName);
 		static bool				isChannelInServer(std::string &channelName);
-		static std::string		greetJoinedUser(Client *client, Channel &channel);
+		static std::string		greetJoinedUser(Client &client, Channel &channel);
 
 		static void 			initServer(void);
 		static void 			runServer(void);

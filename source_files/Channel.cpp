@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/07 16:30:42 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/07 18:35:53 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,19 +268,20 @@ void	Server::addChannel(Channel &channel)
 	_channels.insert(std::make_pair(channel.getChannelName(), channel));
 }
 
-std::string Server::greetJoinedUser(Client *client, Channel &channel)
+std::string Server::greetJoinedUser(Client &client, Channel &channel)
 {
-	std::string response;
-	
-	response = RPL_JOIN(user_id(client->getNickname(), client->getUsername()), channel.getChannelName());
+    std::string reply;
+
+    reply = RPL_JOIN(user_id(client.getNickname(), client.getUsername()), channel.getChannelName());
     if (channel.getUsers().size() == 1)
-        response += MODE_CHANNELMSG(channel.getChannelName(), channel.getModes());
+        reply += MODE_CHANNELMSG(channel.getChannelName(), channel.getModes());
     if (channel.getTopic().empty() == false) // if has a topic append it to the message
-        response += RPL_TOPIC(client->getNickname(), channel.getChannelName(), channel.getTopic());
-    response += RPL_NAMREPLY(client->getNickname(), '@', channel.getChannelName(), channel.getUsersList());
-    response += RPL_ENDOFNAMES(client->getUsername(), channel.getChannelName());
-	client->serverReplies.push_back(response);
-	return response;
+        reply += RPL_TOPIC(client.getNickname(), channel.getChannelName(), channel.getTopic());
+    reply += RPL_NAMREPLY(client.getNickname(), '@', channel.getChannelName(), channel.getUsersList());
+    reply += RPL_ENDOFNAMES(client.getNickname(), channel.getChannelName());
+	client.serverReplies.push_back(reply);
+
+    return reply;
 }
 
 std::string Channel::getUsersList()
