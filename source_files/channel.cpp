@@ -6,7 +6,7 @@
 /*   By: shamzaou <shamzaou@student.42abudhabi.ae>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 17:24:24 by shamzaou          #+#    #+#             */
-/*   Updated: 2024/07/07 09:24:59 by shamzaou         ###   ########.fr       */
+/*   Updated: 2024/07/07 09:25:25 by shamzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void Channel::inviteClient(Client* client, Client* invitedBy) {
         addClient(client);
         client->sendMessage("You have been invited to " + _name + " by " + invitedBy->getNickname());
     }
-}
+		}
 
 const std::string& Channel::getName() const {
     return _name;
