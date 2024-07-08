@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/08 18:10:42 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/08 18:49:43 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ class Server {
 
 		Server( void ) {}
 
-		void            setNonblocking(int fd);
 		void            handleNewConnection(void);
 		int     		ft_recv( int fd );
 		void            cleanupServer(void);
