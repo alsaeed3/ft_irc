@@ -46,6 +46,6 @@ void Server::topicCommand(Client *client, const ParseMessage &ParsedMsg)
     newTopic = ParsedMsg.getTrailing();
 	std::string topicChangeMsg;
     channel.setTopic(newTopic);
-	topicChangeMsg = RPL_CHANGETOPIC(user_id(client->getNickname(),client->getNickname()), channel.getChannelName(), newTopic);
+	topicChangeMsg = RPL_CHANGETOPIC(user_id(client->getNickname(),client->getUsername()), channel.getChannelName(), newTopic);
 	channel.broadcastMessage(topicChangeMsg);
 }

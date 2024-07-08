@@ -136,7 +136,7 @@ void Server::handleChannelMode(Client *client, std::string &channelName,
 				channelName));
 		return ;
 	}
-	if (params.size() > 0)
+	if (params.size() > 1)
 	{
 		processChannelModes(client, channel, params);
 	}
@@ -157,7 +157,7 @@ void Server::modeCommand(Client *client, const ParseMessage &parsedMsg)
 		params.insert(params.end(), splitTrailing.begin(), splitTrailing.end());
 	}
 
-	if (params.size() < 2)
+	if (params.size() < 1)
 	{
 		client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE"));
 		return ;

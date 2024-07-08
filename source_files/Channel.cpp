@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/07 18:35:53 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/08 21:26:08 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ Channel::Channel(std::string &channelName, Client *client) : channelName(channel
 	modes['k'] = false;
 	modes['o'] = false;
 	modes['l'] = false;
+	setMode('t', true);
 }
 
 Channel::~Channel(){}
@@ -132,14 +133,14 @@ int Channel::getUserLimit()
 
 std::string Channel::getModes() const
 {
-    std::string result;
+    std::string result = "";
 
     for (std::map<char, bool>::const_iterator it = modes.begin(); it != modes.end(); ++it) {
         if (it->second) {
             result += it->first;
         }
     }
-    return result;
+    return result.empty() ? "" : "+" + result;
 }
 void Channel::broadcastMessage(const std::string message)
 {
@@ -278,9 +279,7 @@ std::string Server::greetJoinedUser(Client &client, Channel &channel)
     if (channel.getTopic().empty() == false) // if has a topic append it to the message
         reply += RPL_TOPIC(client.getNickname(), channel.getChannelName(), channel.getTopic());
     reply += RPL_NAMREPLY(client.getNickname(), '@', channel.getChannelName(), channel.getUsersList());
-    reply += RPL_ENDOFNAMES(client.getNickname(), channel.getChannelName());
-	client.serverReplies.push_back(reply);
-
+    reply += RPL_ENDOFNAMES(client.getUsername(), channel.getChannelName());
     return reply;
 }
 

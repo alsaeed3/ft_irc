@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/08 15:31:04 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/08 21:27:41 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,6 @@ void Server::addNewUser(Client* client, const ParseMessage &parsedMsg)
     if (client->getUsername().empty() == true && !params.empty())
     {
         client->setUsername(params[0]);
-        if (params.size() > 2 && params[1] != "0" && params[2] != "*" && !parsedMsg.getTrailing().empty())
-        {
-            client->setUsername(parsedMsg.getTrailing());
-        }
-        else if (params.size() > 1)
-        {
-            client->setUsername(params[1]);
-        }
         std::cout << "User registered: " << client->getUsername() 
                   << " (Real name: " << client->getUsername() << ")" << std::endl;
     }
@@ -94,7 +86,7 @@ bool Server::isValidIRCCommand(const std::string& command)
 {
     static const char* validCommands[] = {
         "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG", "KICK",
-        "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "NOTICE", 0
+        "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "WHO", "NOTICE", 0
     };
 
     for (const char** cmd = validCommands; *cmd; ++cmd) {
