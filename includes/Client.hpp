@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/03 00:14:00 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/08 15:25:12 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class Client {
 		// std::string					_ip;
 		std::string					_nickname;
 		std::string					_username;
-		// std::string					_realname;
+		std::string					_realname;
 		std::string					_channel;
 		
 
@@ -49,12 +49,14 @@ class Client {
 		void		setIsCorrectPassword( bool isCorrectPassword );
 		void		setNickname( const std::string &nickname );
 		void		setUsername( const std::string &username );
+		void		setRealname( const std::string &username );
 		void		setFd(int value);
 		
 		//GETTERS
 		std::string getFullIdentity( void ) const;
 		std::string &getNickname( void ) const;
 		std::string getUsername( void ) const;
+		std::string getRealname( void ) const;
 		bool		getIsCorrectPassword( void ) const;
 		// std::string getIp( void ) const;
 		int			getFd( void ) const;

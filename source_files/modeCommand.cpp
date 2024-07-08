@@ -130,6 +130,7 @@ static void handleChannelMode(Client *client, std::string &channelName,
 	}
 	Channel &channel = Server::getChannel(channelName);
 	const std::string nick = client->getNickname();
+
 	if (!channel.isOperator(const_cast<std::string &>(client->getNickname())))
 	{
 		client->serverReplies.push_back(ERR_CHANOPRIVSNEEDED(client->getNickname(),
@@ -157,7 +158,7 @@ void Server::modeCommand(Client *client, const ParseMessage &parsedMsg)
 		params.insert(params.end(), splitTrailing.begin(), splitTrailing.end());
 	}
 
-	if (params.empty())
+	if (params.size() < 2)
 	{
 		client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE"));
 		return ;

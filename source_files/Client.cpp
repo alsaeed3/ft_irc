@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/02 22:31:31 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/08 15:25:21 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Client::Client( void ) :	_fd( 0 ),
 							_isCorrectPassword( false ),
 							_nickname( "" ),
 							_username( "" ),
+							_realname(""),
 							// _realname( "" ),
 							_channel( "" ) {
 
@@ -107,4 +108,9 @@ Client	*Server::getClient(std::string nickname)
         }
     }
     return NULL;
+}
+
+void		Client::setRealname( const std::string &username )
+{
+	this->_realname = username;
 }

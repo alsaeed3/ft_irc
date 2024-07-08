@@ -28,7 +28,7 @@ void Server::topicCommand(Client *client, const ParseMessage &ParsedMsg)
         return;
     }
     // If no topic is provided as second param or trailing message
-    if (params.size() == 1 && ParsedMsg.getTrailing().empty()) {
+    else if (ParsedMsg.getTrailing().empty()) {
         if (channel.getTopic().empty()) {
             response = RPL_NOTOPIC(client->getNickname(), channelName);
         } else 
@@ -38,17 +38,14 @@ void Server::topicCommand(Client *client, const ParseMessage &ParsedMsg)
         client->serverReplies.push_back(response);
         return;
     }
-    if (channel.checkMode('t') && !channel.isOperator(client->getNickname())) {
+    else if (channel.checkMode('t') && !channel.isOperator(client->getNickname())) {
         response = ERR_CHANOPRIVSNEEDED(client->getNickname(), channelName);
         client->serverReplies.push_back(response);
         return;
     }
-    newTopic = ParsedMsg.getTrailing().empty() ? params[1] : ParsedMsg.getTrailing();
-    if (newTopic == channel.getTopic()) 
-	{
-        return;
-    }
+    newTopic = ParsedMsg.getTrailing();
+	std::string topicChangeMsg;
     channel.setTopic(newTopic);
-    std::string topicChangeMsg = RPL_CHANGETOPIC(user_id(client->getNickname(), client->getUsername()), channel.getChannelName(), newTopic);
+	topicChangeMsg = RPL_CHANGETOPIC(user_id(client->getNickname(),client->getNickname()), channel.getChannelName(), newTopic);
 	channel.broadcastMessage(topicChangeMsg);
 }

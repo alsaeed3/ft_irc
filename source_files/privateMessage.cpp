@@ -36,7 +36,7 @@ void Server::privateMessage(Client *client, const ParseMessage &parsedMsg)
             client->serverReplies.push_back(ERR_CANNOTSENDTOCHAN(client->getNickname(), receiver));
             return;
         }
-        channel.sendToOthers(client, RPL_PRIVMSG(client->getNickname(), client->getUsername(), receiver, trailing));
+        channel.sendToOthers(client, RPL_PRIVMSG(client->getNickname(), client->getNickname(), receiver, trailing));
     }
     else
     {
