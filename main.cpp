@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:55:22 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/08 18:54:21 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/08 18:57:47 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int main( int ac, char* av[] ) {
 		return -3;
 	}
 	
-	Server *server;
+	Server *server = NULL;
 		// Initialize and run the server
 	try {
 
