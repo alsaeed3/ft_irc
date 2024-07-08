@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 17:44:04 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/08 15:25:12 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
-#include <IrcLibs.hpp>
+#include <string>
+#include <vector>
+#include <IrcException.hpp>
+#include <unistd.h>
+#include <cstring>
+#include <sys/socket.h>
 
 class Client {
 
@@ -25,7 +30,7 @@ class Client {
 		// std::string					_ip;
 		std::string					_nickname;
 		std::string					_username;
-		// std::string					_realname;
+		std::string					_realname;
 		std::string					_channel;
 		
 
@@ -44,12 +49,14 @@ class Client {
 		void		setIsCorrectPassword( bool isCorrectPassword );
 		void		setNickname( const std::string &nickname );
 		void		setUsername( const std::string &username );
+		void		setRealname( const std::string &username );
 		void		setFd(int value);
 		
 		//GETTERS
 		std::string getFullIdentity( void ) const;
-		std::string getNickname( void ) const;
+		std::string &getNickname( void ) const;
 		std::string getUsername( void ) const;
+		std::string getRealname( void ) const;
 		bool		getIsCorrectPassword( void ) const;
 		// std::string getIp( void ) const;
 		int			getFd( void ) const;

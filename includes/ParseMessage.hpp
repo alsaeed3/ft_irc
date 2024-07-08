@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseMessage.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tmususa <tmususa@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:20:06 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 17:43:19 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/23 16:58:00 by tmususa          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #ifndef PARSEMESG_HPP
 
 #include <IrcLibs.hpp>
+#include <IrcException.hpp>
 
 class ParseMessage {
 

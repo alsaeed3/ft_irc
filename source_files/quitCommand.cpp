@@ -1,14 +1,14 @@
 #include <Server.hpp>
 
-void				Server::quitCommand(std::string reason, Client *client)
+void	Server::quitCommand(std::string reason, Client *client) //there are some changes to take care of 
 {
 	std::map<std::string, Channel>::iterator	itr;
 	std::string nickname = client->getNickname();
-	std::string message = " has quit";
-	for(itr = _channels.begin(); itr != _channels.end(); itr++) {
-
-		if(itr->second.isClientInChannel(nickname)) {
-
+	std::string message = "has quit";
+	for(itr = _channels.begin(); itr != _channels.end(); itr++)
+	{
+		if(itr->second.isClientInChannel(nickname))
+		{
 			//remove user from all channels
 			if(reason.empty())
 			{
@@ -20,8 +20,8 @@ void				Server::quitCommand(std::string reason, Client *client)
 			}
 		}
 	}
-
-	throw( CloseClientException() );
 	// closeClient(client->getFd());
-	// client->setFd(-1);
+	// close(client->getFd());
+	throw(std::exception());
+	client->setFd(-1);
 }

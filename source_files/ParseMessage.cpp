@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseMessage.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 17:48:04 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/26 19:16:08 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

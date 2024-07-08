@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/30 16:22:53 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/05 19:25:24 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 #define CHANNEL_HPP
 
 #include <IrcLibs.hpp>
+#include <IrcException.hpp>
+#include <sys/socket.h>
 
 class Channel 
 {
 	private:
-		int totalUsers;
 		std::string channelName;
 		std::string _topic;
 		std::string _key;
@@ -27,45 +28,43 @@ class Channel
 		std::map<std::string, Client *> users;
 		std::map<std::string, Client *> inviteList;
 		std::map<char, bool> modes;
-		bool	_inviteOnly;
-		bool	_topicRestricted;
 		
-		int maxUsers; 
+		int UserLimit; 
 
 	public:
-		Channel(std::string &channelName, Client &client);
+		Channel(std::string &channelName, Client *client);
 		~Channel();
 
 		//SEND TO OTHERS
 		void	broadcastMessage(const std::string message);
 		void	sendToOthers(Client *client, std::string message);
 		//ADD FUNCTIONS		
-		void addClient(Client &client);
-		void inviteClient(Client &client);
-		void addOperator(Client &client);
+		void addClient(Client *client);
+		void inviteClient(Client *client);
+		void addOperator(std::string nickname);
 
 		//REMOVE FUNCTIONS
-		void removeUser(Client &client, Client *kickedBy, const std::string &reason);
+		void removeClient(Client *client);
 		void removeInvite(std::string &invite);
-		void removeOperator(Client &client);
+		void removeOperator(std::string nickname);
+		void removeKey();
+		void removeUserLimit();
 		
 		//GETTERS
-		std::string 					getKey( void );
-		std::map<std::string, Client>	getUsers();
-		int								getMaxUsers();
-		std::string						getChannelName();
-		std::string						getTopic();
-		std::map<std::string, Client *>	getOperators();
-		std::map<std::string, Client *>	getInviteList();
-		
+		std::string getKey( void );
+		std::map<std::string, Client *> getUsers();
+		std::string  getUsersList();
+		int		getUserLimit();
+		std::string getModes() const;
+		std::string getChannelName() const;
+		std::string getTopic() const;
+
 		//SETTERS
 		void setTopic(std::string &topic);
-		void setMode(char mode, bool value, Client* client);
-		void setInviteOnly(bool inviteOnly, Client* client);
-		void setTopicRestricted(bool topicRestricted, Client* client);
-		void setUserLimit(int userLimit, Client* client);
+		// void setTopicRestricted(bool topicRestricted, Client* client);
+		void setUserLimit(int limit);
 		void setKey(std::string &password);
-		void setMaxUser(int limit);
+		void setMode(char c, bool setting);
 
 		//CHECK FUNCTIONS
 		bool isClientInChannel(std::string nickname);

@@ -3,29 +3,35 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+         #
+#    By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/05 23:41:54 by alsaeed           #+#    #+#              #
-#    Updated: 2024/06/26 15:11:03 by tofaramusus      ###   ########.fr        #
+#    Updated: 2024/07/03 18:36:37 by alsaeed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
 CXX = c++
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
 INCLUDES = -Iincludes/
 
 SRCS =	Server.cpp \
 		Channel.cpp \
 		Client.cpp \
 		ParseMessage.cpp \
-		Commands.cpp \
 		nickCommand.cpp \
 		quitCommand.cpp \
 		joinCommand.cpp  \
 		privateMessage.cpp \
-		
+		Commands.cpp \
+		modeCommand.cpp \
+		inviteCommand.cpp \
+		kickCommand.cpp \
+		motdCommand.cpp \
+		noticeCommand.cpp \
+		partCommand.cpp \
+		topicCommand.cpp
 
 OBJS_DIR = object_files
 OBJS = $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
@@ -63,14 +69,21 @@ $(OBJS):	Makefile \
 			includes/IrcLibs.hpp \
 			includes/ParseMessage.hpp \
 			source_files/Server.cpp \
-			source_files/nickCommand.cpp \
-			source_files/quitCommand.cpp \
 			source_files/Channel.cpp \
 			source_files/Client.cpp \
-			source_files/Commands.cpp \
-			source_files/joinCommand.cpp \
 			source_files/ParseMessage.cpp \
+			source_files/joinCommand.cpp \
+			source_files/nickCommand.cpp \
+			source_files/quitCommand.cpp \
 			source_files/privateMessage.cpp \
+			source_files/modeCommand.cpp \
+			source_files/inviteCommand.cpp \
+			source_files/kickCommand.cpp \
+			source_files/motdCommand.cpp \
+			source_files/noticeCommand.cpp \
+			source_files/partCommand.cpp \
+			source_files/topicCommand.cpp \
+			source_files/Commands.cpp
 
 clean:
 	@if [ -e $(OBJS_DIR) ]; then \

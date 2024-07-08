@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 09:24:21 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 17:45:10 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/06/09 12:29:01 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #ifndef IRCEXCEPTION_HPP
 # define IRCEXCEPTION_HPP
 
-#include <IrcLibs.hpp>
+#include <exception>
+#include <string>
 
 class IrcException : public std::exception {
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 17:51:59 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/06 18:33:57 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,23 +89,25 @@ void    Server::runServer(void) {
 			throw IrcException("Poll error");
 		}
 		
-		if ( Server::_fds[0].revents & POLLIN ) {
-
+		if ( Server::_fds[0].revents & POLLIN )
+		{
 			handleNewConnection();
 		}
 
 		std::vector<pollfd>::iterator it = Server::_fds.begin();
 		while ( it != Server::_fds.end() ) {
 
-			if (it->fd != Server::_listeningSocket && it->revents & POLLIN ) {
-
-				try {
-
-				handleClientMessage(it->fd);
-				} catch (const CloseClientException &e) {
-
+			if (it->fd != Server::_listeningSocket && it->revents & POLLIN ) 
+			{
+				try
+				{
+					handleClientMessage(it->fd);	
+				}
+				catch(...)
+				{
 					it->fd = -1;
 				}
+				// for(std::size_t)
 			} else if (it->fd != Server::_listeningSocket && it->revents & POLLOUT ) {
 
 				sendToClient( it->fd );
@@ -125,8 +127,8 @@ void    Server::runServer(void) {
 	return;
 }
 
-void Server::sendToClient( int client_fd ) {
-
+void Server::sendToClient( int client_fd )
+{
 	Client* client = Server::_clients[client_fd];
 	std::vector<std::string>::iterator it = client->serverReplies.begin();
 
@@ -135,8 +137,8 @@ void Server::sendToClient( int client_fd ) {
 		std::cout << "............................................" << std::endl;
 		std::cout << "Sending message to client " << client->getNickname() << ": " << *it << std::endl;
 		std::cout << "............................................" << std::endl;
-		if ( send( client_fd, it->c_str(), it->size(), 0 ) == -1 ) {
-
+		if ( send( client_fd, it->c_str(), it->size(), 0 ) == -1 )
+		{
 			std::cerr << "Error sending message to client " << client->getNickname() << " (" << strerror(errno) << ")" << std::endl;
 			return;
 		}
@@ -205,8 +207,8 @@ void Server::handleClientDisconnection(int client_fd, int bytesRecv) {
 
 	for (std::vector<pollfd>::iterator it = Server::_fds.begin(); it != Server::_fds.end(); ++it) {
 		if (it->fd == client_fd) {
-
-			throw ( CloseClientException() );
+			it->fd = -1;
+			break;
 		}
 	}
 
@@ -236,7 +238,6 @@ void Server::handleClientMessage( int client_fd )
 	{
 		ParseMessage parsedMsg(commandList[i]);
 		processCommand( _clients[client_fd] , parsedMsg );
-		commandList[i].clear();
 	}
 	commandList.clear();
 	return;
@@ -322,6 +323,6 @@ std::map<int, Client*> Server::_clients;
 // std::map<std::string, Channel> Server::_channels;
 std::vector<pollfd> Server::_fds;
 std::map<std::string, Channel>	Server::_channels;
-std::vector<std::string>			Server::_nicknames;
+std::vector<std::string>		Server::_nicknames;
 
 // Path: includes/Server.hpp

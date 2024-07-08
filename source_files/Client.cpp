@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/30 04:46:37 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/08 15:25:21 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ Client::Client( void ) :	_fd( 0 ),
 							_isCorrectPassword( false ),
 							_nickname( "" ),
 							_username( "" ),
+							_realname(""),
 							// _realname( "" ),
 							_channel( "" ) {
 
@@ -42,13 +43,6 @@ bool		Client::sendMessage( const std::string &message ) {
 	return true;
 }
 
-// void		Client::joinChannel( const std::string &channel ) {
-
-	
-// 	return;
-// }
-
-
 bool		Client::isRegistered( void ) const {
 
 	return _isCorrectPassword && _username != "" && _nickname != "";
@@ -73,10 +67,10 @@ void		Client::setUsername( const std::string &username ) {
 	return;
 }
 
-std::string	Client::getNickname( void ) const 
+std::string	&Client::getNickname( void ) const 
 {
 
-	return _nickname;
+	return const_cast<std::string &>(_nickname);
 }
 
 std::string	Client::getUsername( void ) const {
@@ -108,22 +102,15 @@ Client	*Server::getClient(std::string nickname)
 	
     for (it = _clients.begin(); it != _clients.end(); ++it) {
         Client* client = it->second;
-        if (client->getNickname() == nickname) {
-
+        if (client->getNickname() == nickname) 
+		{
             return client;
         }
     }
     return NULL;
 }
 
-// std::string	Client::getFullIdentity( void ) const {
-
-// 	return _nickname + "!" + _username + "@" + _ip;
-// }
-
-// std::string	Client::getIp( void ) const {
-
-// 	return _ip;
-// }
-
-// Path: includes/Client.hpp
+void		Client::setRealname( const std::string &username )
+{
+	this->_realname = username;
+}

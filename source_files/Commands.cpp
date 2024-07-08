@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/27 23:47:53 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/08 15:31:04 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,52 +30,36 @@ void Server::addNewUser(Client* client, const ParseMessage &parsedMsg)
         }
         std::cout << "User registered: " << client->getUsername() 
                   << " (Real name: " << client->getUsername() << ")" << std::endl;
-		//call the message of the day
     }
 }
 
-bool Server::connectUser(Client *client, const ParseMessage &parsedMsg) 
+void Server::connectUser(Client *client, const ParseMessage &parsedMsg) 
 {
     const std::string &command = parsedMsg.getCmd();
     const std::vector<std::string> &params = parsedMsg.getParams();
 
-    if (client->isRegistered() == true) 
-	{
-        if (command == "USER" || command == "PASS")
-		 {
-            client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
-            return true;
-        }
-		else
-        	return false;
-    }
-
     if (command == "CAP")
 	{
         handleCapCommand(client, params);
-        return true;
     }
-
-    if (command == "PASS") 
+    else if (command == "PASS") 
 	{
-        return handlePassCommand(client, params);
+        handlePassCommand(client, params);
     }
-
-    if (command == "USER" && client->getIsCorrectPassword()) {
+    else if (command == "USER" && client->getIsCorrectPassword())
+	{
         addNewUser(client, parsedMsg);
-        return true;
     }
-
-    if (command == "NICK" && client->getIsCorrectPassword() && !client->isRegistered()) 
+    else if (command == "NICK" && client->getIsCorrectPassword()) 
 	{
-        if(nickCommand(client, params))
-			client->serverReplies.push_back( RPL_MOTDSTART(client->getUsername(),client->getUsername()));
-        return true;
+        nickCommand(client, params);
     }
-    return false;
+	if (client->isRegistered() == true)
+	{
+		motdCommand(client);
+	}
+    return ;
 }
-
-// Helper functions
 
 void Server::handleCapCommand(Client *client, const std::vector<std::string> &params) 
 {
@@ -89,17 +73,19 @@ void Server::handleCapCommand(Client *client, const std::vector<std::string> &pa
 bool Server::handlePassCommand(Client *client, const std::vector<std::string> &params) {
     if (client->getIsCorrectPassword() == false) 
 	{
-        if (params[0] == getServerPassword())
+        if (!params.empty() && params[0] == getServerPassword())
 		{
             client->setIsCorrectPassword(true);
         } else 
 		{
-            client->serverReplies.push_back(ERR_PASSWDMISMATCH(client->getNickname()));
-            closeClient(client->getFd());
-            client->setFd(-1);
+            client->serverReplies.push_back(ERR_PASSWDMISMATCH(std::string("ircserver")));
+            // closeClient(client->getFd());
+            // client->setFd(-1);
+			//ADD message to say try again password
+			throw(std::exception());
         }
     } else {
-        client->serverReplies.push_back(ERR_ALREADYREGISTERED(client->getNickname()));
+        client->serverReplies.push_back(ERR_ALREADYREGISTERED(std::string("ircserver")));
     }
     return true;
 }
@@ -107,7 +93,7 @@ bool Server::handlePassCommand(Client *client, const std::vector<std::string> &p
 bool Server::isValidIRCCommand(const std::string& command) 
 {
     static const char* validCommands[] = {
-        "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG",
+        "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG", "KICK",
         "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "NOTICE", 0
     };
 
@@ -132,69 +118,80 @@ void Server::printCommand(ParseMessage message)
 void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 {
 	std::string command;
-	//create print command debugger message
 	
 	std::vector<std::string> params;
-	if(parsedMsg.getCmd().empty() == true) {
-
+	if(parsedMsg.getCmd().empty() == true) //check if it is empty 
+	{
 		return;
 	}
 	printCommand(parsedMsg);
 	command = parsedMsg.getCmd();
 	params = parsedMsg.getParams();
-
-	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING") {
-
-		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getUsername() ,command));
+	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING" &&  command != "QUIT")
+	{
+		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(std::string("ircserver") ,command));
 	}
-	if(isValidIRCCommand(parsedMsg.getCmd()) == false) {
-		//this will check the type of command and send the appropriate error message
-		client->serverReplies.push_back(ERR_UNKNOWNCOMMAND(client->getNickname(), parsedMsg.getCmd()));
+	if(isValidIRCCommand(parsedMsg.getCmd()) == false)
+	{
+		client->serverReplies.push_back(ERR_UNKNOWNCOMMAND(std::string("ircserver"), parsedMsg.getCmd()));
 		return;
 	}
-	if (command == "QUIT") {
-
+	if (command == "QUIT")
 		quitCommand(parsedMsg.getTrailing(), client);
+	if(client->isRegistered() == false)
+	{
+		connectUser(client, parsedMsg);	
 	}
-	if (client->isRegistered() == true) {
-
-		if (command == "JOIN") {
-
+	else
+	{    
+		if (command == "USER" || command == "PASS")
+		{
+            client->serverReplies.push_back(ERR_ALREADYREGISTERED(std::string("ircserver")));
+        }
+		else if (command == "JOIN")
+		{
 			joinCommand(client, parsedMsg);
-		} else if(command == "PRIVMSG") {
-
-			privateMessage(client, parsedMsg);	
-		} else if(command == "PING") {
-
-			 client->serverReplies.push_back(RPL_PONG(user_id(client->getNickname(),client->getUsername()),params[0]));
-		} else if(command == "NICK") {
-
-			nickCommand(client, params);
-		} else if (command == "MODE") {
-
-
-		} else if(command == "TOPIC") {
-
-
-		} else if(command == "INVITE") {
-
-
-		} else if(command == "MOTD") {
-
-
-		} else if(command == "PART") {
-
-
-		} else if(command == "NOTICE") {
-
-
 		}
-		return;
+		else if(command == "PRIVMSG")
+		{
+			privateMessage(client, parsedMsg);	
+		}
+		else if(command == "PING")
+		{
+			 client->serverReplies.push_back(RPL_PONG(user_id(client->getNickname(),client->getUsername()),params[0]));
+		}
+		else if(command == "NICK")
+		{
+			nickCommand(client, params);
+		}
+		else if (command == "MODE")
+		{
+			modeCommand(client, parsedMsg);
+		}
+		else if(command == "TOPIC")
+		{
+			topicCommand(client, parsedMsg);
+		}
+		else if(command == "KICK")
+		{
+			kickCommand(client, parsedMsg);
+		}
+		else if(command == "INVITE")
+		{
+			inviteCommand(client, parsedMsg);
+		}
+		else if(command == "MOTD")
+		{
+			motdCommand(client);
+		}
+		else if(command == "PART")
+		{
+			partCommand(client, parsedMsg);
+		}
+		else if(command == "NOTICE")
+		{
+			noticeCommand(client, parsedMsg);
+		}
 	}
-	if(connectUser(client, parsedMsg) == false) {
-		//send message that says register user first
-
-	}
-	command.clear();
-	params.clear();
+	return;
 }
