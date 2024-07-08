@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/08 18:30:37 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/08 18:49:49 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,6 @@ void Server::initServer(void) {
 	_fds.push_back( listeningSocketPoll );
 
 	return;
-}
-
-
-void Server::setNonblocking(int fd) {
-
-	if (fcntl(fd, F_SETFL, O_NONBLOCK) == -1) {
-		cleanupServer();
-		throw IrcException("Can't set file descriptor flags");
-	}
 }
 
 void Server::signalHandler(int signal) {
