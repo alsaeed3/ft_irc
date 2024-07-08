@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:55:22 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/14 14:15:27 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/08 18:11:12 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,11 @@ int main( int ac, char* av[] ) {
 		// Initialize and run the server
 	try {
 
-		Server::setServerPassword( password );
-		Server::setServerPort( portNum );
-		Server::initServer();
-		Server::runServer();
+		Server *server = Server::getInstance();
+		server->setServerPassword( password );
+		server->setServerPort( portNum );
+		server->initServer();
+		server->runServer();
 	} catch ( const IrcException &e ) {
 
 		std::cerr << "Server error: " << e.what() << std::endl;

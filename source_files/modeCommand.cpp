@@ -1,26 +1,25 @@
 #include <Server.hpp>
 
-static bool handleKeyMode(Client *client, Channel &channel, bool isAdding,
-	  std::vector<std::string> &params, size_t &paramIndex)
+bool Server::handleKeyMode(Client *client, Channel &channel, bool isAdding,
+	  std::vector<std::string> &params, std::size_t &paramIndex)
 {
-	if (isAdding && paramIndex < params.size())
-	{
+	if (isAdding && paramIndex < params.size()) {
+
 		channel.setKey(params[paramIndex++]);
 		return (true);
-	}
-	else if (isAdding)
-	{
+	} else if (isAdding) {
+
 		client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE +k"));
-	}
-	else
-	{
+	} else {
+
 		channel.removeKey();
 	}
+
 	return (false);
 }
 
-static bool handleLimitMode(Client *client, Channel &channel, bool isAdding,
-	  std::vector<std::string> &params, size_t &paramIndex)
+bool Server::handleLimitMode(Client *client, Channel &channel, bool isAdding,
+	  std::vector<std::string> &params, std::size_t &paramIndex)
 {
 	int	UserLimit;
 
@@ -41,8 +40,8 @@ static bool handleLimitMode(Client *client, Channel &channel, bool isAdding,
 	return (false);
 }
 
-static bool handleOperatorMode(Client *client, Channel &channel, bool isAdding,
-	  std::vector<std::string> &params, size_t &paramIndex)
+bool Server::handleOperatorMode(Client *client, Channel &channel, bool isAdding,
+	  std::vector<std::string> &params, std::size_t &paramIndex)
 {
 	if (paramIndex < params.size())
 	{
@@ -64,9 +63,9 @@ static bool handleOperatorMode(Client *client, Channel &channel, bool isAdding,
 	return (false);
 }
 
-static bool processSingleChannelMode(Client *client, Channel &channel,
+bool Server::processSingleChannelMode(Client *client, Channel &channel,
 	char mode, bool isAdding,   std::vector<std::string> &params,
-	size_t &paramIndex)
+	std::size_t &paramIndex)
 {
 	switch (mode)
 	{
@@ -90,11 +89,11 @@ static bool processSingleChannelMode(Client *client, Channel &channel,
 	}
 }
 
-void processChannelModes(Client *client, Channel &channel,
+void Server::processChannelModes(Client *client, Channel &channel,
 	  std::vector<std::string> &params)
 {
 	bool	isAdding;
-	size_t	paramIndex;
+	std::size_t	paramIndex;
 	char	mode;
 
 	std::string modeString = params[0];
@@ -102,7 +101,7 @@ void processChannelModes(Client *client, Channel &channel,
 	paramIndex = 1;
 	std::string modeChanges = ":" + client->getNickname() + " MODE "
 		+ channel.getChannelName() + " " + modeString;
-	for (size_t i = 0; i < modeString.length(); ++i)
+	for (std::size_t i = 0; i < modeString.length(); ++i)
 	{
 		mode = modeString[i];
 		if (mode == '+' || mode == '-')
@@ -119,7 +118,7 @@ void processChannelModes(Client *client, Channel &channel,
 	channel.broadcastMessage(modeChanges);
 }
 
-static void handleChannelMode(Client *client, std::string &channelName,
+void Server::handleChannelMode(Client *client, std::string &channelName,
 	  std::vector<std::string> &params)
 {
 	if (!Server::isChannelInServer(channelName))
