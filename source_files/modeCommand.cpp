@@ -71,14 +71,14 @@ bool Server::processSingleChannelMode(Client *client, Channel &channel,
 	{
 	case 'i':
 		channel.setMode('i', isAdding);
-		return (false);
+		return (true);
 	case 'k':
 		return (handleKeyMode(client, channel, isAdding, params, paramIndex));
 	case 'l':
 		return (handleLimitMode(client, channel, isAdding, params, paramIndex));
 	case 't':
 		channel.setMode('t', isAdding);
-		return (false);
+		return (true);
 	case 'o':
 		return (handleOperatorMode(client, channel, isAdding, params,
 				paramIndex));
@@ -96,9 +96,9 @@ void Server::processChannelModes(Client *client, Channel &channel,
 	std::size_t	paramIndex;
 	char	mode;
 
-	std::string modeString = params[0];
+	std::string modeString = params[1];
 	isAdding = true;
-	paramIndex = 1;
+	paramIndex = 2;
 	std::string modeChanges = ":" + client->getNickname() + " MODE "
 		+ channel.getChannelName() + " " + modeString;
 	for (std::size_t i = 0; i < modeString.length(); ++i)
@@ -129,21 +129,21 @@ void Server::handleChannelMode(Client *client, std::string &channelName,
 	}
 	Channel &channel = Server::getChannel(channelName);
 	const std::string nick = client->getNickname();
-
 	if (!channel.isOperator(const_cast<std::string &>(client->getNickname())))
 	{
 		client->serverReplies.push_back(ERR_CHANOPRIVSNEEDED(client->getNickname(),
 				channelName));
 		return ;
 	}
-	if (params.size() > 1)
-	{
-		processChannelModes(client, channel, params);
-	}
-	else
+
+	if (params.size() == 1)
 	{
 		client->serverReplies.push_back(RPL_CHANNELMODEIS(client->getNickname(), channelName,
 				channel.getModes()));
+	}
+	else
+	{
+		processChannelModes(client, channel, params);
 	}
 }
 
@@ -163,7 +163,7 @@ void Server::modeCommand(Client *client, const ParseMessage &parsedMsg)
 		return ;
 	}
 	std::string target = params[0];
-	params.erase(params.begin());
+	// params.erase(params.begin());
 	if (target[0] == '#' || target[0] == '&')
 	{
 		handleChannelMode(client, target, params);
