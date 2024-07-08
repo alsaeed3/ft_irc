@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/08 18:49:49 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/08 18:52:17 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,7 +305,7 @@ void Server::cleanupServer(void) {
 	_fds.clear();
 	_clients.clear();
 	// Server::_channels.clear();
-	
+	delete Server::_instance;
 	exit (0);
 }
 
