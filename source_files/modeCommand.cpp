@@ -6,6 +6,8 @@ bool Server::handleKeyMode(Client *client, Channel &channel, bool isAdding,
 	if (isAdding && paramIndex < params.size()) {
 
 		channel.setKey(params[paramIndex++]);
+		client->serverReplies.push_back(RPL_CHANNELMODEISWITHKEY(client->getNickname(), channel.getChannelName(), channel.getModes(), channel.getKey()));
+
 		return (true);
 	} else if (isAdding) {
 
@@ -129,13 +131,6 @@ void Server::handleChannelMode(Client *client, std::string &channelName,
 	}
 	Channel &channel = Server::getChannel(channelName);
 	const std::string nick = client->getNickname();
-	if (!channel.isOperator(const_cast<std::string &>(client->getNickname())))
-	{
-		client->serverReplies.push_back(ERR_CHANOPRIVSNEEDED(client->getNickname(),
-				channelName));
-		return ;
-	}
-
 	if (params.size() == 1)
 	{
 		client->serverReplies.push_back(RPL_CHANNELMODEIS(client->getNickname(), channelName,
@@ -143,6 +138,12 @@ void Server::handleChannelMode(Client *client, std::string &channelName,
 	}
 	else
 	{
+		if (!channel.isOperator(const_cast<std::string &>(client->getNickname())))
+		{
+			client->serverReplies.push_back(ERR_CHANOPRIVSNEEDED(client->getNickname(),
+					channelName));
+			return ;
+		}
 		processChannelModes(client, channel, params);
 	}
 }
