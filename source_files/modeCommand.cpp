@@ -101,8 +101,9 @@ void Server::processChannelModes(Client *client, Channel &channel,
 	std::string modeString = params[1];
 	isAdding = true;
 	paramIndex = 2;
-	std::string modeChanges = ":" + client->getNickname() + " MODE "
-		+ channel.getChannelName() + " " + modeString;
+	// std::string modeChanges = ":" + client->getNickname() + " MODE "
+	// 	+ channel.getChannelName() + " " + modeString;
+	std::string modeChanges = MODE_CHANNELMSG(channel.getChannelName(), modeString);
 	for (std::size_t i = 0; i < modeString.length(); ++i)
 	{
 		mode = modeString[i];
@@ -111,11 +112,10 @@ void Server::processChannelModes(Client *client, Channel &channel,
 			isAdding = (mode == '+');
 			continue ;
 		}
-		if (processSingleChannelMode(client, channel, mode, isAdding, params,
-				paramIndex))
-		{
-			modeChanges += " " + params[paramIndex - 1];
-		}
+		processSingleChannelMode(client, channel, mode, isAdding, params, paramIndex);
+		// {
+		// 	modeChanges += " " + params[paramIndex - 1];
+		// }
 	}
 	channel.broadcastMessage(modeChanges);
 }
