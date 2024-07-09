@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/08 21:26:08 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/09 15:09:15 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ bool	Server::isChannelInServer(std::string &channelName)
 	std::map<std::string, Channel>::iterator chan = _channels.find(channelName);
 	if(chan != _channels.end())
 	{
-		return true;
+		return (true);
 	}
-	return false;
+	return (false);
 }
 void Channel::addClient(Client *client)
 {
