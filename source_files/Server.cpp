@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/08 18:52:17 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/09 18:51:31 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,7 +238,7 @@ void Server::handleClientMessage( int client_fd )
 		return;
 	}
 	//split on newline using ft_split and return a vector of strings and loop through that and push to 
-	std::cout << "Received message from client " << client_fd << ": " << _message << std::endl;
+	std::cout << "Received message from client " << _clients[client_fd]->getNickname() << ": " << _message << std::endl;
 	commandList = ft_split(_message, '\n');
 	for(std::size_t i = 0; i < commandList.size(); i++)
 	{
