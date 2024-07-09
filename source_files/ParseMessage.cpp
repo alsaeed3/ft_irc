@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseMessage.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/26 19:16:08 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/09 17:03:23 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ ParseMessage::ParseMessage( const std::string& message ) {
 
 		if ( token[0] == ':' ) {
 			
-			_trailing = ft_trim( message.substr( message.find( token ) ) ); // maybe add + 1
+			_trailing = ft_trim( message.substr( message.find( token ) + 1 ) ); // maybe add + 1
 			break;
 		} else {
 	
