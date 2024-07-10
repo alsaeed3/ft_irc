@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <!-- Server -->
+  <rect x="500" y="10" width="200" height="80" fill="#4CAF50" rx="10" ry="10" />
+  <text x="600" y="50" text-anchor="middle" fill="white" font-weight="bold">IRC Server</text>
+  <text x="600" y="70" text-anchor="middle" fill="white" font-size="12">Port: argv[1], Password: argv[2]</text>
+
+  <!-- Server Components -->
+  <rect x="50" y="150" width="1100" height="400" fill="#f0f0f0" stroke="#333" rx="10" ry="10" />
+  <text x="600" y="175" text-anchor="middle" font-weight="bold">Server Components</text>
+
+  <!-- Socket Manager -->
+  <rect x="70" y="200" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="150" y="235" text-anchor="middle" fill="white" font-size="14">Socket Manager</text>
+  <text x="150" y="255" text-anchor="middle" fill="white" font-size="10">poll(), accept()</text>
+
+  <!-- Client Handler -->
+  <rect x="250" y="200" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="330" y="235" text-anchor="middle" fill="white" font-size="14">Client Handler</text>
+  <text x="330" y="255" text-anchor="middle" fill="white" font-size="10">recv(), send()</text>
+
+  <!-- Channel Manager -->
+  <rect x="430" y="200" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="510" y="235" text-anchor="middle" fill="white" font-size="14">Channel Manager</text>
+  <text x="510" y="255" text-anchor="middle" fill="white" font-size="10">join, part, topic</text>
+
+  <!-- Message Parser -->
+  <rect x="610" y="200" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="690" y="235" text-anchor="middle" fill="white" font-size="14">Message Parser</text>
+  <text x="690" y="255" text-anchor="middle" fill="white" font-size="10">parse IRC protocol</text>
+
+  <!-- Command Handler -->
+  <rect x="790" y="200" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="870" y="235" text-anchor="middle" fill="white" font-size="14">Command Handler</text>
+  <text x="870" y="255" text-anchor="middle" fill="white" font-size="10">execute commands</text>
+
+  <!-- User Manager -->
+  <rect x="970" y="200" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="1050" y="235" text-anchor="middle" fill="white" font-size="14">User Manager</text>
+  <text x="1050" y="255" text-anchor="middle" fill="white" font-size="10">nickname, mode</text>
+
+  <!-- Error Handler -->
+  <rect x="70" y="300" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="150" y="335" text-anchor="middle" fill="white" font-size="14">Error Handler</text>
+  <text x="150" y="355" text-anchor="middle" fill="white" font-size="10">handle exceptions</text>
+
+  <!-- Authentication -->
+  <rect x="250" y="300" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="330" y="335" text-anchor="middle" fill="white" font-size="14">Authentication</text>
+  <text x="330" y="355" text-anchor="middle" fill="white" font-size="10">verify password</text>
+
+  <!-- Logger -->
+  <rect x="430" y="300" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="510" y="335" text-anchor="middle" fill="white" font-size="14">Logger</text>
+  <text x="510" y="355" text-anchor="middle" fill="white" font-size="10">log events</text>
+
+  <!-- Config Manager -->
+  <rect x="610" y="300" width="160" height="80" fill="#E91E63" rx="5" ry="5" />
+  <text x="690" y="335" text-anchor="middle" fill="white" font-size="14">Config Manager</text>
+  <text x="690" y="355" text-anchor="middle" fill="white" font-size="10">server settings</text>
+
+  <!-- Clients -->
+  <rect x="50" y="600" width="300" height="250" fill="#2196F3" rx="10" ry="10" />
+  <text x="200" y="630" text-anchor="middle" fill="white" font-weight="bold">Clients</text>
+  <rect x="70" y="660" width="260" height="40" fill="#1976D2" rx="5" ry="5" />
+  <text x="200" y="685" text-anchor="middle" fill="white" font-size="14">Client 1</text>
+  <rect x="70" y="710" width="260" height="40" fill="#1976D2" rx="5" ry="5" />
+  <text x="200" y="735" text-anchor="middle" fill="white" font-size="14">Client 2</text>
+  <rect x="70" y="760" width="260" height="40" fill="#1976D2" rx="5" ry="5" />
+  <text x="200" y="785" text-anchor="middle" fill="white" font-size="14">Client N</text>
+
+  <!-- Channels -->
+  <rect x="850" y="600" width="300" height="250" fill="#FFC107" rx="10" ry="10" />
+  <text x="1000" y="630" text-anchor="middle" fill="white" font-weight="bold">Channels</text>
+  <rect x="870" y="660" width="260" height="40" fill="#FFA000" rx="5" ry="5" />
+  <text x="1000" y="685" text-anchor="middle" fill="white" font-size="14">Channel 1</text>
+  <rect x="870" y="710" width="260" height="40" fill="#FFA000" rx="5" ry="5" />
+  <text x="1000" y="735" text-anchor="middle" fill="white" font-size="14">Channel 2</text>
+  <rect x="870" y="760" width="260" height="40" fill="#FFA000" rx="5" ry="5" />
+  <text x="1000" y="785" text-anchor="middle" fill="white" font-size="14">Channel M</text>
+
+  <!-- Data Flow -->
+  <!-- Client to Server -->
+  <line x1="350" y1="600" x2="500" y2="90" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="400" y="320" transform="rotate(-65, 400, 320)" fill="#333" font-size="12">1. Client sends message</text>
+
+  <!-- Server to Socket Manager -->
+  <line x1="500" y1="90" x2="150" y2="200" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="300" y="130" transform="rotate(-15, 300, 130)" fill="#333" font-size="12">2. Receive data</text>
+
+  <!-- Socket Manager to Client Handler -->
+  <line x1="230" y1="240" x2="250" y2="240" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="240" y="220" fill="#333" font-size="12">3. Pass to handler</text>
+
+  <!-- Client Handler to Message Parser -->
+  <line x1="410" y1="240" x2="610" y2="240" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="510" y="220" fill="#333" font-size="12">4. Parse message</text>
+
+  <!-- Message Parser to Command Handler -->
+  <line x1="770" y1="240" x2="790" y2="240" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="780" y="220" fill="#333" font-size="12">5. Execute command</text>
+
+  <!-- Command Handler to Channel Manager -->
+  <line x1="870" y1="280" x2="590" y2="280" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="730" y="300" fill="#333" font-size="12">6. Manage channels</text>
+
+  <!-- Command Handler to User Manager -->
+  <line x1="950" y1="240" x2="970" y2="240" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="960" y="220" fill="#333" font-size="12">7. Update user info</text>
+
+  <!-- Server to Channels -->
+  <line x1="700" y1="90" x2="1000" y2="600" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="900" y="320" transform="rotate(45, 900, 320)" fill="#333" font-size="12">8. Broadcast to channel</text>
+
+  <!-- Channels to Clients -->
+  <line x1="850" y1="725" x2="350" y2="725" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="600" y="745" fill="#333" font-size="12">9. Send to clients in channel</text>
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+    </marker>
+  </defs>
+</svg>
