@@ -1,0 +1,5 @@
+void ProfanityPatrol::connectToServer(const std::string& host, int port) { /* ... */ }
+void ProfanityPatrol::login(const std::string& password) { /* ... */ }
+void ProfanityPatrol::joinChannel(const std::string& channel) { /* ... */ }
+void ProfanityPatrol::sendMessage(const std::string& message) { /* ... */ }
+void ProfanityPatrol::kickUser(const std::string& user, const std::string& reason) { /* ... */ }
