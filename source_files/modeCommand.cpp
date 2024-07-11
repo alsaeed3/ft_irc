@@ -137,7 +137,7 @@ void Server::processChannelModes(Client *client, Channel &channel,
 		}
 		if (processSingleChannelMode(client, channel, mode, isAdding, params, paramIndex)) {
 
-			modeStr += isAdding == false ? '-' + mode : '+' + mode;
+			modeStr += isAdding == false ? std::string(1,'-') + std::string(1, mode) : std::string(1,'+') + std::string(1, mode);
 		}
 	}
 	
