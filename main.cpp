@@ -41,6 +41,7 @@ int main( int ac, char* av[] ) {
 	}
 	
 	Server *server = NULL;
+	ProfanityPatrol *bot = NULL;
 		// Initialize and run the server
 	try {
 
@@ -48,7 +49,18 @@ int main( int ac, char* av[] ) {
 		server->setServerPassword( password );
 		server->setServerPort( portNum );
 		server->initServer();
-		server->runServer();
+
+        // Create the bot
+        bot = new ProfanityPatrol("ProfanityPatrol", "ProfanityPatrol");
+        
+        // Register the bot with the server
+        server->registerBot(bot);
+
+        // Connect the bot to the server
+        bot->connectToServer("localhost", portNum);
+
+        // Run the server (this will now handle bot actions too)
+        server->runServer();
 	} catch ( const IrcException &e ) {
 
 		std::cerr << "Server error: " << e.what() << std::endl;
@@ -65,6 +77,7 @@ int main( int ac, char* av[] ) {
     }
 
 	delete server;
+	delete bot;
 
 	return 0;
 }

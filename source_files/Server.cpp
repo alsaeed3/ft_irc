@@ -126,6 +126,9 @@ void    Server::runServer(void) {
 				
 				++it;
 			}
+        	if (_bot) {
+            	_bot->processMessages();
+        }
 		}
 	}
 

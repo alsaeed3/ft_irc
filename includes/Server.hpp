@@ -20,6 +20,7 @@
 #include <ParseMessage.hpp>
 #include <Client.hpp>
 #include <Channel.hpp>
+#include <ProfanityPatrol.hpp>
 
 #include <map>
 #include <vector>
@@ -48,6 +49,8 @@ class Server {
 		std::vector<pollfd>				_fds;
 
 		static Server*					_instance;
+
+		ProfanityPatrol* 				_bot;
 
 		Server( void ) {}
 
@@ -117,6 +120,8 @@ class Server {
 		bool			isValidIRCCommand(const std::string& command);
 		void 			printCommand(ParseMessage message);
 		bool			isUserInServer(std::string nickname);
+
+		void 			registerBot(ProfanityPatrol* bot) { _bot = bot; };
 };
 
 std::vector<std::string>  ft_split(std::string str, char delimiter);
