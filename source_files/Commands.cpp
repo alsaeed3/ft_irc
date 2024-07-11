@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/08 21:27:41 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/11 14:48:13 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ bool Server::isValidIRCCommand(const std::string& command)
 {
     static const char* validCommands[] = {
         "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG", "KICK",
-        "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "WHO", "NOTICE", 0
+        "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "WHO", "NOTICE", "WHOIS", 0
     };
 
     for (const char** cmd = validCommands; *cmd; ++cmd) {
