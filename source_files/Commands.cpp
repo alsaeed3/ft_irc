@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/11 14:48:13 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/11 20:15:20 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ bool Server::isValidIRCCommand(const std::string& command)
 {
     static const char* validCommands[] = {
         "JOIN", "MODE", "TOPIC", "NICK", "QUIT", "PRIVMSG", "KICK",
-        "INVITE", "PING", "MOTD", "CAP", "PASS", "USER", "PART", "WHO", "NOTICE", "WHOIS", 0
+        "INVITE", "PING", "motd", "CAP", "PASS", "USER", "PART", "WHO", "NOTICE", "WHOIS", 0
     };
 
     for (const char** cmd = validCommands; *cmd; ++cmd) {
@@ -119,7 +119,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	printCommand(parsedMsg);
 	command = parsedMsg.getCmd();
 	params = parsedMsg.getParams();
-	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING" &&  command != "QUIT")
+	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING" &&  command != "QUIT" && command != "motd")
 	{
 		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(std::string("ircserver") ,command));
 	}
@@ -172,7 +172,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		{
 			inviteCommand(client, parsedMsg);
 		}
-		else if(command == "MOTD")
+		else if(command == "motd")
 		{
 			motdCommand(client);
 		}

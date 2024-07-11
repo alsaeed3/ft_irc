@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/11 19:13:11 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/11 19:38:24 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ class Channel
 		//GETTERS
 		std::string getKey( void ) const;
 		std::map<std::string, Client *> getUsers() const;
-		std::string  getUsersList() const;
+		std::string  getUsersList();
 		int		getUserLimit() const;
 		std::string getModes() const;
 		std::string getChannelName() const;

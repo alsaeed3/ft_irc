@@ -3,7 +3,8 @@
 bool Server::handleKeyMode(Client *client, Channel &channel, bool isAdding,
 	  std::vector<std::string> &params, std::size_t &paramIndex)
 {
-	std::map<char, bool>::iterator itr = channel.getModesMap().find('k');
+	std::map<char, bool> modesMap = channel.getModesMap();
+	std::map<char, bool>::iterator itr = modesMap.find('k');
 	
 	if ( isAdding == itr->second ) {
 
@@ -31,8 +32,8 @@ bool Server::handleLimitMode(Client *client, Channel &channel, bool isAdding,
 {
 	int	UserLimit;
 
-	std::map<char, bool>::iterator itr = channel.getModesMap().find('l');
-	
+	std::map<char, bool> modesMap = channel.getModesMap();
+	std::map<char, bool>::iterator itr = modesMap.find('l');
 	if ( isAdding == itr->second ) {
 
 		return (false);
@@ -58,7 +59,8 @@ bool Server::handleLimitMode(Client *client, Channel &channel, bool isAdding,
 bool Server::handleOperatorMode(Client *client, Channel &channel, bool isAdding,
 	  std::vector<std::string> &params, std::size_t &paramIndex)
 {
-	std::map<char, bool>::iterator itr = channel.getModesMap().find('o');
+	std::map<char, bool> modesMap = channel.getModesMap();
+	std::map<char, bool>::iterator itr = modesMap.find('o');
 	
 	if ( isAdding == itr->second ) {
 
@@ -135,18 +137,14 @@ void Server::processChannelModes(Client *client, Channel &channel,
 		}
 		if (processSingleChannelMode(client, channel, mode, isAdding, params, paramIndex)) {
 
-			modeStr += mode;
+			modeStr += isAdding == false ? '-' + mode : '+' + mode;
 		}
-		// {
-		// 	modeChanges += " " + params[paramIndex - 1];
-		// }
 	}
 	
-	// if ( modeStr.empty() == false ) {
-
+	if ( modeStr.empty() == false ) {
 		std::string modeChanges = MODE_CHANNELCHANGEMODE(user_id(client->getNickname(), client->getUsername()), channel.getChannelName(), modeStr);
 		channel.broadcastMessage(modeChanges);
-	// }
+	}
 }
 
 void Server::handleChannelMode(Client *client, std::string &channelName,
