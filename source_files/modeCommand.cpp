@@ -3,6 +3,12 @@
 bool Server::handleKeyMode(Client *client, Channel &channel, bool isAdding,
 	  std::vector<std::string> &params, std::size_t &paramIndex)
 {
+	std::map<char, bool>::iterator itr = channel.getModesMap().find('k');
+	
+	if ( isAdding == itr->second ) {
+
+		return (false);
+	}
 	if (isAdding && paramIndex < params.size()) {
 
 		channel.setKey(params[paramIndex++]);
@@ -25,6 +31,13 @@ bool Server::handleLimitMode(Client *client, Channel &channel, bool isAdding,
 {
 	int	UserLimit;
 
+	std::map<char, bool>::iterator itr = channel.getModesMap().find('l');
+	
+	if ( isAdding == itr->second ) {
+
+		return (false);
+	}
+
 	if (isAdding && paramIndex < params.size())
 	{
 		UserLimit = std::atoi(params[paramIndex++].c_str());
@@ -45,6 +58,13 @@ bool Server::handleLimitMode(Client *client, Channel &channel, bool isAdding,
 bool Server::handleOperatorMode(Client *client, Channel &channel, bool isAdding,
 	  std::vector<std::string> &params, std::size_t &paramIndex)
 {
+	std::map<char, bool>::iterator itr = channel.getModesMap().find('o');
+	
+	if ( isAdding == itr->second ) {
+
+		return (false);
+	}
+
 	if (paramIndex < params.size())
 	{
 		std::string targetNick = params[paramIndex++];
@@ -72,18 +92,18 @@ bool Server::processSingleChannelMode(Client *client, Channel &channel,
 	switch (mode)
 	{
 	case 'i':
-		channel.setMode('i', isAdding);
-		return (true);
+		return (channel.setMode('i', isAdding));
 	case 'k':
 		return (handleKeyMode(client, channel, isAdding, params, paramIndex));
 	case 'l':
 		return (handleLimitMode(client, channel, isAdding, params, paramIndex));
 	case 't':
-		channel.setMode('t', isAdding);
-		return (true);
+		return (channel.setMode('t', isAdding));
 	case 'o':
 		return (handleOperatorMode(client, channel, isAdding, params,
 				paramIndex));
+	case 'b':
+		return (false);
 	default:
 		client->serverReplies.push_back(ERR_UNKNOWNMODE(client->getNickname(), std::string(1,
 					mode)));
@@ -103,21 +123,30 @@ void Server::processChannelModes(Client *client, Channel &channel,
 	paramIndex = 2;
 	// std::string modeChanges = ":" + client->getNickname() + " MODE "
 	// 	+ channel.getChannelName() + " " + modeString;
-	std::string modeChanges = MODE_CHANNELCHANGEMODE(user_id(client->getNickname(), client->getUsername()), channel.getChannelName(), modeString);
+
+	std::string modeStr;
 	for (std::size_t i = 0; i < modeString.length(); ++i)
 	{
 		mode = modeString[i];
 		if (mode == '+' || mode == '-')
 		{
 			isAdding = (mode == '+');
-			continue ;
+			continue;
 		}
-		processSingleChannelMode(client, channel, mode, isAdding, params, paramIndex);
+		if (processSingleChannelMode(client, channel, mode, isAdding, params, paramIndex)) {
+
+			modeStr += mode;
+		}
 		// {
 		// 	modeChanges += " " + params[paramIndex - 1];
 		// }
 	}
-	channel.broadcastMessage(modeChanges);
+	
+	// if ( modeStr.empty() == false ) {
+
+		std::string modeChanges = MODE_CHANNELCHANGEMODE(user_id(client->getNickname(), client->getUsername()), channel.getChannelName(), modeStr);
+		channel.broadcastMessage(modeChanges);
+	// }
 }
 
 void Server::handleChannelMode(Client *client, std::string &channelName,

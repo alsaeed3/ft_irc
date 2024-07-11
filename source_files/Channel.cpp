@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:50:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/09 15:09:15 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/11 19:14:39 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ bool Channel::isInInvite(std::string nickname)
 }
 
 
-std::map<std::string, Client *> Channel::getUsers( void )
+std::map<std::string, Client *> Channel::getUsers( void ) const
 {
 	return this->users;
 }
@@ -121,12 +121,12 @@ void Channel::setKey(std::string &password)
 	this->setMode('k', true);
 }
 
-std::string Channel::getKey()
+std::string Channel::getKey() const
 {
 	return this->_key;
 }
 
-int Channel::getUserLimit()
+int Channel::getUserLimit() const
 {
 	return UserLimit;
 }
@@ -142,6 +142,13 @@ std::string Channel::getModes() const
     }
     return result.empty() ? "" : "+" + result;
 }
+
+std::map<char, bool> Channel::getModesMap( void ) const {
+
+	return modes;
+}
+
+
 void Channel::broadcastMessage(const std::string message)
 {
     std::map<std::string, Client *>::iterator it;
@@ -166,13 +173,22 @@ void Channel::sendToOthers(Client *client, std::string message)
     }
 }
 
-void Channel::setMode(char c, bool setting)
+bool Channel::setMode(char c, bool setting)
 {
+	// in case the setting is different from the previous one 
 	std::map<char, bool>::iterator itr = modes.find(c);
+	
+	if ( setting == itr->second ) {
+
+		return (false);
+	}
+		
 	if(itr != modes.end())
 	{
 		itr->second = setting;
 	}
+	
+	return (true);
 }
 
 std::string Channel::getChannelName() const

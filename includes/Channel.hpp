@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:48:38 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/05 19:25:24 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/11 19:13:11 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,20 +51,21 @@ class Channel
 		void removeUserLimit();
 		
 		//GETTERS
-		std::string getKey( void );
-		std::map<std::string, Client *> getUsers();
-		std::string  getUsersList();
-		int		getUserLimit();
+		std::string getKey( void ) const;
+		std::map<std::string, Client *> getUsers() const;
+		std::string  getUsersList() const;
+		int		getUserLimit() const;
 		std::string getModes() const;
 		std::string getChannelName() const;
 		std::string getTopic() const;
+		std::map<char, bool> getModesMap() const;
 
 		//SETTERS
 		void setTopic(std::string &topic);
 		// void setTopicRestricted(bool topicRestricted, Client* client);
 		void setUserLimit(int limit);
 		void setKey(std::string &password);
-		void setMode(char c, bool setting);
+		bool setMode(char c, bool setting);
 
 		//CHECK FUNCTIONS
 		bool isClientInChannel(std::string nickname);
