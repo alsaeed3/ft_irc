@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ParseMessage.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/09 17:03:23 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/11 21:10:08 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,3 +172,11 @@ void ParseMessage::displayCommand(  const ParseMessage &parsedMessage ) const {
 	return;
 }
 
+bool Server::isAlphanumeric(const std::string &str) {
+    for (std::string::const_iterator it = str.begin(); it != str.end(); ++it) {
+        if (!std::isalnum(static_cast<unsigned char>(*it))) {
+            return false;
+        }
+    }
+    return true;
+}

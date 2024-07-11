@@ -11,10 +11,16 @@ bool Server::handleKeyMode(Client *client, Channel &channel, bool isAdding,
 		return (false);
 	}
 	if (isAdding && paramIndex < params.size()) {
-
-		channel.setKey(params[paramIndex++]);
-		client->serverReplies.push_back(RPL_CHANNELMODEISWITHKEY(client->getNickname(), channel.getChannelName(), channel.getModes(), channel.getKey()));
-
+		if(isAlphanumeric(params[paramIndex])) {
+			channel.setKey(params[paramIndex++]);
+			std::string key('*', channel.getKey().size());
+			client->serverReplies.push_back(RPL_CHANNELMODEISWITHKEY(client->getNickname(), channel.getChannelName(), channel.getModes(), key));
+			return (true);
+		}
+		else {
+			client->serverReplies.push_back(ERR_INVALIDMODEPARAM(client->getNickname(),channel.getChannelName(),'k', params[paramIndex++]));
+			return(false);
+		}
 		return (true);
 	} else if (isAdding) {
 
@@ -22,6 +28,7 @@ bool Server::handleKeyMode(Client *client, Channel &channel, bool isAdding,
 	} else {
 
 		channel.removeKey();
+		return(true);
 	}
 
 	return (false);
@@ -42,8 +49,16 @@ bool Server::handleLimitMode(Client *client, Channel &channel, bool isAdding,
 	if (isAdding && paramIndex < params.size())
 	{
 		UserLimit = std::atoi(params[paramIndex++].c_str());
-		channel.setUserLimit(UserLimit);
-		return (true);
+		if(UserLimit > 0)
+		{
+			channel.setUserLimit(UserLimit);
+			return (true);
+		}
+		else
+		{
+			client->serverReplies.push_back(ERR_WRONGMODEPARAMS(client->getNickname(), channel.getChannelName(), "MODE +l"));
+			return (false);
+		}
 	}
 	else if (isAdding)
 	{
@@ -52,6 +67,7 @@ bool Server::handleLimitMode(Client *client, Channel &channel, bool isAdding,
 	else
 	{
 		channel.removeUserLimit();
+		return(true);
 	}
 	return (false);
 }
@@ -73,6 +89,7 @@ bool Server::handleOperatorMode(Client *client, Channel &channel, bool isAdding,
 		if(!channel.isClientInChannel(targetNick))
 		{
 			client->serverReplies.push_back(ERR_USERNOTINCHANNEL(client->getNickname(), targetNick, channel.getChannelName()));
+			return (false);
 		}
 		if (isAdding)
 			channel.addOperator(targetNick);

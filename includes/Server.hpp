@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/08 18:49:43 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/11 21:10:28 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,7 @@ class Server {
 		bool			isValidIRCCommand(const std::string& command);
 		void 			printCommand(ParseMessage message);
 		bool			isUserInServer(std::string nickname);
+		bool			isAlphanumeric(const std::string &str);
 };
 
 std::vector<std::string>  ft_split(std::string str, char delimiter);
