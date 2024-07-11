@@ -103,7 +103,7 @@ void Server::processChannelModes(Client *client, Channel &channel,
 	paramIndex = 2;
 	// std::string modeChanges = ":" + client->getNickname() + " MODE "
 	// 	+ channel.getChannelName() + " " + modeString;
-	std::string modeChanges = MODE_CHANNELMSG(channel.getChannelName(), modeString);
+	std::string modeChanges = MODE_CHANNELCHANGEMODE(user_id(client->getNickname(), client->getUsername()), channel.getChannelName(), modeString);
 	for (std::size_t i = 0; i < modeString.length(); ++i)
 	{
 		mode = modeString[i];
