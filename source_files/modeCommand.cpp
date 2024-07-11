@@ -171,6 +171,9 @@ void Server::modeCommand(Client *client, const ParseMessage &parsedMsg)
 	}
 	else
 	{
-		client->serverReplies.push_back(ERR_NOSUCHCHANNEL(client->getNickname(), target));
+		if ( !isUserInServer( target ) ) {
+
+			client->serverReplies.push_back(ERR_NOSUCHCHANNEL(client->getNickname(), target));
+		}
 	}
 }
