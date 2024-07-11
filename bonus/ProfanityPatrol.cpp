@@ -59,22 +59,17 @@ bool ProfanityPatrol::containsBadWord(const std::string& message) const {
     return false;
 }
 
-void ProfanityPatrol::start(const std::string& host, int port, const std::string& password) {
-    if (!connectToServer(host, port)) {
-        return;
-    }
-    if (!login(password)) {
-        return;
-    }
-    run();
-}
-
 void ProfanityPatrol::run() {
-    fd_set readfds;
-    struct timeval tv;
-    int max_fd = _socket + 1;
+    if (!start("localhost", 6667, "your_password_here")) {
+        std::cerr << "Failed to start the bot" << std::endl;
+        return;
+    }
 
     while (true) {
+        fd_set readfds;
+        struct timeval tv;
+        int max_fd = _socket + 1;
+
         FD_ZERO(&readfds);
         FD_SET(_socket, &readfds);
         tv.tv_sec = 1;
@@ -93,6 +88,19 @@ void ProfanityPatrol::run() {
         }
     }
 }
+
+// Implement start() method to connect and login
+bool ProfanityPatrol::start(const std::string& host, int port, const std::string& password) {
+    if (!connectToServer(host, port)) {
+        return false;
+    }
+    if (!login(password)) {
+        return false;
+    }
+    return true;
+}
+
+// ... (other methods remain the same)
 
 bool ProfanityPatrol::connectToServer(const std::string& host, int port) {
     struct sockaddr_in server_addr;

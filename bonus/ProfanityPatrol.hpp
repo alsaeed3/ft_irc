@@ -18,11 +18,11 @@
 
 class ProfanityPatrol {
 private:
-    std::string _nickname;
-    std::string _username;
-    std::vector<std::string> _badWords;
-    int _socket;
-    std::string _currentChannel;
+    std::string                 _nickname;
+    std::string                 _username;
+    std::vector<std::string>    _badWords;
+    int                         _socket;
+    std::string                 _currentChannel;
 
     void loadBadWords(const std::string& filename);
     bool containsBadWord(const std::string& message) const;
@@ -31,11 +31,11 @@ private:
     void sendMessage(const std::string& message);
     void kickUser(const std::string& channel, const std::string& user, const std::string& reason);
 
+    bool start(const std::string& host, int port, const std::string& password);
 public:
     ProfanityPatrol(const std::string& nickname, const std::string& username);
     ~ProfanityPatrol();
 
-    void start(const std::string& host, int port, const std::string& password);
     void run();
     bool processMessages();
     bool connectToServer(const std::string& host, int port);
