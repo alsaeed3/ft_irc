@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/12 14:30:07 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/12 16:38:12 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,14 @@ void Server::connectUser(Client *client, const ParseMessage &parsedMsg)
 	{
         handlePassCommand(client, params);
     }
-    else if (command == "USER" && client->getIsCorrectPassword())
+	else if (command == "USER" && client->getIsCorrectPassword())
 	{
-        addNewUser(client, parsedMsg);
-    }
-    else if (command == "NICK" && client->getIsCorrectPassword()) 
+		addNewUser(client, parsedMsg);
+	}
+	else if (command == "NICK" && client->getIsCorrectPassword()) 
 	{
-        nickCommand(client, params);
-    }
+		nickCommand(client, params);
+	}
 	if (client->isRegistered() == true)
 	{
 		motdCommand(client);
@@ -55,11 +55,14 @@ void Server::connectUser(Client *client, const ParseMessage &parsedMsg)
 
 void Server::handleCapCommand(Client *client, const std::vector<std::string> &params) 
 {
-    if (params[0] == "LS") {
+    if (params.size() == 2 && params[0] == "LS" && params[1] == "302") {
+		client->conRegi[0] = true;
         client->serverReplies.push_back(":irssi CAP * LS :  \r\n");
     } else if (params[0] == "REQ") {
         client->serverReplies.push_back(":irssi CAP * REQ:  \r\n");
-    }
+    } else if (client->conRegi[4] == true && params[0] == "") {
+		c
+	}
 }
 
 bool Server::handlePassCommand(Client *client, const std::vector<std::string> &params) {

@@ -6,14 +6,14 @@
 #    By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/05 23:41:54 by alsaeed           #+#    #+#              #
-#    Updated: 2024/07/12 14:11:26 by tofaramusus      ###   ########.fr        #
+#    Updated: 2024/07/12 16:45:13 by tofaramusus      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
 CXX = c++
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
 INCLUDES = -Iincludes/
 
 SRCS =	Server.cpp \
@@ -95,6 +95,9 @@ fclean: clean
 	@if [ -e $(NAME) ]; then \
 		rm -rf $(NAME); \
 		echo "$(BOLD_YELLOW)ircserv Full-Clean$(RESET): $(BOLD_GREEN)<OK>$(RESET)"; \
+	fi
+	@if [ -e ircserv.DSYM ]; then \
+		rm -rf ircserv.DSYM; \
 	fi
 
 re: fclean all

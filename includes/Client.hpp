@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/11 20:46:25 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/12 16:40:55 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,10 @@ class Client {
 		
 
 	public:
-
+		
+		bool						isRegistered;
 		std::vector<std::string>	serverReplies;
-
+		bool	conRegi[5];
 		Client( void );
 		Client( int fd );
 
