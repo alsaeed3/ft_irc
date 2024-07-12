@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/12 19:20:28 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/12 19:27:13 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	{
 		connectUser(client, parsedMsg);	
 	}
-	else if ( client->conRegi[2] == true )
+	else if ( client->isRegistered == true && client->conRegi[2] == true )
 	{
 		if (command == "USER" || command == "PASS")
 		{
