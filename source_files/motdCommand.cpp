@@ -6,7 +6,7 @@ void	Server::motdCommand(Client *client)
     std::string line;
     std::ifstream infile;
 
-	if(!client->isRegistered())
+	if(!client->isRegistered)
 		return;
     infile.open("./source_files/motd.txt", std::ios::in);
 	

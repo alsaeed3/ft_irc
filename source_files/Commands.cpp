@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/12 16:38:12 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/12 17:54:42 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,30 @@ void Server::connectUser(Client *client, const ParseMessage &parsedMsg)
 	{
         handleCapCommand(client, params);
     }
-    else if (command == "PASS") 
-	{
+    else if (client->conRegi[0] == true && command == "PASS") {
+
         handlePassCommand(client, params);
+		if (client->getIsCorrectPassword() == true) {
+			client->conRegi[1] = true;
+		}
     }
-	else if (command == "USER" && client->getIsCorrectPassword())
+	else if (client->conRegi[1] == true && (command == "USER" || command == "NICK"))
 	{
-		addNewUser(client, parsedMsg);
+		if (command == "USER") {
+
+			addNewUser(client, parsedMsg);
+		}
+		else if (command == "NICK") {
+
+			nickCommand(client, params);
+		}
+
+		if (client->getUsername() != "" && client->getNickname() != "") {
+
+			client->conRegi[2] = true;
+		}
 	}
-	else if (command == "NICK" && client->getIsCorrectPassword()) 
-	{
-		nickCommand(client, params);
-	}
-	if (client->isRegistered() == true)
+	if (client->isRegistered == true)
 	{
 		motdCommand(client);
 	}
@@ -56,12 +67,24 @@ void Server::connectUser(Client *client, const ParseMessage &parsedMsg)
 void Server::handleCapCommand(Client *client, const std::vector<std::string> &params) 
 {
     if (params.size() == 2 && params[0] == "LS" && params[1] == "302") {
+
 		client->conRegi[0] = true;
         client->serverReplies.push_back(":irssi CAP * LS :  \r\n");
-    } else if (params[0] == "REQ") {
-        client->serverReplies.push_back(":irssi CAP * REQ:  \r\n");
-    } else if (client->conRegi[4] == true && params[0] == "") {
-		c
+    } else if ( client->conRegi[0] == true ) {
+
+		if (params.size() == 1 && params[0] == "REQ") {
+
+        	client->serverReplies.push_back(":irssi CAP * REQ:  \r\n");
+		} else if (params.size() == 1 && params[0] == "NAK" ) {
+
+			client->serverReplies.push_back(":irssi CAP * NAK:  \r\n");
+		} else if (params.size() == 1 && params[0] == "ACK" ) {
+
+			client->serverReplies.push_back(":irssi CAP * ACK:  \r\n");
+		} else if (params.size() == 1 && params[0] == "END") {
+
+			client->isRegistered = true;
+		}
 	}
 }
 
@@ -137,12 +160,12 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	}
 	if (command == "QUIT")
 		quitCommand(parsedMsg.getTrailing(), client);
-	if(client->isRegistered() == false)
+	if(client->isRegistered == false)
 	{
 		connectUser(client, parsedMsg);	
 	}
-	else
-	{    
+	else if ( client->conRegi[2] == true )
+	{
 		if (command == "USER" || command == "PASS")
 		{
             client->serverReplies.push_back(ERR_ALREADYREGISTERED(std::string("ircserver")));
