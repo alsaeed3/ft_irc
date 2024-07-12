@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/12 19:18:07 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/12 19:20:28 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void Server::connectUser(Client *client, const ParseMessage &parsedMsg)
 
 void Server::handleCapCommand(Client *client, const std::vector<std::string> &params) 
 {
-    if (params.size() > 1 && params[0] == "LS") {
+    if (params.size() > 0 && params[0] == "LS") {
 
 		client->conRegi[0] = true;
         client->serverReplies.push_back(":irssi CAP * LS :  \r\n");
