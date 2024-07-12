@@ -13,7 +13,7 @@ bool Server::handleKeyMode(Client *client, Channel &channel, bool isAdding,
 	if (isAdding && paramIndex < params.size()) {
 		if(isAlphanumeric(params[paramIndex])) {
 			channel.setKey(params[paramIndex++]);
-			std::string key('*', channel.getKey().size());
+			std::string key(channel.getKey().size(), '*');
 			client->serverReplies.push_back(RPL_CHANNELMODEISWITHKEY(client->getNickname(), channel.getChannelName(), channel.getModes(), key));
 			return (true);
 		}
