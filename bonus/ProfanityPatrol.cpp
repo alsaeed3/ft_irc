@@ -90,6 +90,8 @@ bool ProfanityPatrol::connectToServer() {
 }
 
 void ProfanityPatrol::authenticate() {
+    sendMessage("CAP LS");
+    sendMessage("CAP END");
     sendMessage("PASS " + _password);
     sendMessage("NICK " + _nickname);
     sendMessage("USER " + _username + " 0 * :Profanity Patrol Bot");
