@@ -3,53 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ProfanityPatrol.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shamzaou@student.42abudhabi.ae <shamzaou>  +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/12 16:04:31 by shamzaou@student  #+#    #+#             */
-/*   Updated: 2024/07/12 18:56:25 by shamzaou@student ###   ########.fr       */
+/*   Created: 2024/07/12 16:04:31 by shamzaou@st       #+#    #+#             */
+/*   Updated: 2024/07/12 20:43:59 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include <stdlib.h>
-#include <sstream>
-#include <string>
-#include <vector>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <poll.h>
-#include <cstring>
-#include <cerrno>
-
-class ProfanityPatrol {
-private:
-    std::string _address;
-    int _port;
-    std::string _password;
-    int _socket;
-    std::string _nickname;
-    std::string _username;
-    std::vector<std::string> _profanityList;
-    bool _isConnected;
-
-    // Private member functions
-    bool connectToServer();
-    void authenticate();
-    bool processMessages();
-    void handleInvite(const std::string& channel);
-    void scanForProfanity(const std::string& message, const std::string& channel);
-    // void scanForProfanity(const std::string& line);
-    void sendMessage(const std::string& message);
-    void disconnect();
-
-public:
-    ProfanityPatrol(const std::string& address, int port, const std::string& password);
-    ~ProfanityPatrol();
-
-    void run();
-};
+#include "ProfanityPatrol.hpp"
 
 ProfanityPatrol::ProfanityPatrol(const std::string& address, int port, const std::string& password)
     : _address(address), _port(port), _password(password), _socket(-1), _isConnected(false) {
@@ -98,7 +59,6 @@ void ProfanityPatrol::authenticate() {
 }
 
 void ProfanityPatrol::scanForProfanity(const std::string& message, const std::string& channel) {
-    std::cout << "SCAN LAUNCHED!" << std::endl;
     for (std::vector<std::string>::const_iterator it = _profanityList.begin(); it != _profanityList.end(); ++it) {
         if (message.find(*it) != std::string::npos) {
             std::string response = "PRIVMSG " + channel + " :Warning: Profanity detected!";
@@ -162,30 +122,6 @@ void ProfanityPatrol::sendMessage(const std::string& message) {
     std::string fullMessage = message + "\r\n";
     send(_socket, fullMessage.c_str(), fullMessage.length(), 0);
 }
-
-// void ProfanityPatrol::run() {
-//     if (!connectToServer()) {
-//         return;
-//     }
-
-//     authenticate();
-
-//     struct pollfd pfd;
-//     pfd.fd = _socket;
-//     pfd.events = POLLIN;
-
-//     while (true) {
-//         int ret = poll(&pfd, 1, -1);
-//         if (ret > 0) {
-//             if (pfd.revents & POLLIN) {
-//                 processMessages();
-//             }
-//         } else if (ret < 0) {
-//             std::cerr << "Poll error" << std::endl;
-//             break;
-//         }
-//     }
-// }
 
 void ProfanityPatrol::run() {
     if (!connectToServer()) {

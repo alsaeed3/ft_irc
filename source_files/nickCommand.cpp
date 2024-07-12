@@ -26,7 +26,7 @@ void 	Server::nickCommand(Client *client, const std::vector<std::string> &params
     {
        client->serverReplies.push_back(ERR_NICKNAMEINUSE(std::string("ircserver"), newNick));
 	   return ;
-    }
+    } 
     else if (client->getNickname().empty() == false)
     {
         _nicknames.erase(std::remove(_nicknames.begin(), _nicknames.end(),client->getNickname()), _nicknames.end());
