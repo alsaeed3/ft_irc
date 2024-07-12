@@ -22,7 +22,7 @@ void Server::privateMessage(Client *client, const ParseMessage &parsedMsg)
 		receiver = params[0];
 	}
 
-    if(receiver[0] == '#' || receiver[0] == '&')
+    if(receiver[0] == '#' || receiver[0] == '&') //potential segfault here for receiver
     {
         if (!isChannelInServer(receiver))
         {

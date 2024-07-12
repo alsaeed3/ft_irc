@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/15 18:55:07 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/11 21:10:08 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/12 14:33:52 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,26 +150,12 @@ ParseMessage::ParseMessage( const std::string& message ) {
 
 bool	ParseMessage::isValid( const std::string &param ) const {
 
-	std::string invalidChars = "\n\r\t:";
 	/* if find_first_of() find any invalid character in param
 	returns the position of it, o/w returns std::string::npos */
+	std::string invalidChars = "\n\r\t:";
 	std::size_t valid = param.find_first_of( invalidChars ); 
 
 	return valid == std::string::npos;
-}
-
-void ParseMessage::displayCommand(  const ParseMessage &parsedMessage ) const {
-
-	std::cout << "Command: " << parsedMessage.getCmd() << std::endl;
-	std::cout << "Params: ";
-	for ( int i = 0; i < static_cast<int>(parsedMessage._params.size()); i++ ) {
-		
-		std::cout << "Parameter " << "[" << i << "]: " << parsedMessage._params[i] << std::endl;
-	}
-	std::cout << std::endl;
-	std::cout << "Trailing: " << parsedMessage._trailing << std::endl;
-
-	return;
 }
 
 bool Server::isAlphanumeric(const std::string &str) {

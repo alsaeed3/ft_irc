@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:39 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/11 21:10:28 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/12 14:27:14 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ class Server {
 		void            handleNewConnection(void);
 		int     		ft_recv( int fd );
 		void            cleanupServer(void);
+		void 			displayCommand(  const ParseMessage &parsedMessage ) const;
 
 		//CLIENT FUNCTIONS
 		void			handleClientDisconnection(int client_fd, int bytesRecv);
@@ -115,7 +116,6 @@ class Server {
 		void 			setServerPort(int port) { _serverPort = port; };
 		std::string		getServerPassword( void );
 		bool			isValidIRCCommand(const std::string& command);
-		void 			printCommand(ParseMessage message);
 		bool			isUserInServer(std::string nickname);
 		bool			isAlphanumeric(const std::string &str);
 };

@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/11 20:15:20 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/12 14:30:07 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,15 +96,18 @@ bool Server::isValidIRCCommand(const std::string& command)
     return false;
 }
 
-void Server::printCommand(ParseMessage message)
-{
-	std::vector<std::string> params = message.getParams();
-    std::cout << "Command: " << message.getCmd() << std::endl;
-    for (std::size_t i = 0; i < params.size(); i++) 
-	{
-        std::cout << "Param " << i << ": " << params[i] << std::endl;
-    }
-    std::cout << "Trailing: " << message.getTrailing() << std::endl;
+void	Server::displayCommand(  const ParseMessage &parsedMessage ) const {
+	std::cout << "Command: " << parsedMessage.getCmd() << std::endl;
+	std::cout << "Params: ";
+	for ( int i = 0; i < static_cast<int>(parsedMessage.getParams().size()); i++ ) {
+		
+		std::cout << "Parameter " << "[" << i << "]: " << parsedMessage.getParams()[i] << std::endl;
+	}
+	std::cout << std::endl;
+	if(!parsedMessage.getTrailing().empty())
+		std::cout << "Trailing: " << parsedMessage.getTrailing() << std::endl;
+
+	return;
 }
 
 void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
@@ -116,12 +119,13 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	{
 		return;
 	}
-	printCommand(parsedMsg);
+	displayCommand(parsedMsg);
 	command = parsedMsg.getCmd();
 	params = parsedMsg.getParams();
 	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING" &&  command != "QUIT" && command != "motd")
 	{
 		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(std::string("ircserver") ,command));
+		 return;
 	}
 	if(isValidIRCCommand(parsedMsg.getCmd()) == false)
 	{

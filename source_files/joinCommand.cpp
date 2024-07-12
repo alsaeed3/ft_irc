@@ -10,10 +10,11 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 	std::string response = "";
 	bool allowedJoin = true;
 
-	if(params.size() > 2) {return ;};
+	if(params.size() > 2) {return ;}; //may need to remove this 
 	if(params.size() < 1)
 	{
 		client->serverReplies.push_back(ERR_NEEDMOREPARAMS(client->getNickname(), "JOIN"));
+		return;
 	}
 	std::vector<std::string> chan_list = ft_split(params[0], ',');
 

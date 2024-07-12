@@ -10,7 +10,6 @@ void	Server::quitCommand(std::string reason, Client *client) //there are some ch
 	{
 		if(itr->second.isClientInChannel(nickname)) //if in channel
 		{
-			itr->second.removeClient(client);
 			if(reason.empty())
 			{
 				itr->second.broadcastMessage(RPL_QUIT(user_id(client->getNickname(), client->getUsername()), message));
@@ -19,6 +18,7 @@ void	Server::quitCommand(std::string reason, Client *client) //there are some ch
 			{
 				itr->second.broadcastMessage(RPL_QUIT(user_id(client->getNickname(), client->getUsername()), reason));
 			}
+			itr->second.removeClient(client);
 		}
 	}
 	client->setFd(-1);
