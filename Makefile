@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+         #
+#    By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/05 23:41:54 by alsaeed           #+#    #+#              #
-#    Updated: 2024/07/12 16:45:13 by tofaramusus      ###   ########.fr        #
+#    Updated: 2024/07/12 18:33:41 by alsaeed          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
 CXX = c++
-CXXFLAGS = -Wall -Werror -Wextra -std=c++98 #-g3 -fsanitize=address
+CXXFLAGS = -Wall -Werror -Wextra -std=c++98 -g3 -fsanitize=address
 INCLUDES = -Iincludes/
 
 SRCS =	Server.cpp \

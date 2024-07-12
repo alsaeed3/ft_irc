@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 23:42:42 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/09 18:51:31 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/12 18:34:28 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void    Server::runServer(void) {
 
 	signal(SIGTSTP, signalHandler);
 	signal(SIGINT, signalHandler);
+	signal(SIGQUIT, signalHandler);
 
 	while ( signalInterrupt == false ) {
 
