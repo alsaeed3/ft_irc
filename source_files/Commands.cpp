@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/12 17:54:42 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/12 18:20:30 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void Server::connectUser(Client *client, const ParseMessage &parsedMsg)
 			client->conRegi[2] = true;
 		}
 	}
-	if (client->isRegistered == true)
+	if ( client->isRegistered == true && client->conRegi[2] == true )
 	{
 		motdCommand(client);
 	}
@@ -160,7 +160,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	}
 	if (command == "QUIT")
 		quitCommand(parsedMsg.getTrailing(), client);
-	if(client->isRegistered == false)
+	if( client->isRegistered == false || client->conRegi[2] == false )
 	{
 		connectUser(client, parsedMsg);	
 	}
