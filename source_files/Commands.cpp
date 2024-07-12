@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/12 19:27:13 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/12 19:44:10 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ bool Server::handlePassCommand(Client *client, const std::vector<std::string> &p
             // closeClient(client->getFd());
             // client->setFd(-1);
 			//ADD message to say try again password
-			throw(std::exception());
+			// throw(std::exception());
         }
     } else {
         client->serverReplies.push_back(ERR_ALREADYREGISTERED(std::string("ircserver")));
