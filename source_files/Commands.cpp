@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Commands.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
+/*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/15 12:54:26 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/15 16:44:46 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,6 @@ bool Server::handlePassCommand(Client *client, const std::vector<std::string> &p
         } else 
 		{
             client->serverReplies.push_back(ERR_PASSWDMISMATCH(std::string("ircserver")));
-            // closeClient(client->getFd());
-            // client->setFd(-1);
-			//ADD message to say try again password
-			// throw(std::exception());
         }
     } else {
         client->serverReplies.push_back(ERR_ALREADYREGISTERED(std::string("ircserver")));
