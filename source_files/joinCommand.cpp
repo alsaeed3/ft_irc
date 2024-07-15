@@ -27,9 +27,8 @@ void Server::joinCommand(Client *client, const ParseMessage &ParsedMsg)
 	for (itr_chan = chan_list.begin(); itr_chan != chan_list.end(); ++itr_chan)
 	{
 		std::string chanName = *itr_chan;
-		if ((chanName.at(0) != '#' && chanName.at(0) != '&') || chanName.size() < 2 || chanName.size() > 50)
+		if (chanName.at(0) != '#' && chanName.at(0) != '&')
 		{
-
 			continue; //may need to print an error;
 		}
 		if (isChannelInServer(chanName))
