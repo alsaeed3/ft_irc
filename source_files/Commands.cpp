@@ -6,7 +6,7 @@
 /*   By: tofaramususa <tofaramususa@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 07:48:18 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/07/12 19:44:10 by tofaramusus      ###   ########.fr       */
+/*   Updated: 2024/07/15 12:54:26 by tofaramusus      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 	displayCommand(parsedMsg);
 	command = parsedMsg.getCmd();
 	params = parsedMsg.getParams();
-	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "PING" &&  command != "QUIT" && command != "motd")
+	if(params.size() < 1 && parsedMsg.getTrailing().empty() == true && command != "QUIT" && command != "motd")
 	{
 		 client->serverReplies.push_back(ERR_NEEDMOREPARAMS(std::string("ircserver") ,command));
 		 return;
@@ -178,7 +178,7 @@ void Server::processCommand(Client *client, const ParseMessage &parsedMsg)
 		{
 			privateMessage(client, parsedMsg);	
 		}
-		else if(command == "PING")
+		else if(command == "PING" && params.size() > 0)
 		{
 			 client->serverReplies.push_back(RPL_PONG(user_id(client->getNickname(),client->getUsername()),params[0]));
 		}
