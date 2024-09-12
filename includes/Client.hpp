@@ -6,7 +6,7 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:37:35 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/13 10:12:26 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/17 18:58:02 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,34 @@ class Client {
 	private:
 
 		int							_fd;
-		std::string					_ip;
+		bool						_isCorrectPassword;
 		std::string					_nickname;
 		std::string					_username;
-		bool						_authenticated;
-		std::vector<std::string>	_channels;
+		std::string					_channel;
+		
 
 	public:
-
-		Client( int fd, const std::string &ip );
-		void	sendMessage( const std::string &message );
-		void	joinChannel( const std::string &channel );
-		void	setAuthenticated( bool authenticated );
-		bool	isAuthenticated( void ) const;
-		void	setNickname( const std::string &nickname );
-		void	setUsername( const std::string &username );
 		
+		bool						isRegistered;
+		std::vector<std::string>	serverReplies;
+		bool	conRegi[3];
+		Client( void );
+		Client( int fd );
+
+		bool		sendMessage( const std::string &message );
+		
+		//SETTERS
+		void		setIsCorrectPassword( bool isCorrectPassword );
+		void		setNickname( const std::string &nickname );
+		void		setUsername( const std::string &username );
+		void		setFd(int value);
+		
+		//GETTERS
 		std::string getFullIdentity( void ) const;
-		std::string getNickname( void ) const;
+		std::string &getNickname( void ) const;
 		std::string getUsername( void ) const;
-		std::string getIp( void ) const;
+		bool		getIsCorrectPassword( void ) const;
+		int			getFd( void ) const;
 };
 
 #endif /* CLIENT_HPP */

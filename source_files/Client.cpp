@@ -6,45 +6,47 @@
 /*   By: alsaeed <alsaeed@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/08 11:42:49 by alsaeed           #+#    #+#             */
-/*   Updated: 2024/06/14 15:30:34 by alsaeed          ###   ########.fr       */
+/*   Updated: 2024/07/17 19:01:53 by alsaeed          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Client.hpp>
+#include <Server.hpp>
 
-// Constructor
-Client::Client( int fd, const std::string &ip ) :	_fd( fd ), 
-													_ip( ip ), 
-													_authenticated( false ) {
-
+Client::Client( void ) :	_fd( 0 ),
+							_isCorrectPassword( false ),
+							_nickname( "" ),
+							_username( "" ),
+							_channel( "" ) {
+	memset(conRegi, 0, 3);
+	isRegistered = false;
 	return;
 }
 
-void		Client::sendMessage( const std::string &message ) {
+Client::Client( int fd ) :	_fd( fd ), 
+													_isCorrectPassword( false ),
+													_nickname( "" ),
+													_username( "" ),
+													_channel( "" ) {
+	memset(conRegi, 0, 3);
+	isRegistered = false;
+	return;
+}
+
+bool		Client::sendMessage( const std::string &message ) {
 
 	if ( send( _fd, message.c_str(), message.size(), 0 ) == -1 ) {
 
-		throw IrcException( "Can't send message to client" );
+		return false;
 	}
 
-	return;
+	return true;
 }
 
-void		Client::joinChannel( const std::string &channel ) {
+void		Client::setIsCorrectPassword( bool isCorrectPassword ) {
 
-	_channels.push_back( channel );
+	_isCorrectPassword = isCorrectPassword;
+
 	return;
-}
-
-void		Client::setAuthenticated( bool authenticated ) {
-
-	_authenticated = authenticated;
-	return;
-}
-
-bool		Client::isAuthenticated( void ) const {
-
-	return _authenticated;
 }
 
 void		Client::setNickname( const std::string &nickname ) {
@@ -59,9 +61,10 @@ void		Client::setUsername( const std::string &username ) {
 	return;
 }
 
-std::string	Client::getNickname( void ) const {
+std::string	&Client::getNickname( void ) const 
+{
 
-	return _nickname;
+	return const_cast<std::string &>(_nickname);
 }
 
 std::string	Client::getUsername( void ) const {
@@ -69,14 +72,34 @@ std::string	Client::getUsername( void ) const {
 	return _username;
 }
 
-std::string	Client::getFullIdentity( void ) const {
-
-	return _nickname + "!" + _username + "@" + _ip;
+bool		Client::getIsCorrectPassword( void ) const {
+		return _isCorrectPassword;
 }
 
-std::string	Client::getIp( void ) const {
-
-	return _ip;
+void	Client::setFd(int value)
+{
+	_fd = value;
+}
+int 	Client::getFd( void ) const
+{
+	return _fd;
 }
 
-// Path: includes/Client.hpp
+bool Server::isUserInServer(std::string nickname)
+{
+	    return std::find(_nicknames.begin(),_nicknames.end(), nickname) != _nicknames.end();
+}
+
+Client	*Server::getClient(std::string nickname)
+{
+    std::map<int, Client*>::iterator it;
+	
+    for (it = _clients.begin(); it != _clients.end(); ++it) {
+        Client* client = it->second;
+        if (client->getNickname() == nickname) 
+		{
+            return client;
+        }
+    }
+    return NULL;
+}
